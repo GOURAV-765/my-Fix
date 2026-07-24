@@ -147,6 +147,223 @@ export async function bootstrapDatabase() {
       }
     }
 
+    // 5. Ensure default meetings exist
+    const existingMeetingsCount = await prisma.meeting.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingMeetingsCount === 0) {
+      console.log('👉 Seeding default meetings...');
+      const meet1 = await prisma.meeting.create({
+        data: {
+          societyId: defaultSociety.id,
+          title: 'Fall Semester Kickoff',
+          date: '2026-09-08',
+          description: 'Welcome new members, introduce officers, and outline the semester roadmap.',
+        }
+      });
+      const meet2 = await prisma.meeting.create({
+        data: {
+          societyId: defaultSociety.id,
+          title: 'PCB Design Workshop',
+          date: '2026-09-22',
+          description: 'Hands-on training session on KiCad for designing custom printed circuit boards.',
+        }
+      });
+      await prisma.meeting.create({
+        data: {
+          societyId: defaultSociety.id,
+          title: 'Robotics Team Synch',
+          date: '2026-10-06',
+          description: 'Reviewing progress on the micromouse project and ordering mechanical parts.',
+        }
+      });
+
+      // Seed attendance for members
+      const activeMembers = await prisma.member.findMany({
+        where: { societyId: defaultSociety.id, deletedAt: null }
+      });
+
+      if (activeMembers.length > 0) {
+        await prisma.attendance.createMany({
+          data: activeMembers.flatMap(m => [
+            { meetingId: meet1.id, memberId: m.id, status: 'present' },
+            { meetingId: meet2.id, memberId: m.id, status: 'unmarked' }
+          ]),
+          skipDuplicates: true
+        });
+      }
+    }
+
+    // 6. Ensure default tasks exist
+    const existingTasksCount = await prisma.task.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingTasksCount === 0) {
+      console.log('👉 Seeding default tasks...');
+      await prisma.task.createMany({
+        data: [
+          {
+            societyId: defaultSociety.id,
+            title: 'Design Kickoff Flyer',
+            description: 'Create a social media flyer and printing posters for the Fall Kickoff event.',
+            status: 'completed',
+            priority: 'high',
+            dueDate: '2026-09-01',
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Order KiCad Parts',
+            description: 'Purchase soldering kits, microcontrollers, and components for the workshop.',
+            status: 'in_progress',
+            priority: 'high',
+            dueDate: '2026-09-15',
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Deploy Workshop Registration',
+            description: 'Add RSVP forms on the IEEE portal for the upcoming PCB workshop.',
+            status: 'todo',
+            priority: 'medium',
+            dueDate: '2026-09-18',
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Book Room for Industry Panel',
+            description: 'Reserve the student union grand hall and request projector configurations.',
+            status: 'todo',
+            priority: 'medium',
+            dueDate: '2026-10-01',
+          }
+        ]
+      });
+    // 7. Ensure default projects exist
+    const existingProjectsCount = await prisma.project.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingProjectsCount === 0) {
+      console.log('👉 Seeding default projects...');
+      await prisma.project.createMany({
+        data: [
+          {
+            societyId: defaultSociety.id,
+            title: 'IEEE Portal Mobile App',
+            description: 'React Native mobile companion app for student chapter announcements and QR check-ins.',
+            techStack: 'React Native, Expo, TypeScript, Express',
+            status: 'DEVELOPMENT',
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Autonomous Micromouse Robot',
+            description: 'Custom PCB and flood-fill maze solving robot for regional IEEE competition.',
+            techStack: 'C++, STM32, KiCad, Embedded C',
+            status: 'DEVELOPMENT',
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Smart Campus IoT Network',
+            description: 'LoRaWAN gateway network monitoring ambient temperature and room occupancy.',
+            techStack: 'ESP32, Python, MQTT, InfluxDB',
+            status: 'IDEATION',
+          }
+        ]
+      });
+    }
+
+    // 8. Ensure default events exist
+    const existingEventsCount = await prisma.event.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingEventsCount === 0) {
+      console.log('👉 Seeding default events...');
+      await prisma.event.createMany({
+        data: [
+          {
+            societyId: defaultSociety.id,
+            title: 'Annual IEEE Tech Symposium 2026',
+            description: 'Keynotes from AI researchers, competitive hackathon, and hardware showcase.',
+            startDate: new Date('2026-10-15T09:00:00Z'),
+            endDate: new Date('2026-10-16T18:00:00Z'),
+            location: 'Main Auditorium & Lab Block B',
+            budget: 2500,
+          },
+          {
+            societyId: defaultSociety.id,
+            title: 'Hands-on PCB Soldering Bootcamp',
+            description: 'Learn SMT component placement, reflow soldering techniques, and circuit testing.',
+            startDate: new Date('2026-11-02T14:00:00Z'),
+            endDate: new Date('2026-11-02T17:00:00Z'),
+            location: 'Electronics Innovation Lab 204',
+            budget: 600,
+          }
+        ]
+      });
+    }
+
+    // 9. Ensure default complaints exist
+    const existingComplaintsCount = await prisma.complaint.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingComplaintsCount === 0) {
+      const adminUser = await prisma.user.findFirst({ where: { email: adminEmail } });
+      if (adminUser) {
+        console.log('👉 Seeding default complaints...');
+        await prisma.complaint.createMany({
+          data: [
+            {
+              societyId: defaultSociety.id,
+              creatorId: adminUser.id,
+              title: 'Lab 204 Soldering Station Exhaust Fan',
+              description: 'Exhaust hood motor is vibrating excessively during workshop sessions.',
+              category: 'ELECTRICAL',
+              priority: 'MEDIUM',
+              status: 'OPEN',
+            },
+            {
+              societyId: defaultSociety.id,
+              creatorId: adminUser.id,
+              title: 'Projector HDMI Audio Input in Hall A',
+              description: 'No audio output when connecting laptop via podium HDMI cable.',
+              category: 'EQUIPMENT',
+              priority: 'LOW',
+              status: 'RESOLVED',
+            }
+          ]
+        });
+      }
+    }
+
+    // 10. Ensure default award rules exist
+    const existingAwardsCount = await prisma.awardRule.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingAwardsCount === 0) {
+      console.log('👉 Seeding default award rules...');
+      await prisma.awardRule.createMany({
+        data: [
+          {
+            societyId: defaultSociety.id,
+            awardType: 'MEMBER_OF_MONTH',
+            name: 'Member of the Month',
+            description: 'Recognizes outstanding participation in chapter workshops and outreach.',
+            isActive: true,
+          },
+          {
+            societyId: defaultSociety.id,
+            awardType: 'BEST_DEVELOPER',
+            name: 'Best Developer Award',
+            description: 'Honors top code contributions and pull requests to IEEE chapter projects.',
+            isActive: true,
+          }
+        ]
+      });
+    }
+
     console.log('✅ Database bootstrap completed successfully.');
   } catch (error) {
     console.error('❌ Error during database bootstrap:', error);

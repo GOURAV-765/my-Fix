@@ -5,14 +5,14 @@ import axios from 'axios';
 // API and an infinite 401 → reload loop. In dev we keep localhost for convenience.
 const isProd = import.meta.env.PROD;
 const API_BASE_URL = import.meta.env.VITE_API_URL
-  || (isProd ? '' : 'http://localhost:5000/api/v1');
+  || (isProd ? '' : 'http://localhost:12000/api/v1');
 
 if (!import.meta.env.VITE_API_URL) {
   console.warn(
     '[Society Portal] VITE_API_URL is not set. ' +
     (isProd
       ? 'Production build will be unable to reach the backend. Set VITE_API_URL in Vercel Environment Variables to your deployed backend URL.'
-      : 'API requests will target localhost:5000 (dev default).')
+      : 'API requests will target localhost:12000 (dev default).')
   );
 }
 
@@ -27,7 +27,7 @@ export const getSocketUrl = (): string => {
     return url.origin;
   } catch {
     // Fallback: strip the path portion
-    return API_BASE_URL.replace(/\/api\/v1\/?$/, '') || 'http://localhost:5000';
+    return API_BASE_URL.replace(/\/api\/v1\/?$/, '') || 'http://localhost:12000';
   }
 };
 
@@ -69,12 +69,18 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('auth_token');
-      if (unauthorizedHandler) {
-        try {
-          unauthorizedHandler();
-        } catch {
-          /* no-op */
+      const token = localStorage.getItem('auth_token');
+      // Don't auto-logout when using demo/mock tokens — they're frontend-only
+      // and will always get 401 from the real backend.
+      const isDemoToken = !token || token === 'demo_local_token';
+      if (!isDemoToken) {
+        localStorage.removeItem('auth_token');
+        if (unauthorizedHandler) {
+          try {
+            unauthorizedHandler();
+          } catch {
+            /* no-op */
+          }
         }
       }
     }

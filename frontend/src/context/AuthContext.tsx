@@ -325,27 +325,73 @@ const ConfigWarningBanner: React.FC = () => (
   </div>
 );
 
-// ─── Fallback Auth Provider (no Clerk, no backend calls) ─────────────────────
-// When env vars are not configured: isLoading is immediately false, user is null,
-// and PrivateRoute redirects to /login instantly — no hanging spinner.
+// ─── Fallback Auth Provider (Local JWT authentication when Clerk is not present) ─────
 const FallbackAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const noop = async () => {};
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem('auth_token'));
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const existingToken = localStorage.getItem('auth_token');
+    if (!existingToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    setToken(existingToken);
+    api.get('/auth/me')
+      .then((res) => {
+        if (res.data?.success && res.data.user) {
+          setUser(res.data.user);
+        } else {
+          localStorage.removeItem('auth_token');
+          setToken(null);
+          setUser(null);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem('auth_token');
+        setToken(null);
+        setUser(null);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, []);
+
+  const login = (newToken: string, newUser: User) => {
+    localStorage.setItem('auth_token', newToken);
+    setToken(newToken);
+    setUser(newUser);
+  };
+
+  const logout = async () => {
+    localStorage.removeItem('auth_token');
+    setToken(null);
+    setUser(null);
+    window.location.href = '/login';
+  };
+
+  const hasPermission = (permission: string): boolean => {
+    if (!user) return false;
+    if (user.role?.name === 'Core Admin') return true;
+    return user.permissions ? user.permissions.includes(permission) : true;
+  };
 
   const value: AuthContextType = {
-    user: null,
-    token: null,
-    isAuthenticated: false,
-    isLoading: false, // ← CRITICAL: immediately false, no backend call, no spinner
+    user,
+    token,
+    isAuthenticated: !!user,
+    isLoading,
     isClerkSignedIn: false,
     profileError: null,
-    login: () => {},
-    logout: noop,
-    hasPermission: () => false,
+    login,
+    logout,
+    hasPermission,
   };
 
   return (
     <AuthContext.Provider value={value}>
-      <ConfigWarningBanner />
       {children}
     </AuthContext.Provider>
   );
