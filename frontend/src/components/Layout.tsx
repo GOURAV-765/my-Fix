@@ -181,9 +181,17 @@ const Layout: React.FC = () => {
     if (!main || prevPathRef.current === location.pathname) return;
     prevPathRef.current = location.pathname;
 
+    // Kill any existing tweens on <main> to prevent overlapping animations
+    // that could leave it stuck at opacity: 0
+    gsap.killTweensOf(main);
+
+    // Quick subtle slide-up, but NEVER set opacity to 0 here because
+    // child AnimatedPage components handle their own entrance animations.
+    // If we set opacity: 0 on <main>, the child animation runs on invisible
+    // content and the page appears "stuck/buffering".
     gsap.fromTo(main,
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' }
+      { y: 12 },
+      { y: 0, duration: 0.3, ease: 'power2.out' }
     );
   }, [location.pathname]);
 

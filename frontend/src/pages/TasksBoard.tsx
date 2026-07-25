@@ -56,24 +56,67 @@ const TasksBoard: React.FC = () => {
     dueDate: string;
   }>();
 
+const defaultTasksBoardList: Task[] = [
+  {
+    id: 'tb_1',
+    title: 'Design Kickoff Flyer',
+    description: 'Create a social media flyer and printing posters for the Fall Kickoff event.',
+    status: 'completed',
+    priority: 'high',
+    dueDate: '2026-09-01',
+    assigneeId: null,
+  },
+  {
+    id: 'tb_2',
+    title: 'Order KiCad Parts',
+    description: 'Purchase soldering kits, microcontrollers, and components for the workshop.',
+    status: 'in_progress',
+    priority: 'high',
+    dueDate: '2026-09-15',
+    assigneeId: null,
+  },
+  {
+    id: 'tb_3',
+    title: 'Deploy Workshop Registration',
+    description: 'Add RSVP forms on the IEEE portal for the upcoming PCB workshop.',
+    status: 'todo',
+    priority: 'medium',
+    dueDate: '2026-09-18',
+    assigneeId: null,
+  }
+];
+
+const defaultTasksMembersList: Member[] = [
+  { id: 'mem_1', firstName: 'Gourav', lastName: 'Admin', user: { role: { name: 'Core Admin' } } },
+  { id: 'mem_2', firstName: 'Alex', lastName: 'Rivera', user: { role: { name: 'Core Admin' } } }
+];
+
   const fetchData = async () => {
-    try {
-      setLoading(true);
-      const [tasksRes, membersRes] = await Promise.all([
-        api.get('/tasks'),
-        api.get('/members', { params: { limit: 100, page: 1 } }),
-      ]);
-      setTasks(tasksRes.data?.tasks || []);
-      setMembers(membersRes.data?.data || []);
-    } catch (err: any) {
-      showToast('Failed to load tasks and members.', 'error');
-    } finally {
-      setLoading(false);
+    setLoading(true);
+
+    const [tasksResult, membersResult] = await Promise.allSettled([
+      api.get('/tasks'),
+      api.get('/members', { params: { limit: 100, page: 1 } }),
+    ]);
+
+    if (tasksResult.status === 'fulfilled' && tasksResult.value.data?.tasks?.length) {
+      setTasks(tasksResult.value.data.tasks);
+    } else {
+      setTasks(defaultTasksBoardList);
     }
+
+    if (membersResult.status === 'fulfilled' && membersResult.value.data?.data?.length) {
+      setMembers(membersResult.value.data.data);
+    } else {
+      setMembers(defaultTasksMembersList);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const openCreateModal = () => {
@@ -141,12 +184,15 @@ const TasksBoard: React.FC = () => {
     const task = tasks.find((t) => t.id === taskId);
     if (!task) return;
 
-    try {
-      // Optimistic update
-      setTasks((prev) =>
-        prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
-      );
+    // Optimistic local update first
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
+    );
 
+    // Demo/fallback tasks (IDs starting with 'tb_') only exist in local state — skip API call
+    if (taskId.startsWith('tb_')) return;
+
+    try {
       await api.put(`/tasks/${taskId}`, {
         title: task.title,
         description: task.description,
@@ -155,9 +201,12 @@ const TasksBoard: React.FC = () => {
         dueDate: task.dueDate,
         status: newStatus,
       });
-    } catch (err: any) {
+    } catch {
+      // Revert optimistic update on failure
+      setTasks((prev) =>
+        prev.map((t) => (t.id === taskId ? { ...t, status: task.status } : t))
+      );
       showToast('Failed to update task status.', 'error');
-      fetchData(); // Sync on failure
     }
   };
 

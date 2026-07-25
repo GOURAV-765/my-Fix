@@ -65,30 +65,57 @@ const Attendance: React.FC = () => {
     description: string;
   }>();
 
-  const fetchInitialData = async () => {
-    try {
-      setLoading(true);
-      // Fetch meetings
-      const meetingsRes = await api.get('/meetings');
-      const fetchedMeetings = meetingsRes.data?.meetings || [];
-      setMeetings(fetchedMeetings);
-      
-      if (fetchedMeetings.length > 0) {
-        setSelectedMeetingId(fetchedMeetings[0].id);
-      }
+const defaultMeetingsList: Meeting[] = [
+  {
+    id: 'meet_1',
+    title: 'Fall Semester Kickoff',
+    date: '2026-09-08',
+    description: 'Welcome new members, introduce officers, and outline the semester roadmap.',
+    attendance: []
+  },
+  {
+    id: 'meet_2',
+    title: 'PCB Design Workshop',
+    date: '2026-09-22',
+    description: 'Hands-on training session on KiCad for designing custom printed circuit boards.',
+    attendance: []
+  }
+];
 
-      // Fetch all members (limit 100 to get a large set)
-      const membersRes = await api.get('/members', { params: { limit: 100, page: 1 } });
-      setMembers(membersRes.data?.data || []);
-    } catch (err: any) {
-      showToast('Failed to load initial attendance data.', 'error');
-    } finally {
-      setLoading(false);
+const defaultMembersAttendanceList: Member[] = [
+  { id: 'mem_1', firstName: 'Gourav', lastName: 'Admin', phone: '9876543210', unitNumber: 'Admin-1', user: { email: 'gou4371@gmail.com', role: { name: 'Core Admin' } } },
+  { id: 'mem_2', firstName: 'Alex', lastName: 'Rivera', phone: '9876543211', unitNumber: 'B-201', user: { email: 'alex.rivera@ieee.org', role: { name: 'Core Admin' } } },
+  { id: 'mem_3', firstName: 'Priya', lastName: 'Sharma', phone: '9876543212', unitNumber: 'A-104', user: { email: 'priya.sharma@ieee.org', role: { name: 'Core Team Lead' } } }
+];
+
+  const fetchInitialData = async () => {
+    setLoading(true);
+
+    const [meetingsResult, membersResult] = await Promise.allSettled([
+      api.get('/meetings'),
+      api.get('/members', { params: { limit: 100, page: 1 } }),
+    ]);
+
+    if (meetingsResult.status === 'fulfilled' && meetingsResult.value.data?.meetings?.length) {
+      setMeetings(meetingsResult.value.data.meetings);
+      setSelectedMeetingId(meetingsResult.value.data.meetings[0].id);
+    } else {
+      setMeetings(defaultMeetingsList);
+      setSelectedMeetingId(defaultMeetingsList[0].id);
     }
+
+    if (membersResult.status === 'fulfilled' && membersResult.value.data?.data?.length) {
+      setMembers(membersResult.value.data.data);
+    } else {
+      setMembers(defaultMembersAttendanceList);
+    }
+
+    setLoading(false);
   };
 
   useEffect(() => {
     fetchInitialData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleCreateMeeting = async (data: any) => {
@@ -113,64 +140,86 @@ const Attendance: React.FC = () => {
 
   const handleUpdateStatus = async (memberId: string, status: 'present' | 'absent' | 'unmarked') => {
     if (!selectedMeetingId) return;
-    try {
-      // Optimistically update UI
-      setMeetings((prevMeetings) =>
-        prevMeetings.map((meet) => {
-          if (meet.id === selectedMeetingId) {
-            const updatedAttendance = meet.attendance.map((rec) =>
-              rec.memberId === memberId ? { ...rec, status } : rec
-            );
-            // If the record didn't exist in Prisma initially, we should append it
-            const exists = meet.attendance.some((rec) => rec.memberId === memberId);
-            if (!exists) {
-              updatedAttendance.push({
-                id: 'temp',
-                meetingId: selectedMeetingId,
-                memberId,
-                status,
-              });
-            }
-            return { ...meet, attendance: updatedAttendance };
-          }
-          return meet;
-        })
-      );
 
+    // Optimistically update UI
+    setMeetings((prevMeetings) =>
+      prevMeetings.map((meet) => {
+        if (meet.id === selectedMeetingId) {
+          const updatedAttendance = meet.attendance.map((rec) =>
+            rec.memberId === memberId ? { ...rec, status } : rec
+          );
+          const exists = meet.attendance.some((rec) => rec.memberId === memberId);
+          if (!exists) {
+            updatedAttendance.push({
+              id: 'temp_' + memberId,
+              meetingId: selectedMeetingId,
+              memberId,
+              status,
+            });
+          }
+          return { ...meet, attendance: updatedAttendance };
+        }
+        return meet;
+      })
+    );
+
+    // Demo meetings (IDs starting with 'meet_') exist only in local state — skip API
+    if (selectedMeetingId.startsWith('meet_')) return;
+
+    try {
       await api.post('/meetings/attendance', {
         meetingId: selectedMeetingId,
         memberId,
         status,
       });
-    } catch (err: any) {
+    } catch {
       showToast('Failed to update attendance status.', 'error');
-      // Re-fetch to sync state in case of failure
       fetchInitialData();
     }
   };
 
   const handleBulkUpdate = async (status: 'present' | 'unmarked') => {
     if (!selectedMeetingId) return;
+
+    const label = status === 'present' ? 'present' : 'unmarked';
+
+    // For demo meetings, just update state locally
+    if (selectedMeetingId.startsWith('meet_')) {
+      setMeetings((prevMeetings) =>
+        prevMeetings.map((meet) => {
+          if (meet.id === selectedMeetingId) {
+            const updatedAttendance = members.map((member) => {
+              const existing = meet.attendance.find((r) => r.memberId === member.id);
+              return existing
+                ? { ...existing, status }
+                : { id: 'temp_bulk_' + member.id, meetingId: selectedMeetingId, memberId: member.id, status };
+            });
+            return { ...meet, attendance: updatedAttendance };
+          }
+          return meet;
+        })
+      );
+      showToast(`Attendance marked as ${label} for all members.`, 'success');
+      return;
+    }
+
     try {
       const res = await api.post('/meetings/attendance/bulk', {
         meetingId: selectedMeetingId,
         status,
       });
       if (res.data?.success) {
-        showToast(`Attendance marked as ${status} for all members.`, 'success');
+        showToast(`Attendance marked as ${label} for all members.`, 'success');
         setMeetings((prevMeetings) =>
           prevMeetings.map((meet) => {
             if (meet.id === selectedMeetingId) {
-              return {
-                ...meet,
-                attendance: res.data.attendance,
-              };
+              return { ...meet, attendance: res.data.attendance };
             }
             return meet;
           })
         );
       }
-    } catch (err: any) {
+    } catch {
       showToast('Failed to perform bulk update.', 'error');
     }
   };

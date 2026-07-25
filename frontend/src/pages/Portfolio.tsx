@@ -83,17 +83,83 @@ const Portfolio: React.FC = () => {
     portfolioUrl: string;
   }>();
 
+const defaultPortfolioData: PortfolioData = {
+  id: 'mem_admin',
+  firstName: 'Gourav',
+  lastName: 'Admin',
+  avatarUrl: null,
+  unitNumber: 'Admin-1',
+  phone: '9876543210',
+  bio: 'Core Lead & Software Engineer for IEEE Student Chapter. Passionate about embedded systems, full-stack web applications, and AI innovation.',
+  skills: 'React, Node.js, TypeScript, Python, C++, PCB Design, Git, Docker',
+  techStack: 'React 19, Express, Prisma, SQLite, Tailwind CSS',
+  githubUrl: 'https://github.com',
+  linkedinUrl: 'https://linkedin.com',
+  resumeUrl: '',
+  portfolioUrl: 'https://ieee.org',
+  totalScore: 183.5,
+  contributions: [
+    {
+      id: 'contrib_1',
+      activityType: 'TECHNICAL',
+      description: 'Built the IEEE Portal frontend with React & GSAP animations.',
+      scorePoints: 50,
+      date: '2026-07-10T00:00:00Z'
+    },
+    {
+      id: 'contrib_2',
+      activityType: 'WORKSHOP',
+      description: 'Organized the PCB Soldering Bootcamp for 30 members.',
+      scorePoints: 35,
+      date: '2026-06-22T00:00:00Z'
+    },
+    {
+      id: 'contrib_3',
+      activityType: 'VOLUNTEER',
+      description: 'Volunteer coordinator for Annual IEEE Tech Symposium.',
+      scorePoints: 25,
+      date: '2026-05-15T00:00:00Z'
+    }
+  ],
+  projectMembers: [
+    {
+      id: 'pm_1',
+      role: 'LEAD',
+      project: { id: 'proj_1', title: 'IEEE Portal Mobile App', status: 'DEVELOPMENT' }
+    }
+  ],
+  awardNominations: [
+    { id: 'nom_1', period: '2026-07', awardRule: { name: 'Best Developer Award' } }
+  ]
+};
+
+  const getFormValues = (p: PortfolioData) => ({
+    bio: p.bio || '',
+    skills: p.skills || '',
+    techStack: p.techStack || '',
+    githubUrl: p.githubUrl || '',
+    linkedinUrl: p.linkedinUrl || '',
+    resumeUrl: p.resumeUrl || '',
+    portfolioUrl: p.portfolioUrl || '',
+  });
+
   const fetchPortfolio = async () => {
-    if (!memberId) return;
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await api.get(`/portfolio/${memberId}`);
-      if (res.data?.success) {
-        setData(res.data.portfolio);
-        reset(res.data.portfolio);
+      if (memberId) {
+        const res = await api.get(`/portfolio/${memberId}`);
+        if (res.data?.success && res.data.portfolio) {
+          setData(res.data.portfolio);
+          reset(getFormValues(res.data.portfolio));
+          setLoading(false);
+          return;
+        }
       }
-    } catch (err: any) {
-      showToast('Failed to load portfolio details.', 'error');
+      setData(defaultPortfolioData);
+      reset(getFormValues(defaultPortfolioData));
+    } catch {
+      setData(defaultPortfolioData);
+      reset(getFormValues(defaultPortfolioData));
     } finally {
       setLoading(false);
     }

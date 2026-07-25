@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 
 interface AnimatedPageProps {
@@ -8,19 +8,40 @@ interface AnimatedPageProps {
 
 /**
  * Wraps page content with a smooth GSAP entrance animation.
- * Automatically animates:
- * - The page container (fade + slide up)
- * - Any child elements with data-animate attribute (staggered entrance)
- * - Cards with .glass-panel class (staggered pop-in)
- * - Table rows (slide in from left)
- * - Form fields (staggered fade-up)
+ * 
+ * IMPORTANT: We do NOT use React inline style={{ opacity: 0 }} because React
+ * re-applies inline styles on every re-render. When a child component's state
+ * changes (e.g. data finishes loading), React would reset opacity back to 0
+ * AFTER GSAP had already animated it to 1, causing the page to go permanently
+ * invisible — the "buffering/stuck" bug.
+ * 
+ * Instead, we use useLayoutEffect to imperatively set opacity=0 via GSAP before
+ * the first paint, then animate to 1. On cleanup (unmount), ctx.revert() runs
+ * which restores the element to its pre-GSAP state, but since we only set
+ * opacity via GSAP (not React), there's no conflict.
  */
 const AnimatedPage: React.FC<AnimatedPageProps> = ({ children, className = '' }) => {
   const pageRef = useRef<HTMLDivElement>(null);
+  const hasAnimated = useRef(false);
+
+  // Set initial opacity to 0 imperatively before first paint (no flash)
+  useLayoutEffect(() => {
+    const page = pageRef.current;
+    if (page && !hasAnimated.current) {
+      gsap.set(page, { opacity: 0 });
+    }
+  }, []);
 
   useEffect(() => {
     const page = pageRef.current;
     if (!page) return;
+
+    // Prevent re-running animation on subsequent re-renders
+    if (hasAnimated.current) {
+      gsap.set(page, { opacity: 1 });
+      return;
+    }
+    hasAnimated.current = true;
 
     const ctx = gsap.context(() => {
       // Page entrance
@@ -104,11 +125,15 @@ const AnimatedPage: React.FC<AnimatedPageProps> = ({ children, className = '' })
       }
     }, page);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      // Ensure element is visible after GSAP context is cleaned up
+      if (page) gsap.set(page, { opacity: 1, y: 0 });
+    };
   }, []);
 
   return (
-    <div ref={pageRef} className={className} style={{ opacity: 0 }}>
+    <div ref={pageRef} className={className}>
       {children}
     </div>
   );

@@ -38,12 +38,12 @@ export const getMembers = async (
     if (search) {
       const searchLower = search.toString();
       whereClause.OR = [
-        { firstName: { contains: searchLower, mode: 'insensitive' } },
-        { lastName: { contains: searchLower, mode: 'insensitive' } },
-        { phone: { contains: searchLower, mode: 'insensitive' } },
+        { firstName: { contains: searchLower } },
+        { lastName: { contains: searchLower } },
+        { phone: { contains: searchLower } },
         {
           user: {
-            email: { contains: searchLower, mode: 'insensitive' },
+            email: { contains: searchLower },
           },
         },
       ];
