@@ -294,7 +294,7 @@ export const getCurrentUser = async (
               lastName: user.member.lastName,
               unitNumber: user.member.unitNumber,
               phone: user.member.phone,
-              avatarUrl: user.member.avatarUrl,
+              profileImage: user.member.avatarUrl,
             }
           : null,
       },

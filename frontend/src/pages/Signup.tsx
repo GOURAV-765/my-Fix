@@ -72,7 +72,7 @@ const Signup: React.FC = () => {
               routing="path"
               path="/signup"
               signInUrl="/login"
-              afterSignUpUrl="/dashboard"
+              fallbackRedirectUrl="/dashboard"
               appearance={{
                 elements: {
                   card: 'bg-transparent shadow-none border-none p-0 w-full',
@@ -87,8 +87,8 @@ const Signup: React.FC = () => {
                   formResendCodeLink: 'text-indigo-400 hover:text-indigo-300',
                   dividerLine: 'bg-slate-800',
                   dividerText: 'text-slate-500 text-xs uppercase font-semibold px-2',
-                  socialButtonsBlockButton: 'bg-slate-900 border border-slate-800 hover:bg-slate-850 text-slate-200 transition-all duration-200 rounded-xl py-2 cursor-pointer',
-                  socialButtonsBlockButtonText: 'text-slate-200 font-medium text-sm',
+                  socialButtonsBlockButton: 'bg-white/5 border border-white/10 hover:bg-white/10 !text-white transition-all duration-300 rounded-xl py-2.5 cursor-pointer shadow-sm backdrop-blur-sm',
+                  socialButtonsBlockButtonText: '!text-white font-medium text-sm',
                   alert: 'bg-rose-950/40 border border-rose-500/20 text-rose-350 rounded-xl p-3.5 text-xs',
                 },
                 variables: {
