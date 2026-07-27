@@ -238,6 +238,7 @@ export async function bootstrapDatabase() {
           }
         ]
       });
+    }
     // 7. Ensure default projects exist
     const existingProjectsCount = await prisma.project.count({
       where: { societyId: defaultSociety.id }

@@ -198,7 +198,7 @@ const Layout: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-100">
       {/* Desktop Sidebar */}
-      <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 glass-panel border-r border-slate-800 shrink-0">
+      <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 glass-panel border-r border-slate-800 shrink-0 sticky top-0 h-screen">
         {/* Brand/Logo */}
         <div className="sidebar-brand h-16 flex items-center gap-3 px-6 border-b border-slate-800">
           <Building className="h-6 w-6 text-indigo-400" />
