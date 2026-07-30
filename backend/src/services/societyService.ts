@@ -147,6 +147,7 @@ export class SocietyService {
       roleName: result.adminRole.name,
       societyId: result.society.id,
       permissions: ['*'], // Admin has wildcard
+      departments: [],
     };
 
     const accessToken = generateAccessToken(tokenPayload);

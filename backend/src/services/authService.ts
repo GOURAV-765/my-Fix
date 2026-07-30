@@ -34,6 +34,14 @@ export class AuthService {
     // Extract permissions
     const permissions = user.role.permissions.map((rp: { permission: { name: string } }) => rp.permission.name);
 
+    // Extract departments
+    const departments = user.departments?.map((ud: any) => ({
+      departmentId: ud.departmentId,
+      name: ud.department.name,
+      roleName: ud.role.name,
+      permissions: ud.role.permissions.map((rp: any) => rp.permission.name),
+    })) || [];
+
     const tokenPayload = {
       userId: user.id,
       email: user.email,
@@ -41,6 +49,7 @@ export class AuthService {
       roleName: user.role.name,
       societyId: user.societyId,
       permissions,
+      departments,
     };
 
     const accessToken = generateAccessToken(tokenPayload);
@@ -77,6 +86,7 @@ export class AuthService {
           name: user.role.name,
         },
         permissions,
+        departments,
         member: user.member
           ? {
               id: user.member.id,
@@ -111,6 +121,13 @@ export class AuthService {
     // 3. Retrieve fresh permissions
     const permissions = session.user.role.permissions.map((rp: { permission: { name: string } }) => rp.permission.name);
 
+    const departments = session.user.departments?.map((ud: any) => ({
+      departmentId: ud.departmentId,
+      name: ud.department.name,
+      roleName: ud.role.name,
+      permissions: ud.role.permissions.map((rp: any) => rp.permission.name),
+    })) || [];
+
     const tokenPayload = {
       userId: session.user.id,
       email: session.user.email,
@@ -118,6 +135,7 @@ export class AuthService {
       roleName: session.user.role.name,
       societyId: session.user.societyId,
       permissions,
+      departments,
     };
 
     const newAccessToken = generateAccessToken(tokenPayload);

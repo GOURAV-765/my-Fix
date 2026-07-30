@@ -5,6 +5,7 @@ import { io, Socket } from 'socket.io-client';
 import api, { getSocketUrl } from '../services/api.js';
 import { useToast } from '../context/ToastContext.js';
 import { useAuth } from '../context/AuthContext.js';
+import { useDepartment } from '../context/DepartmentContext.js';
 import {
   ClipboardList,
   AlertTriangle,
@@ -34,11 +35,13 @@ interface Complaint {
 interface ComplaintFormInput {
   title: string;
   description: string;
+  departmentId: string;
 }
 
 const Complaints: React.FC = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const { activeDepartmentId, availableDepartments } = useDepartment();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -77,6 +80,7 @@ const defaultComplaintsList: Complaint[] = [
       const params: any = {};
       if (categoryFilter) params.category = categoryFilter;
       if (priorityFilter) params.priority = priorityFilter;
+      if (activeDepartmentId !== 'all') params.departmentId = activeDepartmentId;
 
       const response = await api.get('/complaints', { params });
       if (response.data?.success && response.data.complaints && response.data.complaints.length > 0) {
@@ -93,7 +97,7 @@ const defaultComplaintsList: Complaint[] = [
 
   useEffect(() => {
     fetchComplaints();
-  }, [categoryFilter, priorityFilter]);
+  }, [categoryFilter, priorityFilter, activeDepartmentId]);
 
   // Socket.IO Real-time Integration
   useEffect(() => {
@@ -239,6 +243,21 @@ const defaultComplaintsList: Complaint[] = [
                 className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
               />
               {errors.description && <span className="text-xs text-red-500 mt-1 block">{errors.description.message}</span>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-slate-300 mb-2">Department</label>
+              <select
+                {...register('departmentId')}
+                className="w-full bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer"
+              >
+                <option value="">Global (No Department)</option>
+                {availableDepartments.map(d => (
+                  <option key={d.departmentId} value={d.departmentId}>
+                    {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <button

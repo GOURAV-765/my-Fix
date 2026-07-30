@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext.js';
 import { ToastProvider } from './context/ToastContext.js';
+import { DepartmentProvider } from './context/DepartmentContext.js';
 
 // Layout & Guards
 import Layout from './components/Layout.js';
@@ -28,6 +29,7 @@ import Portfolio from './pages/Portfolio';
 import AiHub from './pages/AiHub';
 import Attendance from './pages/Attendance.js';
 import TasksBoard from './pages/TasksBoard.js';
+import Departments from './pages/Departments.js';
 
 // Create Query Client
 const queryClient = new QueryClient({
@@ -44,7 +46,8 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
         <AuthProvider>
-          <Router>
+          <DepartmentProvider>
+            <Router>
             <Routes>
               {/* Public Routes */}
               <Route path="/login" element={<Login />} />
@@ -59,6 +62,11 @@ const App: React.FC = () => {
                   {/* Redirect root to dashboard */}
                   <Route path="/" element={<Navigate to="/dashboard" replace />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+
+                  {/* Admin Routes */}
+                  <Route element={<RoleRoute permission="department:manage" />}>
+                    <Route path="/departments" element={<Departments />} />
+                  </Route>
 
                   {/* Member Routes guarded by Role Permissions */}
                   <Route element={<RoleRoute permission="member:read" />}>
@@ -102,6 +110,7 @@ const App: React.FC = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Router>
+          </DepartmentProvider>
         </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>

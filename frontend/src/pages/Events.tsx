@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import api from '../services/api.js';
 import { useToast } from '../context/ToastContext.js';
 import { useAuth } from '../context/AuthContext.js';
+import { useDepartment } from '../context/DepartmentContext.js';
 import {
   Calendar,
   MapPin,
@@ -42,6 +43,7 @@ interface Event {
 const Events: React.FC = () => {
   const { showToast } = useToast();
   const { user } = useAuth();
+  const { activeDepartmentId, availableDepartments } = useDepartment();
   const [events, setEvents] = useState<Event[]>([]);
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
   const [loading, setLoading] = useState(true);
@@ -66,6 +68,7 @@ const Events: React.FC = () => {
     budget: number;
     speakers: string;
     sponsors: string;
+    departmentId: string;
   }>();
 
   const { register: checkinReg, handleSubmit: checkinSub, reset: checkinReset } = useForm<{
@@ -104,7 +107,11 @@ const defaultEventsList = [
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/events');
+      const params: any = {};
+      if (activeDepartmentId !== 'all') {
+        params.departmentId = activeDepartmentId;
+      }
+      const res = await api.get('/events', { params });
       if (res.data?.success && res.data.events && res.data.events.length > 0) {
         setEvents(res.data.events);
       } else {
@@ -119,7 +126,7 @@ const defaultEventsList = [
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [activeDepartmentId]);
 
   const handleRegister = async (eventId: string) => {
     try {
@@ -455,6 +462,20 @@ const defaultEventsList = [
                         className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"
                       />
                     </div>
+                  </div>
+                  <div>
+                    <label className="block text-slate-400 mb-1">Department</label>
+                    <select
+                      {...eventReg('departmentId')}
+                      className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none cursor-pointer"
+                    >
+                      <option value="">Global (No Department)</option>
+                      {availableDepartments.map(d => (
+                        <option key={d.departmentId} value={d.departmentId}>
+                          {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>

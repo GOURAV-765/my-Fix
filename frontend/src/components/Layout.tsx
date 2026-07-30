@@ -20,10 +20,14 @@ import {
   Cpu,
   ClipboardCheck,
   KanbanSquare,
+  Network,
+  ChevronDown,
 } from 'lucide-react';
+import { useDepartment } from '../context/DepartmentContext.js';
 
 const Layout: React.FC = () => {
   const { user, logout, hasPermission } = useAuth();
+  const { activeDepartmentId, setActiveDepartmentId, availableDepartments } = useDepartment();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const sidebarRef = useRef<HTMLElement>(null);
@@ -37,6 +41,12 @@ const Layout: React.FC = () => {
       path: '/dashboard',
       icon: LayoutDashboard,
       show: true,
+    },
+    {
+      name: 'Departments',
+      path: '/departments',
+      icon: Network,
+      show: hasPermission('department:manage') || user?.role?.name === 'Core Admin',
     },
     {
       name: 'Members List',
@@ -351,14 +361,35 @@ const Layout: React.FC = () => {
               <Menu size={20} />
             </button>
 
-            {/* Society Name */}
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-indigo-950 border border-indigo-500/10">
-                <Building size={16} className="text-indigo-400" />
+            {/* Society Name & Department Switcher */}
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-2">
+                <div className="p-1.5 rounded-lg bg-indigo-950 border border-indigo-500/10">
+                  <Building size={16} className="text-indigo-400" />
+                </div>
+                <span className="font-semibold text-sm text-slate-200 md:text-base leading-none">
+                  {user?.societyName}
+                </span>
               </div>
-              <span className="font-semibold text-sm text-slate-200 md:text-base leading-none">
-                {user?.societyName}
-              </span>
+
+              {/* Department Switcher */}
+              {(availableDepartments.length > 0 || user?.role?.name === 'Core Admin') && (
+                <div className="relative group">
+                  <select
+                    value={activeDepartmentId}
+                    onChange={(e) => setActiveDepartmentId(e.target.value)}
+                    className="appearance-none bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 cursor-pointer"
+                  >
+                    <option value="all">Global (All)</option>
+                    {availableDepartments.map(d => (
+                      <option key={d.departmentId} value={d.departmentId}>
+                        {d.name || `Dept ${d.departmentId.substring(0, 8)}`} ({d.roleName})
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                </div>
+              )}
             </div>
           </div>
 

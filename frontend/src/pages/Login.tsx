@@ -32,6 +32,7 @@ const LocalLoginForm: React.FC = () => {
       phone: '9876543210',
       profileImage: null,
     },
+    departments: [],
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
