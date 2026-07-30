@@ -10,6 +10,11 @@ declare global {
         roleName: string;
         societyId: string;
         permissions: string[];
+        departments: {
+          departmentId: string;
+          roleName: string;
+          permissions: string[];
+        }[];
       };
     }
   }

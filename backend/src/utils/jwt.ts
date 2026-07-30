@@ -13,13 +13,18 @@ export interface TokenPayload {
   roleName: string;
   societyId: string;
   permissions: string[];
+  departments: {
+    departmentId: string;
+    roleName: string;
+    permissions: string[];
+  }[];
 }
 
 export const generateAccessToken = (payload: TokenPayload): string => {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRES_IN });
 };
 
-export const generateRefreshToken = (payload: Omit<TokenPayload, 'permissions'>): string => {
+export const generateRefreshToken = (payload: Omit<TokenPayload, 'permissions' | 'departments'>): string => {
   return jwt.sign(payload, REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRES_IN });
 };
 
@@ -27,7 +32,7 @@ export const verifyAccessToken = (token: string): TokenPayload => {
   return jwt.verify(token, JWT_SECRET) as TokenPayload;
 };
 
-export const verifyRefreshToken = (token: string): Omit<TokenPayload, 'permissions'> => {
-  return jwt.verify(token, REFRESH_SECRET) as Omit<TokenPayload, 'permissions'>;
+export const verifyRefreshToken = (token: string): Omit<TokenPayload, 'permissions' | 'departments'> => {
+  return jwt.verify(token, REFRESH_SECRET) as Omit<TokenPayload, 'permissions' | 'departments'>;
 };
 

@@ -30,6 +30,19 @@ export class SessionRepository {
               },
             },
             society: true,
+            departments: {
+              include: {
+                role: {
+                  include: {
+                    permissions: {
+                      include: {
+                        permission: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },

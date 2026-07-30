@@ -145,6 +145,52 @@ export async function bootstrapDatabase() {
         });
         console.log(`👉 Updated existing user to Core Admin: ${adminEmail}`);
       }
+
+      // 4.5 Seed additional fake members
+      const existingMembersCount = await prisma.member.count({
+        where: { societyId: defaultSociety.id }
+      });
+      if (existingMembersCount <= 1) { // only admin exists
+        console.log('👉 Seeding dummy members...');
+        const generalMemberRole = await prisma.role.findFirst({
+          where: { name: 'General Member', societyId: defaultSociety.id }
+        });
+        const teamLeadRole = await prisma.role.findFirst({
+          where: { name: 'Core Team Lead', societyId: defaultSociety.id }
+        });
+
+        if (generalMemberRole && teamLeadRole) {
+          const fakeUsers = [
+            { email: 'alex.rivera@ieee.org', first: 'Alex', last: 'Rivera', role: teamLeadRole.id, unit: 'Block A-1' },
+            { email: 'priya.sharma@ieee.org', first: 'Priya', last: 'Sharma', role: teamLeadRole.id, unit: 'Block B-2' },
+            { email: 'marcus.chen@ieee.org', first: 'Marcus', last: 'Chen', role: generalMemberRole.id, unit: 'Block C-3' },
+            { email: 'elena.rostova@ieee.org', first: 'Elena', last: 'Rostova', role: generalMemberRole.id, unit: 'Block D-4' }
+          ];
+
+          for (const fu of fakeUsers) {
+            const fuHash = await bcrypt.hash('password123', saltRounds);
+            const newUser = await prisma.user.create({
+              data: {
+                email: fu.email,
+                passwordHash: fuHash,
+                status: 'ACTIVE',
+                societyId: defaultSociety.id,
+                roleId: fu.role
+              }
+            });
+            await prisma.member.create({
+              data: {
+                userId: newUser.id,
+                societyId: defaultSociety.id,
+                firstName: fu.first,
+                lastName: fu.last,
+                phone: '1234567890',
+                unitNumber: fu.unit,
+              }
+            });
+          }
+        }
+      }
     }
 
     // 5. Ensure default meetings exist
@@ -363,6 +409,108 @@ export async function bootstrapDatabase() {
           }
         ]
       });
+    }
+    // 11. Ensure default departments exist
+    const existingDepartmentsCount = await prisma.department.count({
+      where: { societyId: defaultSociety.id }
+    });
+
+    if (existingDepartmentsCount === 0) {
+      console.log('👉 Seeding default departments...');
+      const adminUser = await prisma.user.findFirst({ where: { email: adminEmail } });
+      const teamLeadRole = await prisma.role.findFirst({ where: { name: 'Core Team Lead', societyId: defaultSociety.id } });
+      const generalMemberRole = await prisma.role.findFirst({ where: { name: 'General Member', societyId: defaultSociety.id } });
+      
+      if (adminUser && teamLeadRole) {
+        const techDept = await prisma.department.create({
+          data: {
+            societyId: defaultSociety.id,
+            name: 'Technical Department',
+            description: 'Responsible for app development and robotics.',
+          }
+        });
+        
+        const prDept = await prisma.department.create({
+          data: {
+            societyId: defaultSociety.id,
+            name: 'PR & Outreach',
+            description: 'Handles social media, marketing, and external communications.',
+          }
+        });
+
+        // Assign admin to the Technical Department
+        await prisma.userDepartment.create({
+          data: {
+            userId: adminUser.id,
+            departmentId: techDept.id,
+            roleId: teamLeadRole.id,
+          }
+        });
+
+        // Assign admin to PR department
+        await prisma.userDepartment.create({
+          data: {
+            userId: adminUser.id,
+            departmentId: prDept.id,
+            roleId: teamLeadRole.id,
+          }
+        });
+
+        // Assign fake users to departments
+        const alex = await prisma.user.findUnique({ where: { email: 'alex.rivera@ieee.org' } });
+        const priya = await prisma.user.findUnique({ where: { email: 'priya.sharma@ieee.org' } });
+        const marcus = await prisma.user.findUnique({ where: { email: 'marcus.chen@ieee.org' } });
+        const elena = await prisma.user.findUnique({ where: { email: 'elena.rostova@ieee.org' } });
+
+        if (alex) {
+          await prisma.userDepartment.create({
+            data: { userId: alex.id, departmentId: techDept.id, roleId: teamLeadRole.id }
+          });
+        }
+        if (priya) {
+          await prisma.userDepartment.create({
+            data: { userId: priya.id, departmentId: prDept.id, roleId: teamLeadRole.id }
+          });
+        }
+        if (marcus) {
+          await prisma.userDepartment.create({
+            data: { userId: marcus.id, departmentId: techDept.id, roleId: generalMemberRole.id }
+          });
+        }
+        if (elena) {
+          await prisma.userDepartment.create({
+            data: { userId: elena.id, departmentId: prDept.id, roleId: generalMemberRole.id }
+          });
+        }
+
+        
+        // Add a department-scoped task
+        await prisma.task.create({
+          data: {
+            societyId: defaultSociety.id,
+            departmentId: techDept.id,
+            title: 'Deploy API to Production',
+            description: 'Finalize CI/CD pipelines for the new portal.',
+            status: 'todo',
+            priority: 'urgent',
+            dueDate: '2026-08-01',
+          }
+        });
+        
+        // Add a department-scoped event
+        await prisma.event.create({
+          data: {
+            societyId: defaultSociety.id,
+            departmentId: prDept.id,
+            title: 'Social Media Campaign Launch',
+            description: 'Kickoff for the new Instagram reel series.',
+            startDate: new Date('2026-08-10T10:00:00Z'),
+            endDate: new Date('2026-08-10T12:00:00Z'),
+            location: 'Virtual',
+            budget: 50,
+          }
+        });
+      }
     }
 
     console.log('✅ Database bootstrap completed successfully.');

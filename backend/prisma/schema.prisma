@@ -31,6 +31,37 @@ model Society {
   contributions    ContributionActivity[]
   tasks            Task[]
   meetings         Meeting[]
+  departments      Department[]
+}
+
+// 1.5 Department & Department-Level RBAC
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  societyId   String
+  society     Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  
+  members     UserDepartment[]
+  complaints  Complaint[]
+  transactions Transaction[]
+  notices     Notice[]
+  projects    Project[]
+  events      Event[]
+  tasks       Task[]
+}
+
+model UserDepartment {
+  id           String     @id @default(uuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  roleId       String
+  role         Role       @relation(fields: [roleId], references: [id])
+  joinedAt     DateTime   @default(now())
+
+  @@unique([userId, departmentId])
 }
 
 // 2. User Authentication & Session
@@ -53,6 +84,7 @@ model User {
   complaints   Complaint[] // Created complaints
   assignedTasks ComplaintTask[] // Assigned complaints (for staff)
   auditLogs    AuditLog[]
+  departments  UserDepartment[]
 }
 
 model Session {
@@ -74,6 +106,7 @@ model Role {
   society     Society?         @relation(fields: [societyId], references: [id], onDelete: Cascade)
   permissions RolePermission[]
   users       User[]
+  userDepartments UserDepartment[]
 
   @@unique([name, societyId])
 }
@@ -130,6 +163,8 @@ model Complaint {
   id           String           @id @default(uuid())
   societyId    String
   society      Society          @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department   Department?      @relation(fields: [departmentId], references: [id])
   creatorId    String
   creator      User             @relation(fields: [creatorId], references: [id])
   title        String
@@ -167,6 +202,8 @@ model Transaction {
   id          String   @id @default(uuid())
   societyId   String
   society     Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department  Department? @relation(fields: [departmentId], references: [id])
   amount      Float
   type        String   // INCOME, EXPENSE
   category    String   // Maintenance Dues, Facility Booking, Event Fee, Vendor Payment
@@ -182,6 +219,8 @@ model Notice {
   id          String   @id @default(uuid())
   societyId   String
   society     Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department  Department? @relation(fields: [departmentId], references: [id])
   title       String
   content     String
   isPinned    Boolean  @default(false)
@@ -256,6 +295,8 @@ model Project {
   id           String             @id @default(uuid())
   societyId    String
   society      Society            @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department   Department?        @relation(fields: [departmentId], references: [id])
   title        String
   description  String
   githubUrl    String?
@@ -312,6 +353,8 @@ model Event {
   id           String              @id @default(uuid())
   societyId    String
   society      Society             @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department   Department?         @relation(fields: [departmentId], references: [id])
   title        String
   description  String
   bannerUrl    String?
@@ -359,6 +402,8 @@ model Task {
   id          String   @id @default(uuid())
   societyId   String
   society     Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
+  departmentId String?
+  department  Department? @relation(fields: [departmentId], references: [id])
   title       String
   description String?
   status      String   @default("todo") // todo, in_progress, completed

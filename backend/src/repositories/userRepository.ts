@@ -34,6 +34,20 @@ export class UserRepository {
         },
         society: true,
         member: true,
+        departments: {
+          include: {
+            department: true,
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -53,6 +67,19 @@ export class UserRepository {
         },
         society: true,
         member: true,
+        departments: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }
@@ -72,6 +99,19 @@ export class UserRepository {
         },
         society: true,
         member: true,
+        departments: {
+          include: {
+            role: {
+              include: {
+                permissions: {
+                  include: {
+                    permission: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }

@@ -20,6 +20,11 @@ interface User {
     phone: string | null;
     profileImage: string | null;
   } | null;
+  departments: {
+    departmentId: string;
+    roleName: string;
+    permissions: string[];
+  }[];
 }
 
 interface AuthContextType {

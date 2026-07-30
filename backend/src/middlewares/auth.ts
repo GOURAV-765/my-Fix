@@ -11,6 +11,11 @@ export interface AuthenticatedRequest extends Request {
     roleName: string;
     societyId: string;
     permissions: string[];
+    departments: {
+      departmentId: string;
+      roleName: string;
+      permissions: string[];
+    }[];
   };
 }
 
@@ -89,6 +94,19 @@ export const authenticate = async (
                 },
               },
             },
+            departments: {
+              include: {
+                role: {
+                  include: {
+                    permissions: {
+                      include: {
+                        permission: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
           },
         });
 
@@ -112,6 +130,19 @@ export const authenticate = async (
                     },
                   },
                 },
+                departments: {
+                  include: {
+                    role: {
+                      include: {
+                        permissions: {
+                          include: {
+                            permission: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
             });
 
@@ -125,6 +156,19 @@ export const authenticate = async (
                       permissions: {
                         include: {
                           permission: true,
+                        },
+                      },
+                    },
+                  },
+                  departments: {
+                    include: {
+                      role: {
+                        include: {
+                          permissions: {
+                            include: {
+                              permission: true,
+                            },
+                          },
                         },
                       },
                     },
@@ -145,6 +189,7 @@ export const authenticate = async (
               roleName: '',
               societyId: '',
               permissions: [],
+              departments: [],
             };
             return next();
           }
@@ -176,6 +221,12 @@ export const authenticate = async (
           (rp: { permission: { name: string } }) => rp.permission.name
         );
 
+        const departments = dbUser.departments.map((ud: any) => ({
+          departmentId: ud.departmentId,
+          roleName: ud.role.name,
+          permissions: ud.role.permissions.map((rp: any) => rp.permission.name),
+        }));
+
         req.user = {
           userId: dbUser.id,
           email: dbUser.email,
@@ -183,6 +234,7 @@ export const authenticate = async (
           roleName: dbUser.role.name,
           societyId: dbUser.societyId,
           permissions,
+          departments,
         };
 
         return next();

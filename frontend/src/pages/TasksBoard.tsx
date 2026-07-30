@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import api from '../services/api.js';
 import { useToast } from '../context/ToastContext.js';
 import { useAuth } from '../context/AuthContext.js';
+import { useDepartment } from '../context/DepartmentContext.js';
 import {
   KanbanSquare,
   Plus,
@@ -34,12 +35,14 @@ interface Task {
   status: 'todo' | 'in_progress' | 'completed';
   priority: 'low' | 'medium' | 'high';
   assigneeId: string | null;
+  departmentId: string | null;
   dueDate: string | null;
 }
 
 const TasksBoard: React.FC = () => {
   const { showToast } = useToast();
   const { user } = useAuth();
+  const { activeDepartmentId, availableDepartments } = useDepartment();
   
   const [tasks, setTasks] = useState<Task[]>([]);
   const [members, setMembers] = useState<Member[]>([]);
@@ -53,6 +56,7 @@ const TasksBoard: React.FC = () => {
     description: string;
     priority: 'low' | 'medium' | 'high';
     assigneeId: string;
+    departmentId: string;
     dueDate: string;
   }>();
 
@@ -65,6 +69,7 @@ const defaultTasksBoardList: Task[] = [
     priority: 'high',
     dueDate: '2026-09-01',
     assigneeId: null,
+    departmentId: null,
   },
   {
     id: 'tb_2',
@@ -74,6 +79,7 @@ const defaultTasksBoardList: Task[] = [
     priority: 'high',
     dueDate: '2026-09-15',
     assigneeId: null,
+    departmentId: null,
   },
   {
     id: 'tb_3',
@@ -83,6 +89,7 @@ const defaultTasksBoardList: Task[] = [
     priority: 'medium',
     dueDate: '2026-09-18',
     assigneeId: null,
+    departmentId: null,
   }
 ];
 
@@ -94,8 +101,13 @@ const defaultTasksMembersList: Member[] = [
   const fetchData = async () => {
     setLoading(true);
 
+    const params: any = {};
+    if (activeDepartmentId !== 'all') {
+      params.departmentId = activeDepartmentId;
+    }
+
     const [tasksResult, membersResult] = await Promise.allSettled([
-      api.get('/tasks'),
+      api.get('/tasks', { params }),
       api.get('/members', { params: { limit: 100, page: 1 } }),
     ]);
 
@@ -117,7 +129,7 @@ const defaultTasksMembersList: Member[] = [
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [activeDepartmentId]);
 
   const openCreateModal = () => {
     setEditingTask(null);
@@ -131,6 +143,7 @@ const defaultTasksMembersList: Member[] = [
     setValue('description', task.description || '');
     setValue('priority', task.priority);
     setValue('assigneeId', task.assigneeId || '');
+    setValue('departmentId', task.departmentId || '');
     setValue('dueDate', task.dueDate || '');
     setModalOpen(true);
   };
@@ -140,6 +153,7 @@ const defaultTasksMembersList: Member[] = [
       const payload = {
         ...data,
         assigneeId: data.assigneeId || null,
+        departmentId: data.departmentId || null,
         dueDate: data.dueDate || null,
       };
 
@@ -447,6 +461,22 @@ const defaultTasksMembersList: Member[] = [
                     {members.map((m) => (
                       <option key={m.id} value={m.id}>
                         {m.firstName} {m.lastName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Explicit Department Dropdown */}
+                <div>
+                  <label className="block text-slate-400 mb-1">Department</label>
+                  <select
+                    {...register('departmentId')}
+                    className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+                  >
+                    <option value="">Global (No Department)</option>
+                    {availableDepartments.map(d => (
+                      <option key={d.departmentId} value={d.departmentId}>
+                        {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
                       </option>
                     ))}
                   </select>

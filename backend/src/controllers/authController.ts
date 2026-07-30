@@ -152,6 +152,20 @@ export const getCurrentUser = async (
             },
           },
           member: true,
+          departments: {
+            include: {
+              department: true,
+              role: {
+                include: {
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     } else {
@@ -169,6 +183,19 @@ export const getCurrentUser = async (
             },
           },
           member: true,
+          departments: {
+            include: {
+              role: {
+                include: {
+                  permissions: {
+                    include: {
+                      permission: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       });
     }
@@ -274,6 +301,13 @@ export const getCurrentUser = async (
       (rp: { permission: { name: string } }) => rp.permission.name
     );
 
+    const departments = user.departments?.map((ud: any) => ({
+      departmentId: ud.departmentId,
+      name: ud.department.name,
+      roleName: ud.role.name,
+      permissions: ud.role.permissions.map((rp: any) => rp.permission.name),
+    })) || [];
+
     res.status(200).json({
       success: true,
       user: {
@@ -287,6 +321,7 @@ export const getCurrentUser = async (
           name: user.role.name,
         },
         permissions,
+        departments,
         member: user.member
           ? {
               id: user.member.id,

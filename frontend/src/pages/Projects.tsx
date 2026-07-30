@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import api from '../services/api.js';
 import { useToast } from '../context/ToastContext.js';
 import { useAuth } from '../context/AuthContext.js';
+import { useDepartment } from '../context/DepartmentContext.js';
 import {
   FolderGit2,
   KanbanSquare,
@@ -65,6 +66,7 @@ interface ProjectDetail extends Project {
 const Projects: React.FC = () => {
   const { showToast } = useToast();
   const { user } = useAuth();
+  const { activeDepartmentId, availableDepartments } = useDepartment();
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProject, setActiveProject] = useState<ProjectDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -78,6 +80,7 @@ const Projects: React.FC = () => {
     githubUrl: string;
     demoUrl: string;
     techStack: string;
+    departmentId: string;
   }>();
 
   const { register: taskReg, handleSubmit: taskSub, reset: taskReset } = useForm<{
@@ -146,7 +149,11 @@ const defaultProjectDetail = {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/projects');
+      const params: any = {};
+      if (activeDepartmentId !== 'all') {
+        params.departmentId = activeDepartmentId;
+      }
+      const res = await api.get('/projects', { params });
       if (res.data?.success && res.data.projects && res.data.projects.length > 0) {
         setProjects(res.data.projects);
       } else {
@@ -174,7 +181,7 @@ const defaultProjectDetail = {
 
   useEffect(() => {
     fetchProjects();
-  }, []);
+  }, [activeDepartmentId]);
 
   const handleCreateProject = async (data: any) => {
     try {
@@ -520,6 +527,20 @@ const defaultProjectDetail = {
                   placeholder="React, TypeScript, Node.js, SQLite"
                   className="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-200 focus:outline-none"
                 />
+              </div>
+              <div>
+                <label className="block text-slate-400 mb-1">Department</label>
+                <select
+                  {...projectReg('departmentId')}
+                  className="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-slate-200 focus:outline-none cursor-pointer"
+                >
+                  <option value="">Global (No Department)</option>
+                  {availableDepartments.map(d => (
+                    <option key={d.departmentId} value={d.departmentId}>
+                      {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
+                    </option>
+                  ))}
+                </select>
               </div>
               <button type="submit" className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl cursor-pointer">
                 Initialize Workspace
