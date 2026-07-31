@@ -81,7 +81,7 @@ const Signup: React.FC = () => {
  footerActionLink: 'text-ieeeBlue hover:text-ieeeBlue font-semibold transition-colors duration-150',
  formButtonPrimary: 'w-full py-2.5 px-4 bg-ieeeBlue hover:bg-ieeeBlue text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-ieeeBlue/10 border-0 cursor-pointer',
  formFieldLabel: 'text-xs font-semibold text-slate-350 mb-1.5',
- formFieldInput: 'w-full px-4 py-2.5 bg-cardBg border border-slate-200 rounded-xl text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200',
+ formFieldInput: 'w-full px-4 py-2.5 bg-cardBg border border-border rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200',
  identityPreviewText: 'text-textPrimary',
  identityPreviewEditButtonIcon: 'text-textMuted hover:text-slate-250',
  formResendCodeLink: 'text-ieeeBlue hover:text-ieeeBlue',

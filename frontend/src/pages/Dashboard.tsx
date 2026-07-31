@@ -236,7 +236,7 @@ const Dashboard: React.FC = () => {
  )}
  <Link
  to="/members"
- className="hero-btn flex items-center gap-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-700 hover:shadow-lg text-textPrimary border border-slate-200 rounded-xl text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5"
+ className="hero-btn flex items-center gap-2 px-4 py-2.5 bg-surfaceBg hover:bg-ieeeBlue-soft hover:shadow-lg text-textPrimary border border-ieeeBlue/20 rounded-xl text-sm font-semibold transition-all duration-300 hover:-translate-y-0.5"
  style={{ opacity: 0 }}
  >
  View Members
@@ -251,8 +251,8 @@ const Dashboard: React.FC = () => {
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
  {[...Array(4)].map((_, i) => (
  <div key={i} className="bg-cardBg shadow-sm p-6 rounded-xl h-32 animate-pulse space-y-3">
- <div className="h-4 w-2/3 bg-slate-100 rounded"></div>
- <div className="h-8 w-1/3 bg-slate-100 rounded"></div>
+ <div className="h-4 w-2/3 bg-surfaceBg rounded"></div>
+ <div className="h-8 w-1/3 bg-surfaceBg rounded"></div>
  </div>
  ))}
  </div>
@@ -362,7 +362,7 @@ const Dashboard: React.FC = () => {
  <div ref={bottomRef} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
  {/* Recent Members Panel */}
  <div className="animate-section lg:col-span-2 bg-cardBg shadow-sm p-6 rounded-xl space-y-5" style={{ opacity: 0 }}>
- <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+ <div className="flex items-center justify-between border-b border-border pb-3">
  <h2 className="text-lg font-bold text-textPrimary flex items-center gap-2">
  <Activity size={18} className="text-ieeeBlue" />
  Recently Registered Members
@@ -376,10 +376,10 @@ const Dashboard: React.FC = () => {
  <div className="space-y-4">
  {[...Array(3)].map((_, i) => (
  <div key={i} className="flex items-center gap-3 animate-pulse">
- <div className="h-10 w-10 bg-slate-100 rounded-full"></div>
+ <div className="h-10 w-10 rounded-full bg-surfaceBg"></div>
  <div className="flex-1 space-y-2">
- <div className="h-3 w-1/4 bg-slate-100 rounded"></div>
- <div className="h-2.5 w-1/3 bg-slate-100 rounded"></div>
+ <div className="h-3 w-1/4 rounded bg-surfaceBg"></div>
+ <div className="h-2.5 w-1/3 rounded bg-surfaceBg"></div>
  </div>
  </div>
  ))}
@@ -389,13 +389,13 @@ const Dashboard: React.FC = () => {
  ) : (
  <div className="divide-y divide-slate-850">
  {recentMembers.map((member: any, idx: number) => (
- <div key={member.id} className="member-row flex items-center justify-between py-3.5 first:pt-0 last:pb-0 hover:bg-slate-50 -mx-3 px-3 rounded-lg transition-colors duration-200" style={{ opacity: 0 }}>
+ <div key={member.id} className="member-row group flex items-center justify-between py-3.5 first:pt-0 last:pb-0 hover:bg-surfaceBg -mx-3 px-3 rounded-lg transition-colors duration-200" style={{ opacity: 0 }}>
  <div className="flex items-center gap-3.5 min-w-0">
  <div className="h-10 w-10 rounded-md bg-ieeeBlue-soft flex items-center justify-center font-bold text-ieeeBlue text-sm border border-ieeeBlue/20 shrink-0 group-hover:scale-105 transition-transform">
  {member.firstName[0]}
  </div>
  <div className="min-w-0">
- <h4 className="text-sm font-semibold text-textPrimary truncate">
+ <h4 className="text-sm font-semibold text-textPrimary group-hover:text-ieeeBlue transition-colors truncate">
  {member.firstName} {member.lastName}
  </h4>
  <p className="text-xs text-textMuted truncate">{member.user?.email || 'No email'}</p>
@@ -429,14 +429,14 @@ const Dashboard: React.FC = () => {
  {/* Quick Actions & System Info */}
  <div className="space-y-6">
  <div className="animate-section bg-cardBg shadow-sm p-6 rounded-xl space-y-4" style={{ opacity: 0 }}>
- <h2 className="text-base font-bold text-textPrimary border-b border-slate-200 pb-2.5 flex items-center gap-2">
+ <h2 className="text-base font-bold text-textPrimary border-b border-border pb-2.5 flex items-center gap-2">
  <Sparkles size={16} className="text-warning" />
  Portal Quick Access
  </h2>
  <div className="space-y-2.5">
  <Link
  to={user?.member ? `/members/${user.member.id}` : '#'}
- className="quick-link flex items-center gap-3 p-3 rounded-xl bg-cardBg hover:bg-slate-50 border border-slate-200 hover:border-ieeeBlue/20 transition-all duration-300 text-sm group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ieeeBlue/5"
+ className="quick-link flex items-center gap-3 p-3 rounded-xl bg-cardBg hover:bg-slate-50 border border-border hover:border-ieeeBlue/20 transition-all duration-300 text-sm group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ieeeBlue/5"
  style={{ opacity: 0 }}
  >
  <div className="p-2 rounded-lg bg-slate-100 text-ieeeBlue group-hover:bg-ieeeBlue/20 group-hover:text-ieeeBlue transition-all duration-300">
@@ -451,7 +451,7 @@ const Dashboard: React.FC = () => {
  {hasPermission('member:create') && (
  <Link
  to="/members/add"
- className="quick-link flex items-center gap-3 p-3 rounded-xl bg-cardBg hover:bg-slate-50 border border-slate-200 hover:border-ieeeBlue/20 transition-all duration-300 text-sm group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ieeeBlue/5"
+ className="quick-link flex items-center gap-3 p-3 rounded-xl bg-cardBg hover:bg-slate-50 border border-border hover:border-ieeeBlue/20 transition-all duration-300 text-sm group hover:-translate-y-0.5 hover:shadow-lg hover:shadow-ieeeBlue/5"
  style={{ opacity: 0 }}
  >
  <div className="p-2 rounded-lg bg-slate-100 text-ieeeBlue group-hover:bg-ieeeBlue/20 group-hover:text-ieeeBlue transition-all duration-300">
@@ -468,7 +468,7 @@ const Dashboard: React.FC = () => {
 
  {/* System Environment Info */}
  <div className="animate-section bg-cardBg shadow-sm p-5 rounded-xl bg-cardBg text-xs text-textMuted space-y-3" style={{ opacity: 0 }}>
- <div className="flex items-center gap-2 text-textBody font-semibold border-b border-slate-200 pb-2">
+ <div className="flex items-center gap-2 text-textBody font-semibold border-b border-border pb-2">
  <Clock size={14} className="animate-spin-slow" />
  <span>Session Log Info</span>
  </div>

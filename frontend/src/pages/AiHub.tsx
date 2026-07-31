@@ -118,14 +118,14 @@ const AiHub: React.FC = () => {
  ========================================== */
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fadeIn">
  {/* Input Panel */}
- <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 space-y-4 self-start">
+ <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-border space-y-4 self-start">
  <h3 className="font-extrabold text-textPrimary text-sm">Generation Parameters</h3>
  <form onSubmit={writeSub(handleGenerateWriting)} className="space-y-4 text-xs">
  <div>
  <label className="block text-textMuted mb-1">Content Type</label>
  <select
  {...writeReg('type')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="caption">Social Media Poster Caption</option>
  <option value="minutes">Meeting Minutes & Actions Summarizer</option>
@@ -139,7 +139,7 @@ const AiHub: React.FC = () => {
  {...writeReg('prompt')}
  placeholder="Enter agenda points or poster keywords..."
  rows={6}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <button
@@ -163,7 +163,7 @@ const AiHub: React.FC = () => {
  <Bookmark className="h-5 w-5 text-ieeeBlue" />
  Generated Document Summary
  </h3>
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 bg-appBg/30 min-h-[300px]">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border bg-appBg/30 min-h-[300px]">
  {writeResult ? (
  <div className="text-textBody text-xs whitespace-pre-wrap leading-relaxed">
  {writeResult}
@@ -182,7 +182,7 @@ const AiHub: React.FC = () => {
  ========================================== */
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 animate-fadeIn">
  {/* Input Panel */}
- <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 space-y-4 self-start">
+ <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-border space-y-4 self-start">
  <h3 className="font-extrabold text-textPrimary text-sm">Resume Parameters</h3>
  <form onSubmit={resumeSub(handleResumeReview)} className="space-y-4 text-xs">
  <div>
@@ -192,7 +192,7 @@ const AiHub: React.FC = () => {
  {...resumeReg('bio')}
  placeholder="Focus areas (e.g. Backend developer seeking web infrastructure roles)..."
  rows={4}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <div>
@@ -202,7 +202,7 @@ const AiHub: React.FC = () => {
  required
  {...resumeReg('skills')}
  placeholder="React, SQLite, TypeScript"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -212,7 +212,7 @@ const AiHub: React.FC = () => {
  required
  {...resumeReg('techStack')}
  placeholder="Node.js, AWS Cloud, Docker"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <button
@@ -238,13 +238,13 @@ const AiHub: React.FC = () => {
  </h3>
 
  {!resumeResult ? (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center text-slate-500 text-xs">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center text-slate-500 text-xs">
  Submit profile details for gap validation review.
  </div>
  ) : (
  <div className="space-y-6">
  {/* Skill Gaps Card */}
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-3">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-3">
  <h4 className="text-xs font-bold text-error flex items-center gap-1.5">
  <AlertCircle className="h-4 w-4" />
  Identified Gaps to Close
@@ -260,7 +260,7 @@ const AiHub: React.FC = () => {
  </div>
 
  {/* Interview Prep Questions Card */}
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-3">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-3">
  <h4 className="text-xs font-bold text-ieeeBlue flex items-center gap-1.5">
  <HelpCircle className="h-4 w-4" />
  Custom Interview Prep Questions
@@ -276,7 +276,7 @@ const AiHub: React.FC = () => {
  </div>
 
  {/* Recommendations */}
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-2">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-2">
  <h4 className="text-xs font-bold text-success flex items-center gap-1.5">
  <CheckCircle2 className="h-4 w-4" />
  Recommended Certifications & Sprints

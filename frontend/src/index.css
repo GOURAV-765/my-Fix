@@ -7,6 +7,7 @@
   --color-textPrimary: #0F172A;
   --color-textBody: #334155;
   --color-textMuted: #64748B;
+  --color-border: #E2E8F0;
   
   --color-ieeeBlue: #00508F;
   --color-ieeeBlue-dark: #003E70;
@@ -31,6 +32,30 @@
 }
 
 @layer base {
+  .dark {
+    --color-appBg: #09090B;
+    --color-surfaceBg: #18181B;
+    --color-cardBg: #27272A;
+    --color-textPrimary: #FAFAFA;
+    --color-textBody: #D4D4D8;
+    --color-textMuted: #A1A1AA;
+    --color-border: #3F3F46;
+    
+    --color-ieeeBlue: #3B82F6;
+    --color-ieeeBlue-dark: #2563EB;
+    --color-ieeeBlue-soft: #1E3A8A;
+    
+    --color-techTeal: #2DD4BF;
+    --color-techTeal-dark: #14B8A6;
+    
+    --color-richGold: #FCD34D;
+    
+    --color-success: #34D399;
+    --color-warning: #FBBF24;
+    --color-error: #F87171;
+    --color-info: #60A5FA;
+  }
+
   html, body {
     background-color: var(--color-appBg);
     color: var(--color-textBody);

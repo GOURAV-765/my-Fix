@@ -96,7 +96,7 @@ const LocalLoginForm: React.FC = () => {
  value={email}
  onChange={(e) => setEmail(e.target.value)}
  required
- className="w-full pl-10 pr-4 py-2.5 bg-cardBg border border-slate-200 rounded-xl text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200"
+ className="w-full pl-10 pr-4 py-2.5 bg-cardBg border border-border rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200"
  placeholder="you@domain.com"
  />
  </div>
@@ -111,7 +111,7 @@ const LocalLoginForm: React.FC = () => {
  value={password}
  onChange={(e) => setPassword(e.target.value)}
  required
- className="w-full pl-10 pr-4 py-2.5 bg-cardBg border border-slate-200 rounded-xl text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200"
+ className="w-full pl-10 pr-4 py-2.5 bg-cardBg border border-border rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200"
  placeholder="••••••••"
  />
  </div>
@@ -133,13 +133,13 @@ const LocalLoginForm: React.FC = () => {
  </button>
  </form>
 
- <div className="pt-3 border-t border-slate-200 space-y-2">
+ <div className="pt-3 border-t border-border space-y-2">
  <p className="text-[11px] font-semibold text-textMuted uppercase tracking-wider text-center">Quick Local Test Logins</p>
  <div className="grid grid-cols-2 gap-2">
  <button
  type="button"
  onClick={() => handleQuickLogin('gou4371@gmail.com', 'Gou@302005')}
- className="p-2 text-xs bg-cardBg hover:bg-slate-100 border border-slate-200 rounded-xl text-ieeeBlue font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+ className="p-2 text-xs bg-cardBg hover:bg-slate-100 border border-border rounded-xl text-ieeeBlue font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
  >
  <ShieldCheck size={14} />
  Core Admin
@@ -147,7 +147,7 @@ const LocalLoginForm: React.FC = () => {
  <button
  type="button"
  onClick={() => handleQuickLogin('lead@greenwood.com', 'Password123')}
- className="p-2 text-xs bg-cardBg hover:bg-slate-100 border border-slate-200 rounded-xl text-textBody font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+ className="p-2 text-xs bg-cardBg hover:bg-slate-100 border border-border rounded-xl text-textBody font-medium flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
  >
  Team Lead
  </button>
@@ -236,7 +236,7 @@ const Login: React.FC = () => {
  footerActionLink: 'text-ieeeBlue hover:text-ieeeBlue font-semibold transition-colors duration-150',
  formButtonPrimary: 'w-full py-2.5 px-4 bg-ieeeBlue hover:bg-ieeeBlue text-white text-sm font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-ieeeBlue/10 border-0 cursor-pointer',
  formFieldLabel: 'text-xs font-semibold text-slate-350 mb-1.5',
- formFieldInput: 'w-full px-4 py-2.5 bg-cardBg border border-slate-200 rounded-xl text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-4 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200',
+ formFieldInput: 'w-full px-4 py-2.5 bg-cardBg border border-border rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 focus:ring-ieeeBlue/20 focus:border-ieeeBlue transition-all duration-200',
  identityPreviewText: 'text-textPrimary',
  identityPreviewEditButtonIcon: 'text-textMuted hover:text-slate-250',
  formResendCodeLink: 'text-ieeeBlue hover:text-ieeeBlue',

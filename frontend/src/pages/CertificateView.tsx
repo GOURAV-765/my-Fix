@@ -143,7 +143,7 @@ const CertificateView: React.FC = () => {
  </p>
 
  {/* Footer QR Verification Code */}
- <div className="flex flex-col md:flex-row items-center justify-between w-full border-t border-slate-200 pt-8 mt-6 gap-6 print:border-black print:text-black">
+ <div className="flex flex-col md:flex-row items-center justify-between w-full border-t border-border pt-8 mt-6 gap-6 print:border-black print:text-black">
  <div className="text-left space-y-1 text-xs text-slate-500 print:text-black">
  <p className="font-bold text-textMuted print:text-black">Digitally Verified Reference:</p>
  <p className="font-mono">{data.id}</p>

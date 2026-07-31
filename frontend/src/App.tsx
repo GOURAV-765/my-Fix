@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './context/AuthContext.js';
 import { ToastProvider } from './context/ToastContext.js';
 import { DepartmentProvider } from './context/DepartmentContext.js';
+import { ThemeProvider } from './context/ThemeContext.js';
 
 // Layout & Guards
 import Layout from './components/Layout.js';
@@ -44,6 +45,7 @@ const queryClient = new QueryClient({
 const App: React.FC = () => {
  return (
  <QueryClientProvider client={queryClient}>
+ <ThemeProvider>
  <ToastProvider>
  <AuthProvider>
  <DepartmentProvider>
@@ -113,6 +115,7 @@ const App: React.FC = () => {
  </DepartmentProvider>
  </AuthProvider>
  </ToastProvider>
+ </ThemeProvider>
  </QueryClientProvider>
  );
 };

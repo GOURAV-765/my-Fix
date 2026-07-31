@@ -245,7 +245,7 @@ const defaultTasksMembersList: Member[] = [
  <div>
  <div className="p-6 max-w-7xl mx-auto space-y-8">
  {/* Header */}
- <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-6">
+ <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border pb-6">
  <div className="space-y-1">
  <h1 className="text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-ieeeBlue via-techTeal to-pink-400">
  Tasks Board
@@ -281,7 +281,7 @@ const defaultTasksMembersList: Member[] = [
  <span className="text-xs font-extrabold tracking-wider uppercase text-slate-450">
  {col.title}
  </span>
- <span className="text-[10px] bg-cardBg border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">
+ <span className="text-[10px] bg-cardBg border border-border text-slate-500 px-2 py-0.5 rounded-full font-black">
  {colTasks.length}
  </span>
  </div>
@@ -305,7 +305,7 @@ const defaultTasksMembersList: Member[] = [
  return (
  <div
  key={task.id}
- className="bg-cardBg p-4 rounded-xl border border-slate-850/80 space-y-3 shadow-md hover:border-slate-200 transition-colors"
+ className="bg-cardBg p-4 rounded-xl border border-slate-850/80 space-y-3 shadow-md hover:border-border transition-colors"
  >
  <div className="flex justify-between items-start gap-2">
  <span
@@ -348,7 +348,7 @@ const defaultTasksMembersList: Member[] = [
  </p>
  )}
 
- <div className="flex justify-between items-center border-t border-slate-200 pt-2 text-[9px] text-slate-500">
+ <div className="flex justify-between items-center border-t border-border pt-2 text-[9px] text-slate-500">
  <div
  className={`flex items-center gap-1 ${
  isOverdue ? 'text-error font-bold' : ''
@@ -375,7 +375,7 @@ const defaultTasksMembersList: Member[] = [
  onChange={(e) =>
  handleMoveTask(task.id, e.target.value as any)
  }
- className="bg-appBg border border-slate-200 rounded px-1 py-0.5 text-[9px] text-textBody focus:outline-none cursor-pointer"
+ className="bg-appBg border border-border rounded px-1 py-0.5 text-[9px] text-textBody focus:outline-none cursor-pointer"
  >
  <option value="todo">TODO</option>
  <option value="in_progress">WORK</option>
@@ -397,7 +397,7 @@ const defaultTasksMembersList: Member[] = [
  {/* Task Form Modal */}
  {modalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-md w-full space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-md w-full space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">
  {editingTask ? 'Edit Task' : 'Create Task'}
@@ -414,7 +414,7 @@ const defaultTasksMembersList: Member[] = [
  required
  {...register('title')}
  placeholder="e.g. Design event brochure"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -423,7 +423,7 @@ const defaultTasksMembersList: Member[] = [
  {...register('description')}
  placeholder="Provide specific notes and items..."
  rows={3}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
 
@@ -433,7 +433,7 @@ const defaultTasksMembersList: Member[] = [
  <select
  {...register('priority')}
  defaultValue="medium"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="low">Low</option>
  <option value="medium">Medium</option>
@@ -445,7 +445,7 @@ const defaultTasksMembersList: Member[] = [
  <input
  type="date"
  {...register('dueDate')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -454,7 +454,7 @@ const defaultTasksMembersList: Member[] = [
  <label className="block text-textMuted mb-1">Assign Teammate</label>
  <select
  {...register('assigneeId')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="">Unassigned</option>
  <option value="__all__">👥 All Members</option>
@@ -471,7 +471,7 @@ const defaultTasksMembersList: Member[] = [
  <label className="block text-textMuted mb-1">Department</label>
  <select
  {...register('departmentId')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="">Global (No Department)</option>
  {availableDepartments.map(d => (
