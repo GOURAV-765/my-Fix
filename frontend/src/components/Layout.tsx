@@ -3,434 +3,434 @@ import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.js';
 import { gsap } from 'gsap';
 import {
-  LayoutDashboard,
-  Users,
-  UserPlus,
-  LogOut,
-  Menu,
-  X,
-  Building,
-  User as UserIcon,
-  Shield,
-  ClipboardList,
-  ShieldAlert,
-  Calendar,
-  Trophy,
-  FolderGit2,
-  Cpu,
-  ClipboardCheck,
-  KanbanSquare,
-  Network,
-  ChevronDown,
+ LayoutDashboard,
+ Users,
+ UserPlus,
+ LogOut,
+ Menu,
+ X,
+ Building,
+ User as UserIcon,
+ Shield,
+ ClipboardList,
+ ShieldAlert,
+ Calendar,
+ Trophy,
+ FolderGit2,
+ Cpu,
+ ClipboardCheck,
+ KanbanSquare,
+ Network,
+ ChevronDown,
 } from 'lucide-react';
 import { useDepartment } from '../context/DepartmentContext.js';
 
 const Layout: React.FC = () => {
-  const { user, logout, hasPermission } = useAuth();
-  const { activeDepartmentId, setActiveDepartmentId, availableDepartments } = useDepartment();
-  const location = useLocation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const sidebarRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
-  const mainRef = useRef<HTMLElement>(null);
-  const prevPathRef = useRef(location.pathname);
+ const { user, logout, hasPermission } = useAuth();
+ const { activeDepartmentId, setActiveDepartmentId, availableDepartments } = useDepartment();
+ const location = useLocation();
+ const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+ const sidebarRef = useRef<HTMLElement>(null);
+ const headerRef = useRef<HTMLElement>(null);
+ const mainRef = useRef<HTMLElement>(null);
+ const prevPathRef = useRef(location.pathname);
 
-  const navigationItems = [
-    {
-      name: 'Dashboard',
-      path: '/dashboard',
-      icon: LayoutDashboard,
-      show: true,
-    },
-    {
-      name: 'Departments',
-      path: '/departments',
-      icon: Network,
-      show: hasPermission('department:manage') || user?.role?.name === 'Core Admin',
-    },
-    {
-      name: 'Members List',
-      path: '/members',
-      icon: Users,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Add Member',
-      path: '/members/add',
-      icon: UserPlus,
-      show: hasPermission('member:create'),
-    },
-    {
-      name: 'Complaints',
-      path: '/complaints',
-      icon: ClipboardList,
-      show: hasPermission('complaint:read'),
-    },
+ const navigationItems = [
+ {
+ name: 'Dashboard',
+ path: '/dashboard',
+ icon: LayoutDashboard,
+ show: true,
+ },
+ {
+ name: 'Departments',
+ path: '/departments',
+ icon: Network,
+ show: hasPermission('department:manage') || user?.role?.name === 'Core Admin',
+ },
+ {
+ name: 'Members List',
+ path: '/members',
+ icon: Users,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Add Member',
+ path: '/members/add',
+ icon: UserPlus,
+ show: hasPermission('member:create'),
+ },
+ {
+ name: 'Complaints',
+ path: '/complaints',
+ icon: ClipboardList,
+ show: hasPermission('complaint:read'),
+ },
 
 
-    {
-      name: 'Awards & Badges',
-      path: '/awards',
-      icon: Trophy,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Project Sprints',
-      path: '/projects',
-      icon: FolderGit2,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Events Hub',
-      path: '/events',
-      icon: Calendar,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Professional Portfolio',
-      path: '/portfolio',
-      icon: UserIcon,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'AI Productivity Hub',
-      path: '/ai-hub',
-      icon: Cpu,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Attendance Logger',
-      path: '/attendance',
-      icon: ClipboardCheck,
-      show: hasPermission('member:read'),
-    },
-    {
-      name: 'Tasks Board',
-      path: '/tasks',
-      icon: KanbanSquare,
-      show: hasPermission('member:read'),
-    },
-  ];
+ {
+ name: 'Awards & Badges',
+ path: '/awards',
+ icon: Trophy,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Project Sprints',
+ path: '/projects',
+ icon: FolderGit2,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Events Hub',
+ path: '/events',
+ icon: Calendar,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Professional Portfolio',
+ path: '/portfolio',
+ icon: UserIcon,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'AI Productivity Hub',
+ path: '/ai-hub',
+ icon: Cpu,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Attendance Logger',
+ path: '/attendance',
+ icon: ClipboardCheck,
+ show: hasPermission('member:read'),
+ },
+ {
+ name: 'Tasks Board',
+ path: '/tasks',
+ icon: KanbanSquare,
+ show: hasPermission('member:read'),
+ },
+ ];
 
-  const activeItems = navigationItems.filter((item) => item.show);
+ const activeItems = navigationItems.filter((item) => item.show);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+ const toggleMobileMenu = () => {
+ setIsMobileMenuOpen(!isMobileMenuOpen);
+ };
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+ const closeMobileMenu = () => {
+ setIsMobileMenuOpen(false);
+ };
 
-  const getRoleBadgeColor = (roleName: string) => {
-    switch (roleName) {
-      case 'Core Admin':
-        return 'bg-rose-500/10 text-rose-400 border-rose-500/20';
-      case 'Core Team Lead':
-        return 'bg-amber-500/10 text-amber-400 border-amber-500/20';
-      default:
-        return 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-    }
-  };
+ const getRoleBadgeColor = (roleName: string) => {
+ switch (roleName) {
+ case 'Core Admin':
+ return 'bg-error/10 text-error border-error/20';
+ case 'Core Team Lead':
+ return 'bg-warning/10 text-warning border-warning/20';
+ default:
+ return 'bg-success/10 text-success border-success/20';
+ }
+ };
 
-  /* ----- GSAP: Sidebar entrance animation on mount ----- */
-  useEffect(() => {
-    const sidebar = sidebarRef.current;
-    if (!sidebar) return;
+ /* ----- GSAP: Sidebar entrance animation on mount ----- */
+ useEffect(() => {
+ const sidebar = sidebarRef.current;
+ if (!sidebar) return;
 
-    const ctx = gsap.context(() => {
-      // Logo slides in
-      const brand = sidebar.querySelector('.sidebar-brand');
-      if (brand) {
-        gsap.fromTo(brand,
-          { x: -30, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
-        );
-      }
+ const ctx = gsap.context(() => {
+ // Logo slides in
+ const brand = sidebar.querySelector('.sidebar-brand');
+ if (brand) {
+ gsap.fromTo(brand,
+ { x: -30, opacity: 0 },
+ { x: 0, opacity: 1, duration: 0.6, ease: 'power3.out' }
+ );
+ }
 
-      // Nav links stagger in
-      const navLinks = sidebar.querySelectorAll('.nav-link');
-      if (navLinks.length) {
-        gsap.fromTo(navLinks,
-          { x: -40, opacity: 0 },
-          { x: 0, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.2, ease: 'power2.out' }
-        );
-      }
+ // Nav links stagger in
+ const navLinks = sidebar.querySelectorAll('.nav-link');
+ if (navLinks.length) {
+ gsap.fromTo(navLinks,
+ { x: -40, opacity: 0 },
+ { x: 0, opacity: 1, duration: 0.4, stagger: 0.05, delay: 0.2, ease: 'power2.out' }
+ );
+ }
 
-      // User card slides up
-      const userCard = sidebar.querySelector('.sidebar-user');
-      if (userCard) {
-        gsap.fromTo(userCard,
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.5, delay: 0.6, ease: 'power2.out' }
-        );
-      }
-    }, sidebar);
+ // User card slides up
+ const userCard = sidebar.querySelector('.sidebar-user');
+ if (userCard) {
+ gsap.fromTo(userCard,
+ { y: 20, opacity: 0 },
+ { y: 0, opacity: 1, duration: 0.5, delay: 0.6, ease: 'power2.out' }
+ );
+ }
+ }, sidebar);
 
-    return () => ctx.revert();
-  }, []);
+ return () => ctx.revert();
+ }, []);
 
-  /* ----- GSAP: Header entrance animation ----- */
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
+ /* ----- GSAP: Header entrance animation ----- */
+ useEffect(() => {
+ const header = headerRef.current;
+ if (!header) return;
 
-    const ctx = gsap.context(() => {
-      gsap.fromTo(header,
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
-      );
-    }, header);
+ const ctx = gsap.context(() => {
+ gsap.fromTo(header,
+ { y: -20, opacity: 0 },
+ { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }
+ );
+ }, header);
 
-    return () => ctx.revert();
-  }, []);
+ return () => ctx.revert();
+ }, []);
 
-  /* ----- GSAP: Page transition on route change ----- */
-  useEffect(() => {
-    const main = mainRef.current;
-    if (!main || prevPathRef.current === location.pathname) return;
-    prevPathRef.current = location.pathname;
+ /* ----- GSAP: Page transition on route change ----- */
+ useEffect(() => {
+ const main = mainRef.current;
+ if (!main || prevPathRef.current === location.pathname) return;
+ prevPathRef.current = location.pathname;
 
-    // Kill any existing tweens on <main> to prevent overlapping animations
-    // that could leave it stuck at opacity: 0
-    gsap.killTweensOf(main);
+ // Kill any existing tweens on <main> to prevent overlapping animations
+ // that could leave it stuck at opacity: 0
+ gsap.killTweensOf(main);
 
-    // Quick subtle slide-up, but NEVER set opacity to 0 here because
-    // child AnimatedPage components handle their own entrance animations.
-    // If we set opacity: 0 on <main>, the child animation runs on invisible
-    // content and the page appears "stuck/buffering".
-    gsap.fromTo(main,
-      { y: 12 },
-      { y: 0, duration: 0.3, ease: 'power2.out' }
-    );
-  }, [location.pathname]);
+ // Quick subtle slide-up, but NEVER set opacity to 0 here because
+ // child AnimatedPage components handle their own entrance animations.
+ // If we set opacity: 0 on <main>, the child animation runs on invisible
+ // content and the page appears "stuck/buffering".
+ gsap.fromTo(main,
+ { y: 12 },
+ { y: 0, duration: 0.3, ease: 'power2.out' }
+ );
+ }, [location.pathname]);
 
-  return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100">
-      {/* Desktop Sidebar */}
-      <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 glass-panel border-r border-slate-800 shrink-0 sticky top-0 h-screen">
-        {/* Brand/Logo */}
-        <div className="sidebar-brand h-16 flex items-center gap-3 px-6 border-b border-slate-800">
-          <Building className="h-6 w-6 text-indigo-400" />
-          <span className="font-bold text-lg text-gradient leading-none">Society Portal</span>
-        </div>
+ return (
+ <div className="flex min-h-screen bg-appBg text-textPrimary">
+ {/* Desktop Sidebar */}
+ <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 bg-cardBg shadow-sm border-r border-slate-200 shrink-0 sticky top-0 h-screen">
+ {/* Brand/Logo */}
+ <div className="sidebar-brand h-16 flex items-center gap-3 px-6 border-b border-slate-200">
+ <Building className="h-6 w-6 text-ieeeBlue" />
+ <span className="font-bold text-lg text-gradient leading-none">Society Portal</span>
+ </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto sidebar-scrollbar">
-          {activeItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
-                  isActive
-                    ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/20 nav-link-active'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                }`}
-              >
-                <Icon size={18} className={`transition-transform duration-200 ${!isActive ? 'group-hover:scale-110' : ''}`} />
-                <span className={`transition-all duration-200 ${!isActive ? 'group-hover:translate-x-0.5' : ''}`}>{item.name}</span>
-                {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />}
-              </Link>
-            );
-          })}
-        </nav>
+ {/* Navigation */}
+ <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto sidebar-scrollbar">
+ {activeItems.map((item) => {
+ const Icon = item.icon;
+ const isActive = location.pathname === item.path;
+ return (
+ <Link
+ key={item.name}
+ to={item.path}
+ className={`nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
+ isActive
+ ? 'bg-ieeeBlue/90 text-white shadow-lg shadow-ieeeBlue/20 nav-link-active'
+ : 'text-textMuted hover:text-textPrimary hover:bg-slate-50'
+ }`}
+ >
+ <Icon size={18} className={`transition-transform duration-200 ${!isActive ? 'group-hover:scale-110' : ''}`} />
+ <span className={`transition-all duration-200 ${!isActive ? 'group-hover:translate-x-0.5' : ''}`}>{item.name}</span>
+ {isActive && <div className="ml-auto w-1.5 h-1.5 rounded-full bg-white/70 animate-pulse" />}
+ </Link>
+ );
+ })}
+ </nav>
 
-        {/* User profile card & Logout */}
-        <div className="sidebar-user p-4 border-t border-slate-800">
-          <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-slate-900/50 border border-slate-800/50 hover:border-indigo-500/20 transition-all duration-300">
-            {user?.member?.profileImage ? (
-              <img
-                src={user.member.profileImage}
-                alt="Profile"
-                className="h-9 w-9 rounded-lg object-cover border border-indigo-500/20 shrink-0"
-              />
-            ) : (
-              <div className="h-9 w-9 rounded-lg bg-indigo-950 flex items-center justify-center text-indigo-400 font-semibold border border-indigo-500/20 shrink-0">
-                {user?.member?.firstName[0] || user?.email[0].toUpperCase()}
-              </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-200 truncate">
-                {user?.member ? `${user.member.firstName} ${user.member.lastName}` : 'System User'}
-              </p>
-              <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
-            </div>
-          </div>
+ {/* User profile card & Logout */}
+ <div className="sidebar-user p-4 border-t border-slate-200">
+ <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-slate-200 hover:border-ieeeBlue/20 transition-all duration-300">
+ {user?.member?.profileImage ? (
+ <img
+ src={user.member.profileImage}
+ alt="Profile"
+ className="h-9 w-9 rounded-lg object-cover border border-ieeeBlue/20 shrink-0"
+ />
+ ) : (
+ <div className="h-9 w-9 rounded-lg bg-ieeeBlue-soft flex items-center justify-center text-ieeeBlue font-semibold border border-ieeeBlue/20 shrink-0">
+ {user?.member?.firstName[0] || user?.email[0].toUpperCase()}
+ </div>
+ )}
+ <div className="min-w-0 flex-1">
+ <p className="text-xs font-semibold text-textPrimary truncate">
+ {user?.member ? `${user.member.firstName} ${user.member.lastName}` : 'System User'}
+ </p>
+ <p className="text-[10px] text-textMuted truncate">{user?.email}</p>
+ </div>
+ </div>
 
-          <button
-            onClick={logout}
-            className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-800 text-sm font-medium text-slate-400 hover:text-rose-400 hover:border-rose-500/20 hover:bg-rose-500/5 transition-all duration-200 group"
-          >
-            <LogOut size={16} className="transition-transform duration-200 group-hover:-translate-x-0.5" />
-            Log Out
-          </button>
-        </div>
-      </aside>
+ <button
+ onClick={logout}
+ className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200 group"
+ >
+ <LogOut size={16} className="transition-transform duration-200 group-hover:-translate-x-0.5" />
+ Log Out
+ </button>
+ </div>
+ </aside>
 
-      {/* Mobile Menu Backdrop */}
-      {isMobileMenuOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm md:hidden animate-fadeIn"
-          onClick={closeMobileMenu}
-        />
-      )}
+ {/* Mobile Menu Backdrop */}
+ {isMobileMenuOpen && (
+ <div
+ className="fixed inset-0 z-40 bg-appBg/80 md:hidden animate-fadeIn"
+ onClick={closeMobileMenu}
+ />
+ )}
 
-      {/* Mobile Sidebar */}
-      <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 glass-panel border-r border-slate-800 flex flex-col transition-transform duration-300 transform md:hidden ${
-          isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-        }`}
-      >
-        <div className="h-16 flex items-center justify-between px-6 border-b border-slate-800">
-          <div className="flex items-center gap-3">
-            <Building className="h-5 w-5 text-indigo-400" />
-            <span className="font-bold text-base text-gradient">Society Portal</span>
-          </div>
-          <button
-            onClick={toggleMobileMenu}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
-          >
-            <X size={18} />
-          </button>
-        </div>
+ {/* Mobile Sidebar */}
+ <aside
+ className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-cardBg shadow-sm border-r border-slate-200 flex flex-col transition-transform duration-300 transform md:hidden ${
+ isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+ }`}
+ >
+ <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
+ <div className="flex items-center gap-3">
+ <Building className="h-5 w-5 text-ieeeBlue" />
+ <span className="font-bold text-base text-gradient">Society Portal</span>
+ </div>
+ <button
+ onClick={toggleMobileMenu}
+ className="p-1 rounded-lg text-textMuted hover:text-textPrimary hover:bg-slate-100 transition-colors"
+ >
+ <X size={18} />
+ </button>
+ </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-          {activeItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.name}
-                to={item.path}
-                onClick={closeMobileMenu}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
-                  isActive
-                    ? 'bg-indigo-600/90 text-white shadow-lg shadow-indigo-600/25'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
-                }`}
-              >
-                <Icon size={18} />
-                {item.name}
-              </Link>
-            );
-          })}
-        </nav>
+ <nav className="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+ {activeItems.map((item) => {
+ const Icon = item.icon;
+ const isActive = location.pathname === item.path;
+ return (
+ <Link
+ key={item.name}
+ to={item.path}
+ onClick={closeMobileMenu}
+ className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
+ isActive
+ ? 'bg-ieeeBlue/90 text-white shadow-lg shadow-ieeeBlue/25'
+ : 'text-textMuted hover:text-textPrimary hover:bg-slate-50'
+ }`}
+ >
+ <Icon size={18} />
+ {item.name}
+ </Link>
+ );
+ })}
+ </nav>
 
-        <div className="p-4 border-t border-slate-800">
-          <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-slate-900/50 border border-slate-800/50">
-            {user?.member?.profileImage ? (
-              <img
-                src={user.member.profileImage}
-                alt="Profile"
-                className="h-9 w-9 rounded-lg object-cover border border-indigo-500/20 shrink-0"
-              />
-            ) : (
-              <div className="h-9 w-9 rounded-lg bg-indigo-950 flex items-center justify-center text-indigo-400 font-semibold border border-indigo-500/20 shrink-0">
-                {user?.member?.firstName[0] || user?.email[0].toUpperCase()}
-              </div>
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold text-slate-200 truncate">
-                {user?.member ? `${user.member.firstName} ${user.member.lastName}` : 'System User'}
-              </p>
-              <p className="text-[10px] text-slate-400 truncate">{user?.email}</p>
-            </div>
-          </div>
-          <button
-            onClick={logout}
-            className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-800 text-sm font-medium text-slate-400 hover:text-rose-400 hover:border-rose-500/20 hover:bg-rose-500/5 transition-all duration-200"
-          >
-            <LogOut size={16} />
-            Log Out
-          </button>
-        </div>
-      </aside>
+ <div className="p-4 border-t border-slate-200">
+ <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-slate-200">
+ {user?.member?.profileImage ? (
+ <img
+ src={user.member.profileImage}
+ alt="Profile"
+ className="h-9 w-9 rounded-lg object-cover border border-ieeeBlue/20 shrink-0"
+ />
+ ) : (
+ <div className="h-9 w-9 rounded-lg bg-ieeeBlue-soft flex items-center justify-center text-ieeeBlue font-semibold border border-ieeeBlue/20 shrink-0">
+ {user?.member?.firstName[0] || user?.email[0].toUpperCase()}
+ </div>
+ )}
+ <div className="min-w-0 flex-1">
+ <p className="text-xs font-semibold text-textPrimary truncate">
+ {user?.member ? `${user.member.firstName} ${user.member.lastName}` : 'System User'}
+ </p>
+ <p className="text-[10px] text-textMuted truncate">{user?.email}</p>
+ </div>
+ </div>
+ <button
+ onClick={logout}
+ className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200"
+ >
+ <LogOut size={16} />
+ Log Out
+ </button>
+ </div>
+ </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
-        {/* Top Header */}
-        <header ref={headerRef} className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-slate-850 bg-slate-950/60 backdrop-blur-md sticky top-0 z-30">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={toggleMobileMenu}
-              className="p-2 rounded-xl border border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-900 md:hidden transition-colors"
-            >
-              <Menu size={20} />
-            </button>
+ {/* Main Content Area */}
+ <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
+ {/* Top Header */}
+ <header ref={headerRef} className="h-16 flex items-center justify-between px-4 md:px-8 border-b border-slate-850 bg-appBg/60 sticky top-0 z-30">
+ <div className="flex items-center gap-4">
+ <button
+ onClick={toggleMobileMenu}
+ className="p-2 rounded-xl border border-slate-200 text-textMuted hover:text-textPrimary hover:bg-cardBg md:hidden transition-colors"
+ >
+ <Menu size={20} />
+ </button>
 
-            {/* Society Name & Department Switcher */}
-            <div className="flex items-center gap-4">
-              <div className="hidden md:flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-indigo-950 border border-indigo-500/10">
-                  <Building size={16} className="text-indigo-400" />
-                </div>
-                <span className="font-semibold text-sm text-slate-200 md:text-base leading-none">
-                  {user?.societyName}
-                </span>
-              </div>
+ {/* Society Name & Department Switcher */}
+ <div className="flex items-center gap-4">
+ <div className="hidden md:flex items-center gap-2">
+ <div className="p-1.5 rounded-lg bg-ieeeBlue-soft border border-ieeeBlue/20">
+ <Building size={16} className="text-ieeeBlue" />
+ </div>
+ <span className="font-semibold text-sm text-textPrimary md:text-base leading-none">
+ {user?.societyName}
+ </span>
+ </div>
 
-              {/* Department Switcher */}
-              {(availableDepartments.length > 0 || user?.role?.name === 'Core Admin') && (
-                <div className="relative group">
-                  <select
-                    value={activeDepartmentId}
-                    onChange={(e) => setActiveDepartmentId(e.target.value)}
-                    className="appearance-none bg-slate-900 border border-slate-700 text-slate-300 text-sm rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 cursor-pointer"
-                  >
-                    <option value="all">Global (All)</option>
-                    {availableDepartments.map(d => (
-                      <option key={d.departmentId} value={d.departmentId}>
-                        {d.name || `Dept ${d.departmentId.substring(0, 8)}`} ({d.roleName})
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
-                </div>
-              )}
-            </div>
-          </div>
+ {/* Department Switcher */}
+ {(availableDepartments.length > 0 || user?.role?.name === 'Core Admin') && (
+ <div className="relative group">
+ <select
+ value={activeDepartmentId}
+ onChange={(e) => setActiveDepartmentId(e.target.value)}
+ className="appearance-none bg-cardBg border border-slate-200 text-textBody text-sm rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-ieeeBlue focus:ring-1 focus:ring-ieeeBlue cursor-pointer"
+ >
+ <option value="all">Global (All)</option>
+ {availableDepartments.map(d => (
+ <option key={d.departmentId} value={d.departmentId}>
+ {d.name || `Dept ${d.departmentId.substring(0, 8)}`} ({d.roleName})
+ </option>
+ ))}
+ </select>
+ <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-textMuted pointer-events-none" />
+ </div>
+ )}
+ </div>
+ </div>
 
-          {/* User Meta Information */}
-          <div className="flex items-center gap-3">
-            {user?.role && (
-              <span
-                className={`flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full border ${getRoleBadgeColor(
-                  user.role.name
-                )}`}
-              >
-                <Shield size={12} />
-                {user.role.name}
-              </span>
-            )}
+ {/* User Meta Information */}
+ <div className="flex items-center gap-3">
+ {user?.role && (
+ <span
+ className={`flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full border ${getRoleBadgeColor(
+ user.role.name
+ )}`}
+ >
+ <Shield size={12} />
+ {user.role.name}
+ </span>
+ )}
 
-            <Link
-              to={user?.member ? `/members/${user.member.id}` : '#'}
-              className="h-9 w-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 hover:border-indigo-500 hover:text-white hover:shadow-lg hover:shadow-indigo-500/10 transition-all duration-300 shrink-0 overflow-hidden"
-              title="View Profile"
-            >
-              {user?.member?.profileImage ? (
-                <img
-                  src={user.member.profileImage}
-                  alt="Profile"
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <UserIcon size={16} />
-              )}
-            </Link>
-          </div>
-        </header>
+ <Link
+ to={user?.member ? `/members/${user.member.id}` : '#'}
+ className="h-9 w-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-textBody hover:border-ieeeBlue hover:text-white hover:shadow-lg hover:shadow-ieeeBlue/10 transition-all duration-300 shrink-0 overflow-hidden"
+ title="View Profile"
+ >
+ {user?.member?.profileImage ? (
+ <img
+ src={user.member.profileImage}
+ alt="Profile"
+ className="h-full w-full object-cover"
+ />
+ ) : (
+ <UserIcon size={16} />
+ )}
+ </Link>
+ </div>
+ </header>
 
-        {/* Router Outlet for nested page views */}
-        <main ref={mainRef} className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
-          <Outlet />
-        </main>
-      </div>
-    </div>
-  );
+ {/* Router Outlet for nested page views */}
+ <main ref={mainRef} className="flex-1 p-4 md:p-8 max-w-7xl w-full mx-auto">
+ <Outlet />
+ </main>
+ </div>
+ </div>
+ );
 };
 
 export default Layout;

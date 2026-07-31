@@ -33,88 +33,88 @@ import Departments from './pages/Departments.js';
 
 // Create Query Client
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
+ defaultOptions: {
+ queries: {
+ refetchOnWindowFocus: false,
+ retry: 1,
+ },
+ },
 });
 
 const App: React.FC = () => {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <AuthProvider>
-          <DepartmentProvider>
-            <Router>
-            <Routes>
-              {/* Public Routes */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/login/*" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/signup/*" element={<Signup />} />
-              <Route path="/awards/certificate/:id" element={<CertificateView />} />
+ return (
+ <QueryClientProvider client={queryClient}>
+ <ToastProvider>
+ <AuthProvider>
+ <DepartmentProvider>
+ <Router>
+ <Routes>
+ {/* Public Routes */}
+ <Route path="/login" element={<Login />} />
+ <Route path="/login/*" element={<Login />} />
+ <Route path="/signup" element={<Signup />} />
+ <Route path="/signup/*" element={<Signup />} />
+ <Route path="/awards/certificate/:id" element={<CertificateView />} />
 
-              {/* Private Protected Routes */}
-              <Route element={<PrivateRoute />}>
-                <Route element={<Layout />}>
-                  {/* Redirect root to dashboard */}
-                  <Route path="/" element={<Navigate to="/dashboard" replace />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
+ {/* Private Protected Routes */}
+ <Route element={<PrivateRoute />}>
+ <Route element={<Layout />}>
+ {/* Redirect root to dashboard */}
+ <Route path="/" element={<Navigate to="/dashboard" replace />} />
+ <Route path="/dashboard" element={<Dashboard />} />
 
-                  {/* Admin Routes */}
-                  <Route element={<RoleRoute permission="department:manage" />}>
-                    <Route path="/departments" element={<Departments />} />
-                  </Route>
+ {/* Admin Routes */}
+ <Route element={<RoleRoute permission="department:manage" />}>
+ <Route path="/departments" element={<Departments />} />
+ </Route>
 
-                  {/* Member Routes guarded by Role Permissions */}
-                  <Route element={<RoleRoute permission="member:read" />}>
-                    <Route path="/members" element={<MembersList />} />
-                    <Route path="/members/:id" element={<MemberProfile />} />
-                  </Route>
+ {/* Member Routes guarded by Role Permissions */}
+ <Route element={<RoleRoute permission="member:read" />}>
+ <Route path="/members" element={<MembersList />} />
+ <Route path="/members/:id" element={<MemberProfile />} />
+ </Route>
 
-                  <Route element={<RoleRoute permission="member:create" />}>
-                    <Route path="/members/add" element={<AddMember />} />
-                  </Route>
+ <Route element={<RoleRoute permission="member:create" />}>
+ <Route path="/members/add" element={<AddMember />} />
+ </Route>
 
-                  <Route element={<RoleRoute permission="member:update" />}>
-                    <Route path="/members/edit/:id" element={<EditMember />} />
-                  </Route>
+ <Route element={<RoleRoute permission="member:update" />}>
+ <Route path="/members/edit/:id" element={<EditMember />} />
+ </Route>
 
-                  {/* Complaints Route */}
-                  <Route element={<RoleRoute permission="complaint:read" />}>
-                    <Route path="/complaints" element={<Complaints />} />
-                  </Route>
-
-
+ {/* Complaints Route */}
+ <Route element={<RoleRoute permission="complaint:read" />}>
+ <Route path="/complaints" element={<Complaints />} />
+ </Route>
 
 
 
-                  {/* Awards Route */}
-                  <Route element={<RoleRoute permission="member:read" />}>
-                    <Route path="/awards" element={<AwardsDashboard />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/events" element={<Events />} />
-                    <Route path="/portfolio" element={<Portfolio />} />
-                    <Route path="/portfolio/:id" element={<Portfolio />} />
-                    <Route path="/ai-hub" element={<AiHub />} />
-                    <Route path="/attendance" element={<Attendance />} />
-                    <Route path="/tasks" element={<TasksBoard />} />
-                  </Route>
-                </Route>
-              </Route>
 
-              {/* Error Pages */}
-              <Route path="/unauthorized" element={<Unauthorized />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </Router>
-          </DepartmentProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </QueryClientProvider>
-  );
+
+ {/* Awards Route */}
+ <Route element={<RoleRoute permission="member:read" />}>
+ <Route path="/awards" element={<AwardsDashboard />} />
+ <Route path="/projects" element={<Projects />} />
+ <Route path="/events" element={<Events />} />
+ <Route path="/portfolio" element={<Portfolio />} />
+ <Route path="/portfolio/:id" element={<Portfolio />} />
+ <Route path="/ai-hub" element={<AiHub />} />
+ <Route path="/attendance" element={<Attendance />} />
+ <Route path="/tasks" element={<TasksBoard />} />
+ </Route>
+ </Route>
+ </Route>
+
+ {/* Error Pages */}
+ <Route path="/unauthorized" element={<Unauthorized />} />
+ <Route path="*" element={<NotFound />} />
+ </Routes>
+ </Router>
+ </DepartmentProvider>
+ </AuthProvider>
+ </ToastProvider>
+ </QueryClientProvider>
+ );
 };
 
 export default App;

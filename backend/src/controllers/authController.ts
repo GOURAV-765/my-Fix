@@ -185,6 +185,7 @@ export const getCurrentUser = async (
           member: true,
           departments: {
             include: {
+              department: true,
               role: {
                 include: {
                   permissions: {
