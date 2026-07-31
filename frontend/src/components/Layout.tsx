@@ -22,12 +22,16 @@ import {
  KanbanSquare,
  Network,
  ChevronDown,
+ Sun,
+ Moon,
 } from 'lucide-react';
 import { useDepartment } from '../context/DepartmentContext.js';
+import { useTheme } from '../context/ThemeContext.js';
 
 const Layout: React.FC = () => {
  const { user, logout, hasPermission } = useAuth();
  const { activeDepartmentId, setActiveDepartmentId, availableDepartments } = useDepartment();
+ const { theme, toggleTheme } = useTheme();
  const location = useLocation();
  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
  const sidebarRef = useRef<HTMLElement>(null);
@@ -208,11 +212,11 @@ const Layout: React.FC = () => {
  return (
  <div className="flex min-h-screen bg-appBg text-textPrimary">
  {/* Desktop Sidebar */}
- <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 bg-cardBg shadow-sm border-r border-slate-200 shrink-0 sticky top-0 h-screen">
+ <aside ref={sidebarRef} className="hidden md:flex flex-col w-64 bg-cardBg shadow-sm border-r border-border shrink-0 sticky top-0 h-screen">
  {/* Brand/Logo */}
- <div className="sidebar-brand h-16 flex items-center gap-3 px-6 border-b border-slate-200">
+ <div className="sidebar-brand h-16 flex items-center gap-3 px-6 border-b border-border">
  <Building className="h-6 w-6 text-ieeeBlue" />
- <span className="font-bold text-lg text-gradient leading-none">Society Portal</span>
+ <span className="font-bold font-serif text-lg text-textPrimary leading-none">Society Portal</span>
  </div>
 
  {/* Navigation */}
@@ -227,7 +231,7 @@ const Layout: React.FC = () => {
  className={`nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 group ${
  isActive
  ? 'bg-ieeeBlue/90 text-white shadow-lg shadow-ieeeBlue/20 nav-link-active'
- : 'text-textMuted hover:text-textPrimary hover:bg-slate-50'
+ : 'text-textMuted hover:text-textPrimary hover:bg-ieeeBlue-soft'
  }`}
  >
  <Icon size={18} className={`transition-transform duration-200 ${!isActive ? 'group-hover:scale-110' : ''}`} />
@@ -239,8 +243,8 @@ const Layout: React.FC = () => {
  </nav>
 
  {/* User profile card & Logout */}
- <div className="sidebar-user p-4 border-t border-slate-200">
- <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-slate-200 hover:border-ieeeBlue/20 transition-all duration-300">
+ <div className="sidebar-user p-4 border-t border-border">
+ <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-border hover:border-ieeeBlue/20 transition-all duration-300">
  {user?.member?.profileImage ? (
  <img
  src={user.member.profileImage}
@@ -262,7 +266,7 @@ const Layout: React.FC = () => {
 
  <button
  onClick={logout}
- className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200 group"
+ className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200 group"
  >
  <LogOut size={16} className="transition-transform duration-200 group-hover:-translate-x-0.5" />
  Log Out
@@ -280,14 +284,14 @@ const Layout: React.FC = () => {
 
  {/* Mobile Sidebar */}
  <aside
- className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-cardBg shadow-sm border-r border-slate-200 flex flex-col transition-transform duration-300 transform md:hidden ${
+ className={`fixed top-0 bottom-0 left-0 z-50 w-64 bg-cardBg shadow-sm border-r border-border flex flex-col transition-transform duration-300 transform md:hidden ${
  isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
  }`}
  >
- <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
+ <div className="h-16 flex items-center justify-between px-6 border-b border-border">
  <div className="flex items-center gap-3">
  <Building className="h-5 w-5 text-ieeeBlue" />
- <span className="font-bold text-base text-gradient">Society Portal</span>
+ <span className="font-bold font-serif text-base text-textPrimary leading-none">Society Portal</span>
  </div>
  <button
  onClick={toggleMobileMenu}
@@ -309,7 +313,7 @@ const Layout: React.FC = () => {
  className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 ${
  isActive
  ? 'bg-ieeeBlue/90 text-white shadow-lg shadow-ieeeBlue/25'
- : 'text-textMuted hover:text-textPrimary hover:bg-slate-50'
+ : 'text-textMuted hover:text-textPrimary hover:bg-ieeeBlue-soft'
  }`}
  >
  <Icon size={18} />
@@ -319,8 +323,8 @@ const Layout: React.FC = () => {
  })}
  </nav>
 
- <div className="p-4 border-t border-slate-200">
- <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-slate-200">
+ <div className="p-4 border-t border-border">
+ <div className="flex items-center gap-3 p-2 mb-3 rounded-xl bg-cardBg border border-border">
  {user?.member?.profileImage ? (
  <img
  src={user.member.profileImage}
@@ -341,7 +345,7 @@ const Layout: React.FC = () => {
  </div>
  <button
  onClick={logout}
- className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200"
+ className="flex items-center justify-center gap-2.5 w-full px-4 py-2.5 rounded-xl border border-border text-sm font-medium text-textMuted hover:text-error hover:border-error/20 hover:bg-error/5 transition-all duration-200"
  >
  <LogOut size={16} />
  Log Out
@@ -356,7 +360,7 @@ const Layout: React.FC = () => {
  <div className="flex items-center gap-4">
  <button
  onClick={toggleMobileMenu}
- className="p-2 rounded-xl border border-slate-200 text-textMuted hover:text-textPrimary hover:bg-cardBg md:hidden transition-colors"
+ className="p-2 rounded-xl border border-border text-textMuted hover:text-textPrimary hover:bg-cardBg md:hidden transition-colors"
  >
  <Menu size={20} />
  </button>
@@ -367,7 +371,7 @@ const Layout: React.FC = () => {
  <div className="p-1.5 rounded-lg bg-ieeeBlue-soft border border-ieeeBlue/20">
  <Building size={16} className="text-ieeeBlue" />
  </div>
- <span className="font-semibold text-sm text-textPrimary md:text-base leading-none">
+ <span className="font-semibold font-serif text-sm text-textPrimary md:text-base leading-none">
  {user?.societyName}
  </span>
  </div>
@@ -378,7 +382,7 @@ const Layout: React.FC = () => {
  <select
  value={activeDepartmentId}
  onChange={(e) => setActiveDepartmentId(e.target.value)}
- className="appearance-none bg-cardBg border border-slate-200 text-textBody text-sm rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-ieeeBlue focus:ring-1 focus:ring-ieeeBlue cursor-pointer"
+ className="appearance-none bg-cardBg border border-border text-textBody text-sm rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:border-ieeeBlue focus:ring-1 focus:ring-ieeeBlue cursor-pointer"
  >
  <option value="all">Global (All)</option>
  {availableDepartments.map(d => (
@@ -395,6 +399,14 @@ const Layout: React.FC = () => {
 
  {/* User Meta Information */}
  <div className="flex items-center gap-3">
+ <button
+ onClick={toggleTheme}
+ className="p-2 rounded-xl border border-ieeeBlue/20 text-textMuted hover:text-ieeeBlue hover:bg-ieeeBlue-soft transition-colors"
+ title="Toggle Theme"
+ >
+ {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+ </button>
+
  {user?.role && (
  <span
  className={`flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full border ${getRoleBadgeColor(
@@ -408,7 +420,7 @@ const Layout: React.FC = () => {
 
  <Link
  to={user?.member ? `/members/${user.member.id}` : '#'}
- className="h-9 w-9 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-textBody hover:border-ieeeBlue hover:text-white hover:shadow-lg hover:shadow-ieeeBlue/10 transition-all duration-300 shrink-0 overflow-hidden"
+ className="h-9 w-9 rounded-full bg-surfaceBg border border-ieeeBlue/20 flex items-center justify-center text-textBody hover:border-ieeeBlue hover:text-ieeeBlue hover:shadow-lg hover:shadow-ieeeBlue/10 transition-all duration-300 shrink-0 overflow-hidden"
  title="View Profile"
  >
  {user?.member?.profileImage ? (

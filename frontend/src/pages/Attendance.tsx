@@ -295,7 +295,7 @@ const defaultMembersAttendanceList: Member[] = [
  {/* Control Bar */}
  <div className="flex flex-wrap gap-4 items-center justify-between">
  <div className="flex flex-wrap gap-3 items-center">
- <div className="bg-cardBg border border-slate-200 rounded-xl px-3 py-1.5 flex items-center gap-2">
+ <div className="bg-cardBg border border-border rounded-xl px-3 py-1.5 flex items-center gap-2">
  <Calendar className="h-4 w-4 text-success" />
  <select
  value={selectedMeetingId}
@@ -315,14 +315,14 @@ const defaultMembersAttendanceList: Member[] = [
  <>
  <button
  onClick={() => handleBulkUpdate('present')}
- className="bg-cardBg border border-slate-200 hover:border-slate-200 text-success hover:text-success text-xs font-bold px-3 py-2 rounded-xl cursor-pointer flex items-center gap-1.5"
+ className="bg-cardBg border border-border hover:border-border text-success hover:text-success text-xs font-bold px-3 py-2 rounded-xl cursor-pointer flex items-center gap-1.5"
  >
  <UserCheck className="h-3.5 w-3.5" />
  Mark All Present
  </button>
  <button
  onClick={() => handleBulkUpdate('unmarked')}
- className="bg-cardBg border border-slate-200 hover:border-slate-200 text-textMuted hover:text-textBody text-xs font-bold px-3 py-2 rounded-xl cursor-pointer flex items-center gap-1.5"
+ className="bg-cardBg border border-border hover:border-border text-textMuted hover:text-textBody text-xs font-bold px-3 py-2 rounded-xl cursor-pointer flex items-center gap-1.5"
  >
  <RefreshCw className="h-3.5 w-3.5" />
  Reset Attendance
@@ -336,7 +336,7 @@ const defaultMembersAttendanceList: Member[] = [
  <>
  {/* Stats Panel */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-3">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-3">
  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
  Attendance Rate
  </span>
@@ -352,7 +352,7 @@ const defaultMembersAttendanceList: Member[] = [
  </div>
  </div>
 
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex justify-between items-center">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex justify-between items-center">
  <div className="space-y-1">
  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
  Present
@@ -364,7 +364,7 @@ const defaultMembersAttendanceList: Member[] = [
  </div>
  </div>
 
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex justify-between items-center">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex justify-between items-center">
  <div className="space-y-1">
  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
  Absent
@@ -376,21 +376,21 @@ const defaultMembersAttendanceList: Member[] = [
  </div>
  </div>
 
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex justify-between items-center">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex justify-between items-center">
  <div className="space-y-1">
  <span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest block">
  Unmarked
  </span>
  <span className="text-3xl font-extrabold text-textPrimary">{unmarkedCount}</span>
  </div>
- <div className="p-2.5 rounded-xl bg-cardBg text-textMuted border border-slate-200">
+ <div className="p-2.5 rounded-xl bg-cardBg text-textMuted border border-border">
  <Users className="h-6 w-6" />
  </div>
  </div>
  </div>
 
  {/* Filters & Search */}
- <div className="bg-cardBg shadow-sm p-4 rounded-xl border border-slate-200 flex flex-wrap gap-4 justify-between items-center">
+ <div className="bg-cardBg shadow-sm p-4 rounded-xl border border-border flex flex-wrap gap-4 justify-between items-center">
  <div className="relative max-w-md w-full">
  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
  <input
@@ -398,7 +398,7 @@ const defaultMembersAttendanceList: Member[] = [
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="Search members by name or role..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-xs text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl pl-10 pr-4 py-2 text-xs text-textPrimary focus:outline-none"
  />
  </div>
 
@@ -410,7 +410,7 @@ const defaultMembersAttendanceList: Member[] = [
  className={`px-3.5 py-1.5 rounded-lg text-xs font-bold border uppercase tracking-wider transition-colors cursor-pointer ${
  filter === opt
  ? 'bg-ieeeBlue/20 text-ieeeBlue border-ieeeBlue/20'
- : 'bg-transparent text-textMuted border-slate-200 hover:text-textBody'
+ : 'bg-transparent text-textMuted border-border hover:text-textBody'
  }`}
  >
  {opt}
@@ -440,7 +440,7 @@ const defaultMembersAttendanceList: Member[] = [
  ? 'border-success/20 hover:border-success/30'
  : status === 'absent'
  ? 'border-error/20 hover:border-error/30'
- : 'border-slate-200 hover:border-slate-200'
+ : 'border-border hover:border-border'
  }`}
  >
  <div className="flex gap-3">
@@ -460,7 +460,7 @@ const defaultMembersAttendanceList: Member[] = [
  </div>
  </div>
 
- <div className="grid grid-cols-3 bg-cardBg p-1 rounded-xl border border-slate-200 text-[10px] font-bold">
+ <div className="grid grid-cols-3 bg-cardBg p-1 rounded-xl border border-border text-[10px] font-bold">
  <button
  onClick={() => handleUpdateStatus(member.id, 'present')}
  className={`py-1.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer uppercase ${
@@ -487,7 +487,7 @@ const defaultMembersAttendanceList: Member[] = [
  onClick={() => handleUpdateStatus(member.id, 'unmarked')}
  className={`py-1.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer uppercase ${
  status === 'unmarked'
- ? 'bg-slate-100 text-textPrimary border border-slate-200'
+ ? 'bg-slate-100 text-textPrimary border border-border'
  : 'text-textMuted hover:text-slate-350'
  }`}
  >
@@ -501,7 +501,7 @@ const defaultMembersAttendanceList: Member[] = [
  </div>
  </>
  ) : (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center">
  <Calendar className="h-10 w-10 text-slate-750 mx-auto mb-4" />
  <p className="text-sm text-slate-500">No meeting scheduled. Please schedule a meeting above to log attendance.</p>
  </div>
@@ -512,7 +512,7 @@ const defaultMembersAttendanceList: Member[] = [
  {/* Schedule Meeting Modal */}
  {modalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-md w-full space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-md w-full space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Schedule New Meeting</h2>
  <button onClick={() => setModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -527,7 +527,7 @@ const defaultMembersAttendanceList: Member[] = [
  required
  {...register('title')}
  placeholder="e.g. PCB Design Workshop"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -537,7 +537,7 @@ const defaultMembersAttendanceList: Member[] = [
  required
  {...register('date')}
  defaultValue={new Date().toISOString().split('T')[0]}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -546,7 +546,7 @@ const defaultMembersAttendanceList: Member[] = [
  {...register('description')}
  placeholder="Brief outline of topics to cover..."
  rows={4}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <button

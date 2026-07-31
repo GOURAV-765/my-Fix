@@ -256,7 +256,7 @@ const defaultProjectDetail = {
  {activeProject ? (
  <button
  onClick={() => setActiveProject(null)}
- className="bg-cardBg border border-slate-200 hover:border-slate-200 text-textPrimary text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer"
+ className="bg-cardBg border border-border hover:border-border text-textPrimary text-xs font-bold px-4 py-2.5 rounded-xl cursor-pointer"
  >
  ← Back to Directory
  </button>
@@ -283,7 +283,7 @@ const defaultProjectDetail = {
  <div className="space-y-8 animate-fadeIn">
  {/* Stats Bar */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex items-center gap-4">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex items-center gap-4">
  <FolderGit2 className="h-10 w-10 text-ieeeBlue" />
  <div>
  <h3 className="text-lg font-black text-textPrimary">{activeProject.title}</h3>
@@ -292,7 +292,7 @@ const defaultProjectDetail = {
  </span>
  </div>
  </div>
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex items-center justify-between">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex items-center justify-between">
  <div className="flex items-center gap-3">
  <Users className="h-5 w-5 text-techTeal" />
  <span className="text-xs text-slate-350">Teammates:</span>
@@ -308,7 +308,7 @@ const defaultProjectDetail = {
  </button>
  </div>
  </div>
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 flex items-center gap-3 justify-between">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border flex items-center gap-3 justify-between">
  <div className="flex items-center gap-3">
  <CheckSquare className="h-5 w-5 text-success" />
  <span className="text-xs text-slate-350">Kanban tasks:</span>
@@ -368,7 +368,7 @@ const defaultProjectDetail = {
  <span className="text-xs font-bold tracking-wider uppercase text-textMuted">
  {col.replace('_', ' ')}
  </span>
- <span className="text-[10px] bg-cardBg border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full font-black">
+ <span className="text-[10px] bg-cardBg border border-border text-slate-500 px-2 py-0.5 rounded-full font-black">
  {colTasks.length}
  </span>
  </div>
@@ -377,7 +377,7 @@ const defaultProjectDetail = {
  {colTasks.map((t) => (
  <div
  key={t.id}
- className="bg-cardBg p-4 rounded-xl border border-slate-850/80 space-y-3 shadow-md hover:border-slate-200 transition-colors"
+ className="bg-cardBg p-4 rounded-xl border border-slate-850/80 space-y-3 shadow-md hover:border-border transition-colors"
  >
  <div className="flex justify-between items-start gap-2">
  <h4 className="font-bold text-slate-250 text-xs leading-normal">{t.title}</h4>
@@ -402,7 +402,7 @@ const defaultProjectDetail = {
  <select
  value={t.status}
  onChange={(e) => handleMoveTask(t.id, e.target.value)}
- className="bg-appBg border border-slate-200 rounded px-1.5 py-0.5 text-[9px] text-textBody focus:outline-none cursor-pointer"
+ className="bg-appBg border border-border rounded px-1.5 py-0.5 text-[9px] text-textBody focus:outline-none cursor-pointer"
  >
  <option value="TODO">TODO</option>
  <option value="IN_PROGRESS">IN PROGRESS</option>
@@ -424,7 +424,7 @@ const defaultProjectDetail = {
  ========================================== */
  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
  {projects.length === 0 ? (
- <div className="col-span-full bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center">
+ <div className="col-span-full bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center">
  <FolderGit2 className="h-10 w-10 text-slate-700 mx-auto mb-4" />
  <p className="text-sm text-slate-500">No active projects registered in society.</p>
  </div>
@@ -433,7 +433,7 @@ const defaultProjectDetail = {
  <div
  key={proj.id}
  onClick={() => fetchProjectDetails(proj.id)}
- className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 hover:border-ieeeBlue/30 transition-all cursor-pointer flex flex-col justify-between gap-6 shadow-xl relative overflow-hidden group"
+ className="bg-cardBg shadow-sm p-6 rounded-xl border border-border hover:border-ieeeBlue/30 transition-all cursor-pointer flex flex-col justify-between gap-6 shadow-xl relative overflow-hidden group"
  >
  <div className="space-y-4">
  <div className="flex justify-between items-start">
@@ -470,7 +470,7 @@ const defaultProjectDetail = {
  ========================================== */}
  {modalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-lg w-full space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-lg w-full space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Create New Project Workspace</h2>
  <button onClick={() => setModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -485,7 +485,7 @@ const defaultProjectDetail = {
  required
  {...projectReg('title')}
  placeholder="e.g. Society Mobile Companion App"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -495,7 +495,7 @@ const defaultProjectDetail = {
  {...projectReg('description')}
  placeholder="Write clear project objectives and guidelines..."
  rows={4}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <div className="grid grid-cols-2 gap-4">
@@ -505,7 +505,7 @@ const defaultProjectDetail = {
  type="url"
  {...projectReg('githubUrl')}
  placeholder="https://github.com/..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -514,7 +514,7 @@ const defaultProjectDetail = {
  type="url"
  {...projectReg('demoUrl')}
  placeholder="https://..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -525,14 +525,14 @@ const defaultProjectDetail = {
  required
  {...projectReg('techStack')}
  placeholder="React, TypeScript, Node.js, SQLite"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
  <label className="block text-textMuted mb-1">Department</label>
  <select
  {...projectReg('departmentId')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
  >
  <option value="">Global (No Department)</option>
  {availableDepartments.map(d => (
@@ -552,7 +552,7 @@ const defaultProjectDetail = {
 
  {taskModalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-md w-full space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-md w-full space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Create Kanban Task</h2>
  <button onClick={() => setTaskModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -567,7 +567,7 @@ const defaultProjectDetail = {
  required
  {...taskReg('title')}
  placeholder="e.g. Set up JWT session middleware"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -576,7 +576,7 @@ const defaultProjectDetail = {
  {...taskReg('description')}
  placeholder="Write clear task breakdown instructions..."
  rows={3}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <div className="grid grid-cols-2 gap-4">
@@ -584,7 +584,7 @@ const defaultProjectDetail = {
  <label className="block text-textMuted mb-1">Priority</label>
  <select
  {...taskReg('priority')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="LOW">LOW</option>
  <option value="MEDIUM">MEDIUM</option>
@@ -598,7 +598,7 @@ const defaultProjectDetail = {
  type="text"
  {...taskReg('assigneeId')}
  placeholder="UUID of society member"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -612,7 +612,7 @@ const defaultProjectDetail = {
 
  {recruitmentModalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-md w-full space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-md w-full space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Recruit Member to Project</h2>
  <button onClick={() => setRecruitmentModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -627,7 +627,7 @@ const defaultProjectDetail = {
  required
  {...recruitReg('memberId')}
  placeholder="Enter member's database UUID"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -635,7 +635,7 @@ const defaultProjectDetail = {
  <select
  required
  {...recruitReg('role')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
  <option value="DEVELOPER">DEVELOPER</option>
  <option value="DESIGNER">DESIGNER</option>

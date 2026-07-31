@@ -240,7 +240,7 @@ const defaultEventsList = [
  {/* Events Listings */}
  <div className="lg:col-span-2 space-y-6">
  {events.length === 0 ? (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center">
  <Calendar className="h-10 w-10 text-slate-700 mx-auto mb-4" />
  <p className="text-sm text-slate-500">No events scheduled currently.</p>
  </div>
@@ -251,7 +251,7 @@ const defaultEventsList = [
  return (
  <div
  key={event.id}
- className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-6 hover:border-slate-200 transition-colors shadow-lg"
+ className="bg-cardBg shadow-sm p-6 rounded-xl border border-border flex flex-col md:flex-row gap-6 hover:border-border transition-colors shadow-lg"
  >
  {/* Event Banner Placeholder */}
  <div className="h-28 w-full md:w-28 bg-cardBg to-warning/10 border border-orange-500/20 rounded-xl flex flex-col items-center justify-center text-orange-400 font-bold text-center p-4">
@@ -311,7 +311,7 @@ const defaultEventsList = [
  setActiveEvent(event);
  setCheckinModalOpen(true);
  }}
- className="bg-cardBg border border-slate-200 hover:border-slate-200 text-ieeeBlue text-[10px] font-extrabold px-4 py-2 rounded-lg flex items-center gap-1 cursor-pointer"
+ className="bg-cardBg border border-border hover:border-border text-ieeeBlue text-[10px] font-extrabold px-4 py-2 rounded-lg flex items-center gap-1 cursor-pointer"
  >
  <QrCode className="h-3.5 w-3.5" />
  Ticket QR Pass
@@ -338,7 +338,7 @@ const defaultEventsList = [
 
  {/* Sidebar Guide */}
  <div className="lg:col-span-1 space-y-6 self-start">
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-4">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-4">
  <h3 className="text-sm font-bold text-textPrimary flex items-center gap-2">
  <Mic className="h-4 w-4 text-orange-400" />
  Featured Speaker Sessions
@@ -356,7 +356,7 @@ const defaultEventsList = [
  ========================================== */}
  {modalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 overflow-y-auto animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-2xl w-full my-8 space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-2xl w-full my-8 space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Publish New Event</h2>
  <button onClick={() => setModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -373,7 +373,7 @@ const defaultEventsList = [
  required
  {...eventReg('title')}
  placeholder="e.g. AI Sprints Hackathon"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -383,14 +383,14 @@ const defaultEventsList = [
  {...eventReg('description')}
  placeholder="Explain speaker agenda, timelines, and rewards..."
  rows={5}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <button
  type="button"
  onClick={handleRunAIPlanner}
  disabled={aiPlanning}
- className="w-full bg-appBg hover:bg-ieeeBlue/15 border border-slate-200 hover:border-ieeeBlue/40 text-ieeeBlue font-bold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+ className="w-full bg-appBg hover:bg-ieeeBlue/15 border border-border hover:border-ieeeBlue/40 text-ieeeBlue font-bold py-2.5 rounded-xl flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
  >
  {aiPlanning ? (
  <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -409,7 +409,7 @@ const defaultEventsList = [
  type="datetime-local"
  required
  {...eventReg('startDate')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -418,7 +418,7 @@ const defaultEventsList = [
  type="datetime-local"
  required
  {...eventReg('endDate')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -430,7 +430,7 @@ const defaultEventsList = [
  required
  {...eventReg('location')}
  placeholder="Lab 4 / Seminar Hall"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -439,7 +439,7 @@ const defaultEventsList = [
  type="number"
  {...eventReg('budget')}
  placeholder="Estimated costs"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -450,7 +450,7 @@ const defaultEventsList = [
  type="text"
  {...eventReg('speakers')}
  placeholder="John Doe, Jane Smith"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -459,7 +459,7 @@ const defaultEventsList = [
  type="text"
  {...eventReg('sponsors')}
  placeholder="Google, IEEE India"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -467,7 +467,7 @@ const defaultEventsList = [
  <label className="block text-textMuted mb-1">Department</label>
  <select
  {...eventReg('departmentId')}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+ className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
  >
  <option value="">Global (No Department)</option>
  {availableDepartments.map(d => (
@@ -520,7 +520,7 @@ const defaultEventsList = [
 
  {checkinModalOpen && activeEvent && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-sm w-full space-y-6 text-center">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-sm w-full space-y-6 text-center">
  <div className="flex justify-between items-center">
  <h2 className="text-sm font-bold text-slate-350 text-left">Verify Check-In Ticket</h2>
  <button onClick={() => setCheckinModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -557,7 +557,7 @@ const defaultEventsList = [
  required
  {...checkinReg('checkInCode')}
  placeholder="Enter 8-Digit Code (e.g. EV-123456)"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-center text-textPrimary text-sm font-mono focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-center text-textPrimary text-sm font-mono focus:outline-none"
  />
  <button type="submit" className="w-full bg-success hover:bg-success text-white font-bold py-2 rounded-xl cursor-pointer">
  Confirm Check-In Entry

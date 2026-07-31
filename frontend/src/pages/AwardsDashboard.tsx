@@ -246,7 +246,7 @@ const defaultNomineesList: Nominee[] = [
  </p>
  </div>
  <div className="flex items-center gap-3">
- <div className="flex items-center gap-2 bg-appBg px-3 py-1.5 rounded-xl border border-slate-200 text-xs">
+ <div className="flex items-center gap-2 bg-appBg px-3 py-1.5 rounded-xl border border-border text-xs">
  <Calendar className="h-4 w-4 text-ieeeBlue" />
  <input
  type="month"
@@ -331,7 +331,7 @@ const defaultNomineesList: Nominee[] = [
  </div>
 
  {leaderboard.length === 0 ? (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center">
  <Trophy className="h-10 w-10 text-slate-700 mx-auto mb-4" />
  <p className="text-sm text-slate-500">No evaluations run for {period} yet.</p>
  </div>
@@ -341,7 +341,7 @@ const defaultNomineesList: Nominee[] = [
  <div
  key={nom.id}
  className={`bg-cardBg shadow-sm p-5 rounded-xl border flex flex-col gap-3 relative overflow-hidden ${
- nom.status === 'APPROVED' ? 'border-success/20 bg-success/5' : 'border-slate-200'
+ nom.status === 'APPROVED' ? 'border-success/20 bg-success/5' : 'border-border'
  }`}
  >
  <div className="flex items-center justify-between gap-3 relative z-10">
@@ -388,7 +388,7 @@ const defaultNomineesList: Nominee[] = [
 
  {/* Sidebar Guide */}
  <div className="lg:col-span-1 space-y-6 self-start">
- <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 space-y-4">
+ <div className="bg-cardBg shadow-sm p-5 rounded-xl border border-border space-y-4">
  <h3 className="text-sm font-bold text-textPrimary flex items-center gap-2">
  <HelpCircle className="h-4 w-4 text-ieeeBlue" />
  How rankings work
@@ -419,7 +419,7 @@ const defaultNomineesList: Nominee[] = [
  {activeTab === 'gallery' && (
  <div>
  {winners.length === 0 ? (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center max-w-3xl mx-auto">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center max-w-3xl mx-auto">
  <Award className="h-10 w-10 text-slate-700 mx-auto mb-4" />
  <h3 className="text-base font-bold text-textMuted">Winners Gallery is empty</h3>
  <p className="text-xs text-slate-500 mt-1">
@@ -431,7 +431,7 @@ const defaultNomineesList: Nominee[] = [
  {winners.map((win) => (
  <div
  key={win.id}
- className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 shadow-xl flex flex-col items-center gap-5 relative group hover:border-warning/35 transition-all"
+ className="bg-cardBg shadow-sm p-6 rounded-xl border border-border shadow-xl flex flex-col items-center gap-5 relative group hover:border-warning/35 transition-all"
  >
  {/* Badge Icon */}
  <div className="h-20 w-20 rounded-full bg-gradient-to-tr from-warning/10 to-orange-500/10 border border-warning/20 flex items-center justify-center text-warning group-hover:scale-105 transition-transform shadow-[0_0_30px_rgba(245,158,11,0.05)]">
@@ -456,7 +456,7 @@ const defaultNomineesList: Nominee[] = [
  href={`/awards/certificate/${win.nomination.id}`}
  target="_blank"
  rel="noreferrer"
- className="w-full mt-2 bg-appBg/80 hover:bg-ieeeBlue/15 border border-slate-200 hover:border-ieeeBlue/40 text-textBody hover:text-ieeeBlue text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+ className="w-full mt-2 bg-appBg/80 hover:bg-ieeeBlue/15 border border-border hover:border-ieeeBlue/40 text-textBody hover:text-ieeeBlue text-xs font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
  >
  <ExternalLink className="h-3.5 w-3.5" />
  Print Certificate
@@ -479,7 +479,7 @@ const defaultNomineesList: Nominee[] = [
  {rules.map((rule) => {
  const ruleFormId = `rule-form-${rule.id}`;
  return (
- <div key={rule.id} className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 space-y-5">
+ <div key={rule.id} className="bg-cardBg shadow-sm p-6 rounded-xl border border-border space-y-5">
  <div>
  <h3 className="text-base font-extrabold text-textPrimary">{rule.name}</h3>
  <p className="text-xs text-textMuted mt-1">{rule.description}</p>
@@ -508,7 +508,7 @@ const defaultNomineesList: Nominee[] = [
  type="number"
  name="minEvents"
  defaultValue={rule.minEvents}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -517,7 +517,7 @@ const defaultNomineesList: Nominee[] = [
  type="number"
  name="minVolHours"
  defaultValue={rule.minVolHours}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -526,7 +526,7 @@ const defaultNomineesList: Nominee[] = [
  type="number"
  name="minTasks"
  defaultValue={rule.minTasks}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -540,7 +540,7 @@ const defaultNomineesList: Nominee[] = [
  step="0.1"
  name="weightEvents"
  defaultValue={rule.weightEvents}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -550,7 +550,7 @@ const defaultNomineesList: Nominee[] = [
  step="0.1"
  name="weightVolHrs"
  defaultValue={rule.weightVolHrs}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -560,7 +560,7 @@ const defaultNomineesList: Nominee[] = [
  step="0.1"
  name="weightTasks"
  defaultValue={rule.weightTasks}
- className="w-full bg-cardBg border border-slate-200 rounded px-2.5 py-1 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded px-2.5 py-1 text-textPrimary focus:outline-none"
  />
  </div>
  </div>

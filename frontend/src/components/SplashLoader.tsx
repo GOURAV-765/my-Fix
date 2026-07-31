@@ -51,7 +51,7 @@ const SplashLoader: React.FC = () => {
  </div>
 
  {/* Loading Progress Bar */}
- <div className="w-48 h-1 bg-cardBg rounded-full overflow-hidden border border-slate-200 mt-4">
+ <div className="w-48 h-1 bg-cardBg rounded-full overflow-hidden border border-border mt-4">
  <div className="h-full bg-gradient-to-r from-ieeeBlue via-techTeal to-pink-500 rounded-full animate-[loadingProgress_1.8s_ease-in-out_infinite]" />
  </div>
  </div>

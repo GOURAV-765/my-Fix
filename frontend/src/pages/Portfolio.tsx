@@ -192,7 +192,7 @@ const defaultPortfolioData: PortfolioData = {
 
  if (!data) {
  return (
- <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-slate-200 text-center max-w-lg mx-auto">
+ <div className="bg-cardBg shadow-sm p-20 rounded-xl border border-border text-center max-w-lg mx-auto">
  <User className="h-10 w-10 text-slate-700 mx-auto mb-4" />
  <p className="text-sm text-slate-500">Portfolio record not found.</p>
  </div>
@@ -205,7 +205,7 @@ const defaultPortfolioData: PortfolioData = {
  <AnimatedPage>
  <div className="p-6 max-w-7xl mx-auto space-y-8">
  {/* 1. Profile Hero Section */}
- <div className="bg-cardBg shadow-sm p-6 md:p-8 rounded-3xl border border-slate-200 shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 bg-cardBg">
+ <div className="bg-cardBg shadow-sm p-6 md:p-8 rounded-3xl border border-border shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center md:items-start gap-8 bg-cardBg">
  <div className="absolute top-0 right-0 w-48 h-48 bg-ieeeBlue/5 rounded-full blur-3xl -mr-20 -mt-20" />
  
  {/* Avatar */}
@@ -259,7 +259,7 @@ const defaultPortfolioData: PortfolioData = {
  {isOwnProfile && (
  <button
  onClick={() => setEditModalOpen(true)}
- className="md:self-start bg-appBg/80 hover:bg-cardBg border border-slate-200 hover:border-slate-200 text-textBody hover:text-slate-250 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors"
+ className="md:self-start bg-appBg/80 hover:bg-cardBg border border-border hover:border-border text-textBody hover:text-slate-250 text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer transition-colors"
  >
  <Settings className="h-4 w-4" />
  Edit Profile
@@ -274,7 +274,7 @@ const defaultPortfolioData: PortfolioData = {
  <div className="lg:col-span-2 space-y-8">
  
  {/* Projects Contributed To */}
- <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-slate-200 space-y-4">
+ <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-border space-y-4">
  <h3 className="text-base font-extrabold text-textPrimary flex items-center gap-2">
  <FolderGit2 className="h-5 w-5 text-ieeeBlue" />
  Active Projects Mapped
@@ -287,7 +287,7 @@ const defaultPortfolioData: PortfolioData = {
  <div key={pm.id} className="bg-appBg/40 p-4 rounded-xl border border-slate-850 space-y-2">
  <div className="flex justify-between items-center">
  <h4 className="font-bold text-slate-350 text-xs">{pm.project.title}</h4>
- <span className="text-[8px] font-bold bg-cardBg border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full uppercase">
+ <span className="text-[8px] font-bold bg-cardBg border border-border text-slate-500 px-2 py-0.5 rounded-full uppercase">
  {pm.project.status}
  </span>
  </div>
@@ -299,7 +299,7 @@ const defaultPortfolioData: PortfolioData = {
  </div>
 
  {/* Activity Timeline / Logs */}
- <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-slate-200 space-y-4">
+ <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-border space-y-4">
  <h3 className="text-base font-extrabold text-textPrimary flex items-center gap-2">
  <Calendar className="h-5 w-5 text-techTeal" />
  Contribution Timeline Logs
@@ -334,7 +334,7 @@ const defaultPortfolioData: PortfolioData = {
  <div className="lg:col-span-1 space-y-8">
  
  {/* Analytics Stats */}
- <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-slate-200 space-y-5 bg-gradient-to-br from-ieeeBlue/10 via-techTeal/5 to-slate-900/30">
+ <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-border space-y-5 bg-gradient-to-br from-ieeeBlue/10 via-techTeal/5 to-slate-900/30">
  <h3 className="text-base font-extrabold text-textPrimary flex items-center gap-2">
  <TrendingUp className="h-5 w-5 text-success" />
  Contribution Analytics
@@ -350,7 +350,7 @@ const defaultPortfolioData: PortfolioData = {
  </div>
 
  {/* Badges / Verified Awards */}
- <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-slate-200 space-y-4">
+ <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-border space-y-4">
  <h3 className="text-base font-extrabold text-textPrimary flex items-center gap-2">
  <Trophy className="h-5 w-5 text-warning" />
  Verified Badges ({data.awardNominations.length})
@@ -375,7 +375,7 @@ const defaultPortfolioData: PortfolioData = {
  </div>
 
  {/* Skills & Tech Stack */}
- <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-slate-200 space-y-5">
+ <div className="bg-cardBg shadow-sm p-6 rounded-3xl border border-border space-y-5">
  <h3 className="text-base font-extrabold text-textPrimary flex items-center gap-2">
  <Code2 className="h-5 w-5 text-ieeeBlue" />
  Technical Stack
@@ -387,7 +387,7 @@ const defaultPortfolioData: PortfolioData = {
  </span>
  <div className="flex flex-wrap gap-2">
  {(data.skills || '').split(',').filter(Boolean).map((skill, idx) => (
- <span key={idx} className="bg-cardBg border border-slate-200 text-textBody px-2.5 py-1 rounded-xl text-[10px]">
+ <span key={idx} className="bg-cardBg border border-border text-textBody px-2.5 py-1 rounded-xl text-[10px]">
  {skill.trim()}
  </span>
  ))}
@@ -413,7 +413,7 @@ const defaultPortfolioData: PortfolioData = {
  {/* Edit Profile Modal */}
  {editModalOpen && (
  <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 overflow-y-auto animate-fadeIn">
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 max-w-lg w-full my-8 space-y-6">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-lg w-full my-8 space-y-6">
  <div className="flex justify-between items-center">
  <h2 className="text-lg font-bold text-slate-250">Edit Portfolio Details</h2>
  <button onClick={() => setEditModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
@@ -427,7 +427,7 @@ const defaultPortfolioData: PortfolioData = {
  {...register('bio')}
  placeholder="Tell peers about your focus, experience, and timeline goals..."
  rows={4}
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
  <div className="grid grid-cols-2 gap-4">
@@ -437,7 +437,7 @@ const defaultPortfolioData: PortfolioData = {
  type="text"
  {...register('skills')}
  placeholder="WebDev, Public Speaking, Writing"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -446,7 +446,7 @@ const defaultPortfolioData: PortfolioData = {
  type="text"
  {...register('techStack')}
  placeholder="React, SQLite, TypeScript"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -457,7 +457,7 @@ const defaultPortfolioData: PortfolioData = {
  type="url"
  {...register('githubUrl')}
  placeholder="https://github.com/..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -466,7 +466,7 @@ const defaultPortfolioData: PortfolioData = {
  type="url"
  {...register('linkedinUrl')}
  placeholder="https://linkedin.com/in/..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>
@@ -477,7 +477,7 @@ const defaultPortfolioData: PortfolioData = {
  type="url"
  {...register('resumeUrl')}
  placeholder="Link to GDrive / Dropbox PDF"
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  <div>
@@ -486,7 +486,7 @@ const defaultPortfolioData: PortfolioData = {
  type="url"
  {...register('portfolioUrl')}
  placeholder="https://..."
- className="w-full bg-cardBg border border-slate-200 rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
  </div>

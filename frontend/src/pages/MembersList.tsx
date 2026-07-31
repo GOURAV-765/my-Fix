@@ -149,11 +149,11 @@ const defaultMembersList = [
  case 'ACTIVE':
  return 'bg-success/10 text-success border-success/20';
  case 'INACTIVE':
- return 'bg-slate-500/10 text-textMuted border-slate-200';
+ return 'bg-slate-500/10 text-textMuted border-border';
  case 'SUSPENDED':
  return 'bg-warning/10 text-warning border-warning/20';
  default:
- return 'bg-slate-500/10 text-textMuted border-slate-200';
+ return 'bg-slate-500/10 text-textMuted border-border';
  }
  };
 
@@ -182,7 +182,7 @@ const defaultMembersList = [
  <div className="flex gap-2.5 w-full sm:w-auto self-stretch sm:self-auto">
  <button
  onClick={() => setIsInviteModalOpen(true)}
- className="flex items-center gap-2 px-4 py-2.5 bg-cardBg border border-slate-200 hover:bg-slate-100 text-textPrimary rounded-xl text-sm font-semibold transition-all flex-1 sm:flex-initial justify-center cursor-pointer"
+ className="flex items-center gap-2 px-4 py-2.5 bg-cardBg border border-border hover:bg-slate-100 text-textPrimary rounded-xl text-sm font-semibold transition-all flex-1 sm:flex-initial justify-center cursor-pointer"
  >
  <Plus size={16} />
  Invite Member
@@ -210,7 +210,7 @@ const defaultMembersList = [
  placeholder="Search by name, email, or phone..."
  value={search}
  onChange={handleSearchChange}
- className="w-full pl-9 pr-4 py-2 bg-appBg border border-slate-200 focus:border-ieeeBlue focus:ring-2 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-slate-500 focus:outline-none transition-all"
+ className="w-full pl-9 pr-4 py-2 bg-appBg border border-border focus:border-ieeeBlue focus:ring-2 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none transition-all"
  />
  </div>
 
@@ -222,7 +222,7 @@ const defaultMembersList = [
  <select
  value={statusFilter}
  onChange={handleStatusFilterChange}
- className="w-full pl-9 pr-8 py-2 bg-appBg border border-slate-200 focus:border-ieeeBlue focus:ring-2 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all appearance-none cursor-pointer"
+ className="w-full pl-9 pr-8 py-2 bg-appBg border border-border focus:border-ieeeBlue focus:ring-2 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all appearance-none cursor-pointer"
  >
  <option value="">All Statuses</option>
  <option value="ACTIVE">Active</option>
@@ -233,7 +233,7 @@ const defaultMembersList = [
  </div>
 
  {/* Main Table Panel */}
- <div className="bg-cardBg shadow-sm rounded-xl overflow-hidden shadow-xl border border-slate-200">
+ <div className="bg-cardBg shadow-sm rounded-xl overflow-hidden shadow-xl border border-border">
  <div className="overflow-x-auto">
  {isLoading ? (
  <div className="p-8 space-y-4">
@@ -256,7 +256,7 @@ const defaultMembersList = [
  ) : (
  <table className="w-full text-left border-collapse">
  <thead>
- <tr className="border-b border-slate-200 bg-cardBg text-xs font-semibold uppercase tracking-wider text-textMuted">
+ <tr className="border-b border-border bg-cardBg text-xs font-semibold uppercase tracking-wider text-textMuted">
  <th className="px-6 py-4">Name</th>
  <th className="px-6 py-4">Email</th>
  <th className="px-6 py-4">Phone</th>
@@ -271,7 +271,7 @@ const defaultMembersList = [
  {/* Name */}
  <td className="px-6 py-4 font-medium text-textPrimary">
  <div className="flex items-center gap-3">
- <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-ieeeBlue border border-slate-200 shrink-0">
+ <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-ieeeBlue border border-border shrink-0">
  {member.firstName[0]}
  </div>
  <div>
@@ -345,7 +345,7 @@ const defaultMembersList = [
 
  {/* Pagination Controls */}
  {!isLoading && !isError && members.length > 0 && (
- <div className="flex items-center justify-between px-6 py-4 border-t border-slate-200 text-sm text-textMuted">
+ <div className="flex items-center justify-between px-6 py-4 border-t border-border text-sm text-textMuted">
  <div>
  Showing <span className="font-semibold text-slate-350">{((page - 1) * limit) + 1}</span> to{' '}
  <span className="font-semibold text-slate-350">{Math.min(page * limit, meta.total)}</span> of{' '}
@@ -356,7 +356,7 @@ const defaultMembersList = [
  <button
  onClick={() => setPage((p) => Math.max(p - 1, 1))}
  disabled={page === 1}
- className="p-1.5 rounded-lg border border-slate-200 bg-cardBg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-textMuted hover:text-textPrimary transition-colors"
+ className="p-1.5 rounded-lg border border-border bg-cardBg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-textMuted hover:text-textPrimary transition-colors"
  >
  <ChevronLeft size={16} />
  </button>
@@ -371,7 +371,7 @@ const defaultMembersList = [
  <button
  onClick={() => setPage((p) => Math.min(p + 1, meta.totalPages))}
  disabled={page === meta.totalPages}
- className="p-1.5 rounded-lg border border-slate-200 bg-cardBg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-textMuted hover:text-textPrimary transition-colors"
+ className="p-1.5 rounded-lg border border-border bg-cardBg hover:bg-slate-100 disabled:opacity-50 disabled:cursor-not-allowed text-textMuted hover:text-textPrimary transition-colors"
  >
  <ChevronRight size={16} />
  </button>
@@ -424,7 +424,7 @@ const defaultMembersList = [
  {/* Invite Member Modal */}
  {isInviteModalOpen && (
  <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-appBg/85 animate-fade-in">
- <div className="w-full max-w-md rounded-xl bg-cardBg shadow-sm p-6 sm:p-8 border border-slate-200 shadow-2xl space-y-5 animate-slide-in">
+ <div className="w-full max-w-md rounded-xl bg-cardBg shadow-sm p-6 sm:p-8 border border-border shadow-2xl space-y-5 animate-slide-in">
  <div>
  <h3 className="font-bold text-lg text-textPrimary flex items-center gap-2">
  <Plus className="text-ieeeBlue" size={20} />
@@ -448,7 +448,7 @@ const defaultMembersList = [
  disabled={isSendingInvite}
  value={inviteEmail}
  onChange={(e) => setInviteEmail(e.target.value)}
- className="w-full px-4 py-2.5 bg-cardBg border border-slate-200 focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all duration-200"
+ className="w-full px-4 py-2.5 bg-cardBg border border-border focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all duration-200"
  required
  />
  </div>
@@ -463,7 +463,7 @@ const defaultMembersList = [
  disabled={isSendingInvite}
  value={inviteRoleId}
  onChange={(e) => setInviteRoleId(e.target.value)}
- className="w-full px-4 py-2.5 bg-cardBg border border-slate-200 focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all duration-200 appearance-none cursor-pointer"
+ className="w-full px-4 py-2.5 bg-cardBg border border-border focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all duration-200 appearance-none cursor-pointer"
  required
  >
  <option value="">Select Role</option>
@@ -485,7 +485,7 @@ const defaultMembersList = [
  setInviteEmail('');
  setInviteRoleId('');
  }}
- className="px-4 py-2 border border-slate-200 hover:bg-cardBg rounded-xl text-xs font-semibold text-textMuted hover:text-slate-255 transition-all cursor-pointer"
+ className="px-4 py-2 border border-border hover:bg-cardBg rounded-xl text-xs font-semibold text-textMuted hover:text-slate-255 transition-all cursor-pointer"
  >
  Cancel
  </button>

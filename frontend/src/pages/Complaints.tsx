@@ -208,7 +208,7 @@ const defaultComplaintsList: Complaint[] = [
 
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
  {/* Left Side: Submit Form */}
- <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 shadow-xl self-start">
+ <div className="lg:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-border shadow-xl self-start">
  <h2 className="text-xl font-bold text-textPrimary mb-6 flex items-center gap-2">
  <ClipboardList className="h-5 w-5 text-ieeeBlue" />
  File a Complaint
@@ -223,7 +223,7 @@ const defaultComplaintsList: Complaint[] = [
  type="text"
  placeholder="e.g. Broken corridor light bulb"
  {...register('title', { required: 'Title is required' })}
- className="w-full bg-appBg/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ieeeBlue focus:border-transparent transition-all"
+ className="w-full bg-appBg/80 border border-border rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-ieeeBlue focus:border-transparent transition-all"
  />
  {errors.title && <span className="text-xs text-error mt-1 block">{errors.title.message}</span>}
  </div>
@@ -240,7 +240,7 @@ const defaultComplaintsList: Complaint[] = [
  required: 'Description is required',
  minLength: { value: 10, message: 'Description must be at least 10 characters long' },
  })}
- className="w-full bg-appBg/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ieeeBlue focus:border-transparent transition-all"
+ className="w-full bg-appBg/80 border border-border rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-ieeeBlue focus:border-transparent transition-all"
  />
  {errors.description && <span className="text-xs text-error mt-1 block">{errors.description.message}</span>}
  </div>
@@ -249,7 +249,7 @@ const defaultComplaintsList: Complaint[] = [
  <label className="block text-sm font-semibold text-textBody mb-2">Department</label>
  <select
  {...register('departmentId')}
- className="w-full bg-appBg/80 border border-slate-200 rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-ieeeBlue cursor-pointer"
+ className="w-full bg-appBg/80 border border-border rounded-xl px-4 py-2.5 text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-2 focus:ring-ieeeBlue cursor-pointer"
  >
  <option value="">Global (No Department)</option>
  {availableDepartments.map(d => (
@@ -283,7 +283,7 @@ const defaultComplaintsList: Complaint[] = [
  {/* Right Side: Log */}
  <div className="lg:col-span-2 space-y-6">
  {/* Filters Bar */}
- <div className="flex flex-wrap items-center justify-between gap-4 bg-cardBg p-4 rounded-xl border border-slate-200">
+ <div className="flex flex-wrap items-center justify-between gap-4 bg-cardBg p-4 rounded-xl border border-border">
  <div className="flex items-center gap-2 text-sm text-textBody font-semibold">
  <Filter className="h-4 w-4 text-ieeeBlue" />
  Filter Complaints
@@ -292,7 +292,7 @@ const defaultComplaintsList: Complaint[] = [
  <select
  value={categoryFilter}
  onChange={(e) => setCategoryFilter(e.target.value)}
- className="bg-appBg border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-textPrimary focus:outline-none focus:ring-2 focus:ring-ieeeBlue"
+ className="bg-appBg border border-border rounded-lg px-3 py-1.5 text-xs text-textPrimary focus:outline-none focus:ring-2 focus:ring-ieeeBlue"
  >
  <option value="">All Categories</option>
  <option value="PLUMBING">Plumbing</option>
@@ -304,7 +304,7 @@ const defaultComplaintsList: Complaint[] = [
  <select
  value={priorityFilter}
  onChange={(e) => setPriorityFilter(e.target.value)}
- className="bg-appBg border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-textPrimary focus:outline-none focus:ring-2 focus:ring-ieeeBlue"
+ className="bg-appBg border border-border rounded-lg px-3 py-1.5 text-xs text-textPrimary focus:outline-none focus:ring-2 focus:ring-ieeeBlue"
  >
  <option value="">All Priorities</option>
  <option value="URGENT">Urgent</option>
@@ -334,11 +334,11 @@ const defaultComplaintsList: Complaint[] = [
  {complaints.map((complaint) => (
  <div
  key={complaint.id}
- className="bg-cardBg shadow-sm p-5 rounded-xl border border-slate-200 shadow-md hover:border-slate-200 transition-all flex flex-col gap-4"
+ className="bg-cardBg shadow-sm p-5 rounded-xl border border-border shadow-md hover:border-border transition-all flex flex-col gap-4"
  >
  <div className="flex flex-wrap items-center justify-between gap-3">
  <div className="flex items-center gap-3">
- <span className="p-2 rounded-lg bg-appBg/80 border border-slate-200">
+ <span className="p-2 rounded-lg bg-appBg/80 border border-border">
  {getCategoryIcon(complaint.category)}
  </span>
  <div>
@@ -381,7 +381,7 @@ const defaultComplaintsList: Complaint[] = [
  <select
  value={complaint.status}
  onChange={(e) => handleStatusChange(complaint.id, e.target.value)}
- className="bg-appBg border border-slate-200 rounded px-2 py-1 text-xs text-textPrimary focus:outline-none"
+ className="bg-appBg border border-border rounded px-2 py-1 text-xs text-textPrimary focus:outline-none"
  >
  <option value="OPEN">Open</option>
  <option value="IN_PROGRESS">In Progress</option>

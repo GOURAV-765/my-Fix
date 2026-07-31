@@ -27,11 +27,11 @@ const MemberProfile: React.FC = () => {
  case 'ACTIVE':
  return 'bg-success/10 text-success border-success/20';
  case 'INACTIVE':
- return 'bg-slate-550/10 text-textMuted border-slate-200';
+ return 'bg-slate-550/10 text-textMuted border-border';
  case 'SUSPENDED':
  return 'bg-warning/10 text-warning border-warning/20';
  default:
- return 'bg-slate-500/10 text-textMuted border-slate-200';
+ return 'bg-slate-500/10 text-textMuted border-border';
  }
  };
 
@@ -96,7 +96,7 @@ const MemberProfile: React.FC = () => {
  {/* Main Profile Panel */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
  {/* Left Side: Avatar Card */}
- <div className="md:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 flex flex-col items-center text-center space-y-4">
+ <div className="md:col-span-1 bg-cardBg shadow-sm p-6 rounded-xl border border-border flex flex-col items-center text-center space-y-4">
  <div className="relative">
  {member.profileImage ? (
  <img
@@ -137,8 +137,8 @@ const MemberProfile: React.FC = () => {
  {/* Right Side: Profile Details */}
  <div className="md:col-span-2 space-y-6">
  {/* Section: Credentials */}
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 space-y-5">
- <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider border-b border-slate-200 pb-2.5">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border space-y-5">
+ <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider border-b border-border pb-2.5">
  Contact & Membership Info
  </h3>
 
@@ -196,8 +196,8 @@ const MemberProfile: React.FC = () => {
  </div>
 
  {/* Section: Biography / Notes */}
- <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-slate-200 space-y-4">
- <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider border-b border-slate-200 pb-2.5">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border space-y-4">
+ <h3 className="text-sm font-bold text-textPrimary uppercase tracking-wider border-b border-border pb-2.5">
  Biography & Notes
  </h3>
  <p className="text-sm text-textMuted leading-relaxed font-light">

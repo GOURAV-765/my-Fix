@@ -112,7 +112,7 @@ const AddMember: React.FC = () => {
  </div>
 
  {/* Form Panel */}
- <div className="bg-cardBg shadow-sm p-6 rounded-xl shadow-xl border border-slate-200">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl shadow-xl border border-border">
  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
  {/* First Name */}
@@ -126,8 +126,8 @@ const AddMember: React.FC = () => {
  placeholder="Amit"
  disabled={isSubmittingState}
  className={`w-full px-4 py-2.5 bg-cardBg border ${
- errors.firstName ? 'border-error focus:ring-error/20' : 'border-slate-200 focus:ring-ieeeBlue/20'
- } rounded-xl text-sm text-textPrimary placeholder-slate-600 focus:outline-none focus:ring-4 transition-all`}
+ errors.firstName ? 'border-error focus:ring-error/20' : 'border-border focus:ring-ieeeBlue/20'
+ } rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 transition-all`}
  {...register('firstName')}
  />
  {errors.firstName && (
@@ -146,8 +146,8 @@ const AddMember: React.FC = () => {
  placeholder="Sharma"
  disabled={isSubmittingState}
  className={`w-full px-4 py-2.5 bg-cardBg border ${
- errors.lastName ? 'border-error focus:ring-error/20' : 'border-slate-200 focus:ring-ieeeBlue/20'
- } rounded-xl text-sm text-textPrimary placeholder-slate-600 focus:outline-none focus:ring-4 transition-all`}
+ errors.lastName ? 'border-error focus:ring-error/20' : 'border-border focus:ring-ieeeBlue/20'
+ } rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 transition-all`}
  {...register('lastName')}
  />
  {errors.lastName && (
@@ -166,8 +166,8 @@ const AddMember: React.FC = () => {
  placeholder="amit@example.com"
  disabled={isSubmittingState}
  className={`w-full px-4 py-2.5 bg-cardBg border ${
- errors.email ? 'border-error focus:ring-error/20' : 'border-slate-200 focus:ring-ieeeBlue/20'
- } rounded-xl text-sm text-textPrimary placeholder-slate-600 focus:outline-none focus:ring-4 transition-all`}
+ errors.email ? 'border-error focus:ring-error/20' : 'border-border focus:ring-ieeeBlue/20'
+ } rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 transition-all`}
  {...register('email')}
  />
  {errors.email && (
@@ -186,8 +186,8 @@ const AddMember: React.FC = () => {
  placeholder="9876543210"
  disabled={isSubmittingState}
  className={`w-full px-4 py-2.5 bg-cardBg border ${
- errors.phone ? 'border-error focus:ring-error/20' : 'border-slate-200 focus:ring-ieeeBlue/20'
- } rounded-xl text-sm text-textPrimary placeholder-slate-600 focus:outline-none focus:ring-4 transition-all`}
+ errors.phone ? 'border-error focus:ring-error/20' : 'border-border focus:ring-ieeeBlue/20'
+ } rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none focus:ring-4 transition-all`}
  {...register('phone')}
  />
  {errors.phone && (
@@ -204,7 +204,7 @@ const AddMember: React.FC = () => {
  id="roleId"
  disabled={isSubmittingState || isLoadingRoles}
  className={`w-full px-4 py-2.5 bg-cardBg border ${
- errors.roleId ? 'border-error focus:ring-error/20' : 'border-slate-200 focus:ring-ieeeBlue/20'
+ errors.roleId ? 'border-error focus:ring-error/20' : 'border-border focus:ring-ieeeBlue/20'
  } rounded-xl text-sm text-textPrimary focus:outline-none focus:ring-4 transition-all appearance-none`}
  {...register('roleId')}
  >
@@ -228,7 +228,7 @@ const AddMember: React.FC = () => {
  <select
  id="status"
  disabled={isSubmittingState}
- className="w-full px-4 py-2.5 bg-cardBg border border-slate-200 focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 bg-cardBg border border-border focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary focus:outline-none transition-all"
  {...register('status')}
  >
  <option value="ACTIVE">Active</option>
@@ -248,7 +248,7 @@ const AddMember: React.FC = () => {
  type="text"
  placeholder="https://images.unsplash.com/... or relative path"
  disabled={isSubmittingState}
- className="w-full px-4 py-2.5 bg-cardBg border border-slate-200 focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-slate-650 focus:outline-none transition-all"
+ className="w-full px-4 py-2.5 bg-cardBg border border-border focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none transition-all"
  {...register('profileImage')}
  />
  </div>
@@ -263,7 +263,7 @@ const AddMember: React.FC = () => {
  rows={3}
  placeholder="A brief description about the member..."
  disabled={isSubmittingState}
- className="w-full px-4 py-2.5 bg-cardBg border border-slate-200 focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-slate-600 focus:outline-none transition-all resize-none"
+ className="w-full px-4 py-2.5 bg-cardBg border border-border focus:border-ieeeBlue focus:ring-4 focus:ring-ieeeBlue/20 rounded-xl text-sm text-textPrimary placeholder-textMuted focus:outline-none transition-all resize-none"
  {...register('bio')}
  />
  {errors.bio && (
@@ -287,7 +287,7 @@ const AddMember: React.FC = () => {
  <Link
  to={isSubmittingState ? '#' : '/members'}
  onClick={(e) => isSubmittingState && e.preventDefault()}
- className={`px-5 py-2.5 border border-slate-200 hover:bg-cardBg rounded-xl text-sm font-semibold text-textMuted hover:text-slate-250 transition-all ${isSubmittingState ? 'opacity-50 pointer-events-none' : ''}`}
+ className={`px-5 py-2.5 border border-border hover:bg-cardBg rounded-xl text-sm font-semibold text-textMuted hover:text-slate-250 transition-all ${isSubmittingState ? 'opacity-50 pointer-events-none' : ''}`}
  >
  Cancel
  </Link>
