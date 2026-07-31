@@ -5,52 +5,52 @@ import axios from 'axios';
 // API and an infinite 401 → reload loop. In dev we keep localhost for convenience.
 const isProd = import.meta.env.PROD;
 const API_BASE_URL = import.meta.env.VITE_API_URL
-  || (isProd ? '' : 'http://localhost:12000/api/v1');
+ || (isProd ? '' : 'http://localhost:12000/api/v1');
 
 if (!import.meta.env.VITE_API_URL) {
-  console.warn(
-    '[Society Portal] VITE_API_URL is not set. ' +
-    (isProd
-      ? 'Production build will be unable to reach the backend. Set VITE_API_URL in Vercel Environment Variables to your deployed backend URL.'
-      : 'API requests will target localhost:12000 (dev default).')
-  );
+ console.warn(
+ '[Society Portal] VITE_API_URL is not set. ' +
+ (isProd
+ ? 'Production build will be unable to reach the backend. Set VITE_API_URL in Vercel Environment Variables to your deployed backend URL.'
+ : 'API requests will target localhost:12000 (dev default).')
+ );
 }
 
 /**
  * Derive the Socket.IO server URL from the API base URL.
  * E.g. "https://api.example.com/api/v1" → "https://api.example.com"
- *      "http://localhost:5000/api/v1"    → "http://localhost:5000"
+ * "http://localhost:5000/api/v1" → "http://localhost:5000"
  */
 export const getSocketUrl = (): string => {
-  try {
-    const url = new URL(API_BASE_URL);
-    return url.origin;
-  } catch {
-    // Fallback: strip the path portion
-    return API_BASE_URL.replace(/\/api\/v1\/?$/, '') || 'http://localhost:12000';
-  }
+ try {
+ const url = new URL(API_BASE_URL);
+ return url.origin;
+ } catch {
+ // Fallback: strip the path portion
+ return API_BASE_URL.replace(/\/api\/v1\/?$/, '') || 'http://localhost:12000';
+ }
 };
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 60000, // 60-second request timeout to support Render cold starts
-  headers: {
-    'Content-Type': 'application/json',
-  },
+ baseURL: API_BASE_URL,
+ timeout: 60000, // 60-second request timeout to support Render cold starts
+ headers: {
+ 'Content-Type': 'application/json',
+ },
 });
 
 // Request interceptor to automatically attach authorization token
 api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('auth_token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+ (config) => {
+ const token = localStorage.getItem('auth_token');
+ if (token && config.headers) {
+ config.headers.Authorization = `Bearer ${token}`;
+ }
+ return config;
+ },
+ (error) => {
+ return Promise.reject(error);
+ }
 );
 
 // A handler (registered by AuthContext) that resets auth state on a 401.
@@ -58,7 +58,7 @@ api.interceptors.request.use(
 // us touching window.location, which is what previously caused the reload loop.
 let unauthorizedHandler: (() => void) | null = null;
 export const setUnauthorizedHandler = (fn: (() => void) | null): void => {
-  unauthorizedHandler = fn;
+ unauthorizedHandler = fn;
 };
 
 // Response interceptor to handle token expiry / unauthenticated requests.
@@ -66,26 +66,26 @@ export const setUnauthorizedHandler = (fn: (() => void) | null): void => {
 // AuthContext, which drives a single SPA redirect to /login via <Navigate>.
 // This is what hard-fixes the infinite reload/redirect glitch.
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      const token = localStorage.getItem('auth_token');
-      // Don't auto-logout when using demo/mock tokens — they're frontend-only
-      // and will always get 401 from the real backend.
-      const isDemoToken = !token || token === 'demo_local_token';
-      if (!isDemoToken) {
-        localStorage.removeItem('auth_token');
-        if (unauthorizedHandler) {
-          try {
-            unauthorizedHandler();
-          } catch {
-            /* no-op */
-          }
-        }
-      }
-    }
-    return Promise.reject(error);
-  }
+ (response) => response,
+ (error) => {
+ if (error.response && error.response.status === 401) {
+ const token = localStorage.getItem('auth_token');
+ // Don't auto-logout when using demo/mock tokens — they're frontend-only
+ // and will always get 401 from the real backend.
+ const isDemoToken = !token || token === 'demo_local_token';
+ if (!isDemoToken) {
+ localStorage.removeItem('auth_token');
+ if (unauthorizedHandler) {
+ try {
+ unauthorizedHandler();
+ } catch {
+ /* no-op */
+ }
+ }
+ }
+ }
+ return Promise.reject(error);
+ }
 );
 
 export default api;
