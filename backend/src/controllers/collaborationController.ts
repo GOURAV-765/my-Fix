@@ -420,19 +420,7 @@ export const aiEventPlanner = async (
   }
 };
 
-export const aiResumeReview = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { skills, bio, techStack } = req.body;
-    const review = await aiHubService.resumeReviewer(skills, bio, techStack);
-    res.status(200).json({ success: true, review });
-  } catch (error) {
-    next(error);
-  }
-};
+
 
 export const aiGenerateWriting = async (
   req: AuthenticatedRequest,

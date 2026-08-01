@@ -82,67 +82,6 @@ Provide a structured plan. Return ONLY a valid JSON object matching this schema:
     }
   }
 
-  // 2. AI Resume Reviewer & Skill Gap Analysis
-  async resumeReviewer(skills: string, bio: string, techStack: string) {
-    const apiKey = this.getApiKey();
-
-    if (!apiKey) {
-      return {
-        gaps: [
-          'Advanced Cloud Infrastructure (AWS / Docker)',
-          'Automated testing suites (Jest, Playwright)',
-          'Redis caching integration',
-        ],
-        interviewQuestions: [
-          'How do you design database models for multi-tenant tenant isolation?',
-          'What is the difference between custom JWT refresh token rotation and session management?',
-          'Explain the benefits of Repository Pattern in large TypeScript codebases.',
-        ],
-        recommendations:
-          'Build intermediate backend projects focusing on security protocols and rate limiting middleware. Complete cloud deployment certifications.',
-      };
-    }
-
-    try {
-      const prompt = `
-Analyze the profile of this IEEE student developer:
-Bio: "${bio}"
-Skills: "${skills}"
-Tech Stack: "${techStack}"
-
-Identify skill gaps, draft interview questions, and suggest recommendations.
-Return ONLY a valid JSON object matching this schema:
-{
-  "gaps": ["string", "string"],
-  "interviewQuestions": ["string", "string"],
-  "recommendations": "string"
-}
-`;
-
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json' },
-          }),
-        }
-      );
-
-      const resData = (await response.json()) as any;
-      const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
-      return JSON.parse(text.trim());
-    } catch (e) {
-      console.log('Gemini ResumeReviewer failed, using local fallback:', e);
-      return {
-        gaps: ['Cloud architecture', 'CI/CD pipeline configuration'],
-        interviewQuestions: ['Explain middleware.', 'How do you handle auth scaling?'],
-        recommendations: 'Study system design.',
-      };
-    }
-  }
 
   // 3. AI Hub Generators: Meeting minutes, announcements, poster captions
   async generateWriting(type: string, userPrompt: string) {
