@@ -402,8 +402,8 @@ model Task {
   id          String   @id @default(uuid())
   societyId   String
   society     Society  @relation(fields: [societyId], references: [id], onDelete: Cascade)
-  departmentId String?
-  department  Department? @relation(fields: [departmentId], references: [id])
+  departmentId String
+  department  Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
   title       String
   description String?
   status      String   @default("todo") // todo, in_progress, completed

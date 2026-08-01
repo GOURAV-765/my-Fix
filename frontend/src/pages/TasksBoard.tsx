@@ -470,10 +470,11 @@ const defaultTasksMembersList: Member[] = [
  <div>
  <label className="block text-textMuted mb-1">Department</label>
  <select
- {...register('departmentId')}
+ {...register('departmentId', { required: true })}
+ required
  className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
- <option value="">Global (No Department)</option>
+ <option value="" disabled>Select Department (Required)...</option>
  {availableDepartments.map(d => (
  <option key={d.departmentId} value={d.departmentId}>
  {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
