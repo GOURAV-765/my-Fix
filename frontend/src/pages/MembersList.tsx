@@ -271,9 +271,13 @@ const defaultMembersList = [
  {/* Name */}
  <td className="px-6 py-4 font-medium text-textPrimary">
  <div className="flex items-center gap-3">
+ {member.profileImage ? (
+ <img src={member.profileImage} alt={member.firstName} className="h-9 w-9 rounded-full object-cover border border-border shrink-0" />
+ ) : (
  <div className="h-9 w-9 rounded-full bg-slate-100 flex items-center justify-center font-bold text-ieeeBlue border border-border shrink-0">
  {member.firstName[0]}
  </div>
+ )}
  <div>
  <span className="font-semibold">{member.firstName} {member.lastName}</span>
  </div>

@@ -444,9 +444,13 @@ const defaultMembersAttendanceList: Member[] = [
  }`}
  >
  <div className="flex gap-3">
- <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-ieeeBlue to-techTeal flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-md">
- {initials}
- </div>
+ {member.profileImage ? (
+    <img src={member.profileImage} alt={initials} className="h-10 w-10 rounded-xl object-cover shadow-md shrink-0" />
+  ) : (
+    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-ieeeBlue to-techTeal flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-md">
+    {initials}
+    </div>
+  )}
  <div className="min-w-0">
  <h3 className="font-extrabold text-textPrimary text-sm truncate">
  {member.firstName} {member.lastName}

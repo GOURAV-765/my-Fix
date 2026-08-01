@@ -77,9 +77,14 @@ export const getMembers = async (
       prisma.member.count({ where: whereClause }),
     ]);
 
+    const formattedMembers = members.map(m => ({
+      ...m,
+      profileImage: m.avatarUrl,
+    }));
+
     res.status(200).json({
       success: true,
-      data: members,
+      data: formattedMembers,
       meta: {
         total,
         page,
@@ -134,7 +139,10 @@ export const getMemberById = async (
 
     res.status(200).json({
       success: true,
-      data: member,
+      data: {
+        ...member,
+        profileImage: member.avatarUrl,
+      },
     });
   } catch (error) {
     next(error);
