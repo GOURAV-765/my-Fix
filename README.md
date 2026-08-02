@@ -1,88 +1,32 @@
 # Society Management Portal
 
-Welcome to the Society Management Portal repository. This portal is designed to streamline operations for IEEE organizational units and society chapters, featuring member directories, interactive meeting schedules, attendance logging, and a Kanban workflow board.
+A full-stack, multi-tenant portal designed to streamline operations for IEEE organizational units, university societies, and tech communities.
 
-## Module 1 Features
-
-This repository contains **Module 1** of a multi-tenant Society Management Portal, covering:
-
-- **Multi-Tenant Database Design**: Society-isolated schema using Prisma ORM and PostgreSQL.
-- **Authentication**: Stateless session management using JWT access tokens.
-- **Role-Based Access Control (RBAC)**: Support for Core Admin, Core Team Lead, and General Member tiers.
-- **Member Management**: Standard CRUD, status changes, soft-deletes, pagination, search, and filtration.
-
----
-
-## Technical Stack
-
-- **Backend**: Node.js, Express.js, TypeScript, Prisma ORM, JWT, Bcrypt, Zod, Morgan, Helmet, CORS
-- **Frontend**: React 19, Vite, TypeScript, Tailwind CSS v4, React Router DOM, React Hook Form + Zod, TanStack Query (React Query), Lucide Icons
-
----
+This platform replaces fragmented Google Sheets, Discord bots, and messy Notion boards with a single, unified source of truth.
 
 ## Project Structure
+- **/frontend**: React 19, Vite, Tailwind CSS, TypeScript
+- **/backend**: Node.js, Express, Prisma ORM, PostgreSQL, TypeScript
+- **/docs**: Detailed documentation on API endpoints and core features
 
-```text
-├── README.md
-├── frontend/
-└── backend/
-```
-
----
-
-## Setup Instructions
+## Quick Start
 
 ### Backend
-
-```bash
-cd backend
-npm install
-npx prisma migrate dev --name init
-npm run seed
-npm run dev
-```
+1. `cd backend`
+2. Configure `.env` (Use `.env.example` as a template)
+3. `npm install`
+4. `npx prisma migrate dev --name init`
+5. `npm run seed`
+6. `npm run dev`
 
 ### Frontend
+1. `cd frontend`
+2. Configure `.env`
+3. `npm install`
+4. `npm run dev`
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
----
-
-## Test Credentials
-
-Default password:
-
-```
-Password123
-```
-
-### Greenwood Society
-
-- Core Admin: `admin@greenwood.com`
-- Core Team Lead: `lead@greenwood.com`
-- General Member: `member@greenwood.com`
-
-### Skyline Residency
-
-- Core Admin: `admin@skyline.com`
-- General Member: `member@skyline.com`
-
----
-
-## Security
-
-- Multi-tenant data isolation
-- JWT Authentication
-- Role-Based Access Control (RBAC)
-- Soft Delete support
-
----
-
-## Deployments
-
-- **Frontend (Vercel)**: [society-management-portal-zeta.vercel.app](https://society-management-portal-zeta.vercel.app)
-- **Backend (Render)**: [society-management-portal-ex3f.onrender.com](https://society-management-portal-ex3f.onrender.com)
+## Core Technologies
+- **Auth**: Clerk (Frontend) + JWT verification (Backend)
+- **Database**: PostgreSQL with Prisma ORM
+- **UI**: Midnight Zinc Dark Theme, Lucide Icons, React Hook Form
+- **AI**: Gemini 1.5 Flash (Event Planner)
