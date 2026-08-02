@@ -40,7 +40,7 @@ export const createProject = async (
     }
 
     const userDept = await prisma.userDepartment.findFirst({
-      where: { userId: req.user?.id, departmentId },
+      where: { userId: req.user?.userId, departmentId },
     });
 
     if (!userDept) {
@@ -79,7 +79,7 @@ export const listProjects = async (
     const { departmentId } = req.query;
 
     const userDepartments = await prisma.userDepartment.findMany({
-      where: { userId: req.user?.id },
+      where: { userId: req.user?.userId },
     });
     const userDeptIds = userDepartments.map((ud) => ud.departmentId);
 
@@ -120,7 +120,7 @@ export const getProject = async (
     }
 
     const userDept = await prisma.userDepartment.findFirst({
-      where: { userId: req.user?.id, departmentId: project.departmentId },
+      where: { userId: req.user?.userId, departmentId: project.departmentId },
     });
 
     if (!userDept) {

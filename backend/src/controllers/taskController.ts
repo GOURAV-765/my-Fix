@@ -17,7 +17,7 @@ export const getTasks = async (
     const { departmentId } = req.query;
 
     const userDepartments = await prisma.userDepartment.findMany({
-      where: { userId: req.user?.id },
+      where: { userId: req.user?.userId },
     });
     const userDeptIds = userDepartments.map((ud) => ud.departmentId);
 
@@ -70,7 +70,7 @@ export const createTask = async (
 
     // Verify user belongs to this department
     const userDept = await prisma.userDepartment.findFirst({
-      where: { userId: req.user?.id, departmentId },
+      where: { userId: req.user?.userId, departmentId },
     });
 
     if (!userDept) {
@@ -120,7 +120,7 @@ export const updateTask = async (
 
     // Verify user belongs to the task's department
     const userDept = await prisma.userDepartment.findFirst({
-      where: { userId: req.user?.id, departmentId: taskToUpdate.departmentId },
+      where: { userId: req.user?.userId, departmentId: taskToUpdate.departmentId },
     });
 
     if (!userDept) {
