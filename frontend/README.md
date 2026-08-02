@@ -1,32 +1,22 @@
-# React + TypeScript + Vite
+# Frontend - Society Management Portal
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The frontend application is built with modern React (v19) and Vite, featuring a premium "Midnight Zinc" dark mode aesthetic.
 
-Currently, two official plugins are available:
+## Tech Stack
+- **Framework**: React 19 + Vite
+- **Styling**: Tailwind CSS v4
+- **State/Data Fetching**: React Context + Custom Hooks, Axios
+- **Routing**: React Router DOM v7
+- **Forms**: React Hook Form with Zod validation
+- **Authentication**: Clerk
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Key Directories
+- `/src/components`: Reusable UI components (Layout, Animations, Navbars)
+- `/src/context`: Global state (Auth, Theme, Department selection)
+- `/src/pages`: Major feature pages (Dashboard, Members, Projects, Events, Complaints)
+- `/src/services`: API client wrapper
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Setup
+1. Copy `.env.example` to `.env` and fill in your `VITE_CLERK_PUBLISHABLE_KEY` and `VITE_API_URL`.
+2. `npm install`
+3. `npm run dev`
