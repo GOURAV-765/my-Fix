@@ -58,10 +58,15 @@ export class AwardService {
       where: { societyId, deletedAt: null },
     });
 
-    const nominationsList = [];
+    const nominationsList: Awaited<ReturnType<typeof awardRepo.upsertNomination>>[] = [];
 
     for (const rule of rules) {
-      const candidates = [];
+      type Candidate = {
+        member: typeof members[0];
+        score: number;
+        reason: string;
+      };
+      const candidates: Candidate[] = [];
 
       for (const member of members) {
         // Calculate mock/random metrics for demonstration, mixed with DB constraints
