@@ -32,7 +32,7 @@ import meetingRoutes from './routes/meetingRoutes.js';
 import { errorHandler } from './middlewares/error.js';
 
 const app = express();
-const PORT = process.env.PORT || 12000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
 // Security Middlewares
 app.use(helmet());
@@ -122,10 +122,15 @@ const httpServer = createServer(app);
 initSocket(httpServer);
 
 // Start Server
-httpServer.listen(PORT, async () => {
+httpServer.listen(PORT, '0.0.0.0', async () => {
   console.log(`===============================================`);
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`===============================================`);
-  await bootstrapDatabase();
+  try {
+    await bootstrapDatabase();
+    console.log(`✅ Database initialized successfully`);
+  } catch (error) {
+    console.error(`❌ Database initialization failed:`, error);
+  }
 });
