@@ -10,6 +10,8 @@ import { bootstrapDatabase } from './utils/bootstrap.js';
 // Load environment variables
 dotenv.config();
 
+console.log("🚀 [1/4] Starting server initialization (dotenv loaded)...");
+
 // Validate required environment variables at startup
 const requiredEnv = ['CLERK_SECRET_KEY', 'CLERK_PUBLISHABLE_KEY', 'DATABASE_URL'];
 requiredEnv.forEach((envVar) => {
@@ -17,6 +19,8 @@ requiredEnv.forEach((envVar) => {
     console.warn(`⚠️  Startup Warning: Environment variable "${envVar}" is not set.`);
   }
 });
+
+console.log("📦 [2/4] Loading routes and middlewares...");
 
 // Imports
 import authRoutes from './routes/authRoutes.js';
@@ -121,16 +125,21 @@ app.use(errorHandler);
 const httpServer = createServer(app);
 initSocket(httpServer);
 
+console.log(`🔌 [3/4] Attempting to bind port ${PORT} on 0.0.0.0...`);
+
 // Start Server
-httpServer.listen(PORT, '0.0.0.0', async () => {
+httpServer.listen(PORT, '0.0.0.0', () => {
+  console.log(`✅ [4/4] Server successfully bound and listening!`);
   console.log(`===============================================`);
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`===============================================`);
-  try {
-    await bootstrapDatabase();
-    console.log(`✅ Database initialized successfully`);
-  } catch (error) {
-    console.error(`❌ Database initialization failed:`, error);
-  }
+  
+  // Non-blocking database initialization
+  setTimeout(() => {
+    console.log(`⏳ Starting background database bootstrap...`);
+    bootstrapDatabase()
+      .then(() => console.log(`✅ Database initialized successfully`))
+      .catch((error) => console.error(`❌ Database initialization failed:`, error));
+  }, 1000);
 });
