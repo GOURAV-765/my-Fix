@@ -242,16 +242,18 @@ export async function bootstrapDatabase() {
     }
 
     // 6. Ensure default tasks exist
+    const firstDept = await prisma.department.findFirst({ where: { societyId: defaultSociety.id } });
     const existingTasksCount = await prisma.task.count({
       where: { societyId: defaultSociety.id }
     });
 
-    if (existingTasksCount === 0) {
+    if (existingTasksCount === 0 && firstDept) {
       console.log('👉 Seeding default tasks...');
       await prisma.task.createMany({
         data: [
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Design Kickoff Flyer',
             description: 'Create a social media flyer and printing posters for the Fall Kickoff event.',
             status: 'completed',
@@ -260,6 +262,7 @@ export async function bootstrapDatabase() {
           },
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Order KiCad Parts',
             description: 'Purchase soldering kits, microcontrollers, and components for the workshop.',
             status: 'in_progress',
@@ -268,6 +271,7 @@ export async function bootstrapDatabase() {
           },
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Deploy Workshop Registration',
             description: 'Add RSVP forms on the IEEE portal for the upcoming PCB workshop.',
             status: 'todo',
@@ -276,6 +280,7 @@ export async function bootstrapDatabase() {
           },
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Book Room for Industry Panel',
             description: 'Reserve the student union grand hall and request projector configurations.',
             status: 'todo',
@@ -290,12 +295,13 @@ export async function bootstrapDatabase() {
       where: { societyId: defaultSociety.id }
     });
 
-    if (existingProjectsCount === 0) {
+    if (existingProjectsCount === 0 && firstDept) {
       console.log('👉 Seeding default projects...');
       await prisma.project.createMany({
         data: [
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'IEEE Portal Mobile App',
             description: 'React Native mobile companion app for student chapter announcements and QR check-ins.',
             techStack: 'React Native, Expo, TypeScript, Express',
@@ -303,6 +309,7 @@ export async function bootstrapDatabase() {
           },
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Autonomous Micromouse Robot',
             description: 'Custom PCB and flood-fill maze solving robot for regional IEEE competition.',
             techStack: 'C++, STM32, KiCad, Embedded C',
@@ -310,6 +317,7 @@ export async function bootstrapDatabase() {
           },
           {
             societyId: defaultSociety.id,
+            departmentId: firstDept.id,
             title: 'Smart Campus IoT Network',
             description: 'LoRaWAN gateway network monitoring ambient temperature and room occupancy.',
             techStack: 'ESP32, Python, MQTT, InfluxDB',

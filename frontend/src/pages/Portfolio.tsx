@@ -209,10 +209,14 @@ const defaultPortfolioData: PortfolioData = {
  <div className="absolute top-0 right-0 w-48 h-48 bg-ieeeBlue/5 rounded-full blur-3xl -mr-20 -mt-20" />
  
  {/* Avatar */}
+ {data.avatarUrl ? (
+ <img src={data.avatarUrl} alt={data.firstName} className="h-28 w-28 rounded-xl object-cover border-2 border-ieeeBlue/20 shadow-md" />
+ ) : (
  <div className="h-28 w-28 rounded-xl bg-gradient-to-tr from-ieeeBlue/10 to-techTeal/10 border-2 border-ieeeBlue/20 flex items-center justify-center text-ieeeBlue font-extrabold text-4xl shadow-md">
  {data.firstName[0]}
  {data.lastName[0]}
  </div>
+ )}
 
  {/* Info */}
  <div className="flex-1 space-y-4 text-center md:text-left">

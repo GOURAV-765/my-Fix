@@ -300,11 +300,11 @@ const defaultMembersAttendanceList: Member[] = [
  <select
  value={selectedMeetingId}
  onChange={(e) => setSelectedMeetingId(e.target.value)}
- className="bg-transparent border-none text-textPrimary text-xs font-semibold focus:outline-none cursor-pointer"
+ className="bg-cardBg border-none text-textPrimary text-xs font-semibold focus:outline-none cursor-pointer"
  >
- {meetings.length === 0 && <option value="">No meetings scheduled</option>}
+ {meetings.length === 0 && <option value="" className="bg-cardBg text-textPrimary">No meetings scheduled</option>}
  {meetings.map((m) => (
- <option key={m.id} value={m.id}>
+ <option key={m.id} value={m.id} className="bg-cardBg text-textPrimary">
  {m.title} ({m.date})
  </option>
  ))}
@@ -444,9 +444,13 @@ const defaultMembersAttendanceList: Member[] = [
  }`}
  >
  <div className="flex gap-3">
- <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-ieeeBlue to-techTeal flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-md">
- {initials}
- </div>
+ {member.profileImage ? (
+    <img src={member.profileImage} alt={initials} className="h-10 w-10 rounded-xl object-cover shadow-md shrink-0" />
+  ) : (
+    <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-ieeeBlue to-techTeal flex items-center justify-center font-bold text-white text-sm shrink-0 shadow-md">
+    {initials}
+    </div>
+  )}
  <div className="min-w-0">
  <h3 className="font-extrabold text-textPrimary text-sm truncate">
  {member.firstName} {member.lastName}
@@ -487,8 +491,8 @@ const defaultMembersAttendanceList: Member[] = [
  onClick={() => handleUpdateStatus(member.id, 'unmarked')}
  className={`py-1.5 rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer uppercase ${
  status === 'unmarked'
- ? 'bg-slate-100 text-textPrimary border border-border'
- : 'text-textMuted hover:text-slate-350'
+ ? 'bg-surfaceBg text-textPrimary border border-border'
+ : 'text-textMuted hover:text-textBody'
  }`}
  >
  Unmarked

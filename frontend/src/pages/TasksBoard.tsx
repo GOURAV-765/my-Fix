@@ -293,7 +293,7 @@ const defaultTasksMembersList: Member[] = [
  </div>
  ) : (
  colTasks.map((task) => {
- const { initials, name: assigneeName } = getMemberInitialsAndName(task.assigneeId);
+  const { initials, name: assigneeName, profileImage } = getMemberInitialsAndName(task.assigneeId);
  
  // Check if task is overdue
  let isOverdue = false;
@@ -367,9 +367,15 @@ const defaultTasksMembersList: Member[] = [
  </div>
 
  <div className="flex items-center gap-2">
- <span className="text-[10px] text-textMuted" title={assigneeName}>
+ <div className="flex items-center gap-2" title={assigneeName}>
+ {profileImage ? (
+ <img src={profileImage} alt={assigneeName} className="h-5 w-5 rounded-full object-cover border border-border" />
+ ) : (
+ <div className="h-5 w-5 rounded-full bg-ieeeBlue/10 flex items-center justify-center text-[8px] font-bold text-ieeeBlue border border-ieeeBlue/20">
  {initials}
- </span>
+ </div>
+ )}
+ </div>
  <select
  value={task.status}
  onChange={(e) =>
@@ -470,10 +476,11 @@ const defaultTasksMembersList: Member[] = [
  <div>
  <label className="block text-textMuted mb-1">Department</label>
  <select
- {...register('departmentId')}
+ {...register('departmentId', { required: true })}
+ required
  className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-slate-250 focus:outline-none cursor-pointer"
  >
- <option value="">Global (No Department)</option>
+ <option value="" disabled>Select Department (Required)...</option>
  {availableDepartments.map(d => (
  <option key={d.departmentId} value={d.departmentId}>
  {d.name || `Dept ${d.departmentId.substring(0, 8)}`}

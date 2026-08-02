@@ -391,9 +391,13 @@ const Dashboard: React.FC = () => {
  {recentMembers.map((member: any, idx: number) => (
  <div key={member.id} className="member-row group flex items-center justify-between py-3.5 first:pt-0 last:pb-0 hover:bg-surfaceBg -mx-3 px-3 rounded-lg transition-colors duration-200" style={{ opacity: 0 }}>
  <div className="flex items-center gap-3.5 min-w-0">
- <div className="h-10 w-10 rounded-md bg-ieeeBlue-soft flex items-center justify-center font-bold text-ieeeBlue text-sm border border-ieeeBlue/20 shrink-0 group-hover:scale-105 transition-transform">
- {member.firstName[0]}
- </div>
+  {member.profileImage ? (
+    <img src={member.profileImage} alt={member.firstName} className="h-10 w-10 rounded-md object-cover border border-ieeeBlue/20 shrink-0 group-hover:scale-105 transition-transform" />
+  ) : (
+    <div className="h-10 w-10 rounded-md bg-ieeeBlue-soft flex items-center justify-center font-bold text-ieeeBlue text-sm border border-ieeeBlue/20 shrink-0 group-hover:scale-105 transition-transform">
+    {member.firstName[0]}
+    </div>
+  )}
  <div className="min-w-0">
  <h4 className="text-sm font-semibold text-textPrimary group-hover:text-ieeeBlue transition-colors truncate">
  {member.firstName} {member.lastName}

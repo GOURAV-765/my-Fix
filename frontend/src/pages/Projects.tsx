@@ -69,6 +69,7 @@ const Projects: React.FC = () => {
  const { activeDepartmentId, availableDepartments } = useDepartment();
  const [projects, setProjects] = useState<Project[]>([]);
  const [activeProject, setActiveProject] = useState<ProjectDetail | null>(null);
+ const [members, setMembers] = useState<{ id: string; firstName: string; lastName: string }[]>([]);
  const [loading, setLoading] = useState(true);
  const [modalOpen, setModalOpen] = useState(false);
  const [taskModalOpen, setTaskModalOpen] = useState(false);
@@ -179,9 +180,23 @@ const defaultProjectDetail = {
  }
  };
 
- useEffect(() => {
- fetchProjects();
- }, [activeDepartmentId]);
+  const fetchMembers = async () => {
+    try {
+      const params: any = { limit: 100, page: 1 };
+      if (activeDepartmentId !== 'all') {
+        params.departmentId = activeDepartmentId;
+      }
+      const res = await api.get('/members', { params });
+      if (res.data?.success && res.data.data) {
+        setMembers(res.data.data);
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    fetchProjects();
+    fetchMembers();
+  }, [activeDepartmentId]);
 
  const handleCreateProject = async (data: any) => {
  try {
@@ -528,20 +543,21 @@ const defaultProjectDetail = {
  className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
  />
  </div>
- <div>
- <label className="block text-textMuted mb-1">Department</label>
- <select
- {...projectReg('departmentId')}
- className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
- >
- <option value="">Global (No Department)</option>
- {availableDepartments.map(d => (
- <option key={d.departmentId} value={d.departmentId}>
- {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
- </option>
- ))}
- </select>
- </div>
+  <div>
+    <label className="block text-textMuted mb-1">Department</label>
+    <select
+      {...projectReg('departmentId', { required: true })}
+      required
+      className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+    >
+      <option value="" disabled>Select Department (Required)...</option>
+      {availableDepartments.map(d => (
+        <option key={d.departmentId} value={d.departmentId}>
+          {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
+        </option>
+      ))}
+    </select>
+  </div>
  <button type="submit" className="w-full bg-ieeeBlue hover:bg-ieeeBlue text-white font-bold py-2.5 rounded-xl cursor-pointer">
  Initialize Workspace
  </button>
@@ -592,15 +608,18 @@ const defaultProjectDetail = {
  <option value="URGENT">URGENT</option>
  </select>
  </div>
- <div>
- <label className="block text-textMuted mb-1">Assignee Member ID</label>
- <input
- type="text"
- {...taskReg('assigneeId')}
- placeholder="UUID of society member"
- className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
- />
- </div>
+  <div>
+    <label className="block text-textMuted mb-1">Assignee Member</label>
+    <select
+      {...taskReg('assigneeId')}
+      className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+    >
+      <option value="">Unassigned</option>
+      {members.map(m => (
+        <option key={m.id} value={m.id}>{m.firstName} {m.lastName}</option>
+      ))}
+    </select>
+  </div>
  </div>
  <button type="submit" className="w-full bg-ieeeBlue hover:bg-ieeeBlue text-white font-bold py-2.5 rounded-xl cursor-pointer">
  Create Kanban Card
@@ -620,16 +639,19 @@ const defaultProjectDetail = {
  </button>
  </div>
  <form onSubmit={recruitSub(handleRecruitTeammate)} className="space-y-4 text-xs">
- <div>
- <label className="block text-textMuted mb-1">Society Member ID</label>
- <input
- type="text"
- required
- {...recruitReg('memberId')}
- placeholder="Enter member's database UUID"
- className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
- />
- </div>
+  <div>
+    <label className="block text-textMuted mb-1">Society Member</label>
+    <select
+      required
+      {...recruitReg('memberId')}
+      className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+    >
+      <option value="" disabled>Select a member...</option>
+      {members.map(m => (
+        <option key={m.id} value={m.id}>{m.firstName} {m.lastName}</option>
+      ))}
+    </select>
+  </div>
  <div>
  <label className="block text-textMuted mb-1">Project Role</label>
  <select

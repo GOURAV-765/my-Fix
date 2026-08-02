@@ -19,7 +19,6 @@ import {
   updatePortfolio,
   getPortfolio,
   aiEventPlanner,
-  aiResumeReview,
   aiGenerateWriting,
 } from '../controllers/collaborationController.js';
 
@@ -88,7 +87,7 @@ router.get('/portfolio/:id', checkPermission('member:read'), getPortfolio);
 // AI Hub Routes
 // ==========================================
 router.post('/ai/event-planner', checkPermission('member:read'), aiEventPlanner);
-router.post('/ai/resume-review', checkPermission('member:read'), aiResumeReview);
+
 router.post('/ai/generate-writing', checkPermission('member:read'), aiGenerateWriting);
 
 export default router;

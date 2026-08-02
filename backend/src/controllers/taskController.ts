@@ -14,8 +14,32 @@ export const getTasks = async (
       return;
     }
 
+    const { departmentId } = req.query;
+
+    const userDepartments = await prisma.userDepartment.findMany({
+      where: { userId: req.user?.id },
+    });
+    const userDeptIds = userDepartments.map((ud) => ud.departmentId);
+
+    if (userDeptIds.length === 0) {
+      res.status(200).json({ success: true, tasks: [] });
+      return;
+    }
+
+    let whereClause: any = { societyId };
+
+    if (departmentId && typeof departmentId === 'string') {
+      if (!userDeptIds.includes(departmentId)) {
+        res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
+        return;
+      }
+      whereClause.departmentId = departmentId;
+    } else {
+      whereClause.departmentId = { in: userDeptIds };
+    }
+
     const tasks = await prisma.task.findMany({
-      where: { societyId },
+      where: whereClause,
       orderBy: { createdAt: 'desc' },
     });
 
@@ -37,11 +61,27 @@ export const createTask = async (
       return;
     }
 
-    const { title, description, priority, assigneeId, dueDate } = req.body;
+    const { title, description, priority, assigneeId, dueDate, departmentId } = req.body;
+
+    if (!departmentId) {
+      res.status(400).json({ success: false, message: 'Department is required for a task' });
+      return;
+    }
+
+    // Verify user belongs to this department
+    const userDept = await prisma.userDepartment.findFirst({
+      where: { userId: req.user?.id, departmentId },
+    });
+
+    if (!userDept) {
+      res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
+      return;
+    }
 
     const task = await prisma.task.create({
       data: {
         societyId,
+        departmentId,
         title,
         description,
         priority: priority || 'medium',
@@ -70,7 +110,23 @@ export const updateTask = async (
     }
 
     const { id } = req.params;
-    const { title, description, priority, assigneeId, dueDate, status } = req.body;
+    const { title, description, priority, assigneeId, dueDate, status, departmentId } = req.body;
+
+    const taskToUpdate = await prisma.task.findUnique({ where: { id } });
+    if (!taskToUpdate) {
+      res.status(404).json({ success: false, message: 'Task not found' });
+      return;
+    }
+
+    // Verify user belongs to the task's department
+    const userDept = await prisma.userDepartment.findFirst({
+      where: { userId: req.user?.id, departmentId: taskToUpdate.departmentId },
+    });
+
+    if (!userDept) {
+      res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
+      return;
+    }
 
     // Use update to get the actual updated task object back rather than a batch count.
     const updatedTask = await prisma.task.update({
@@ -82,6 +138,7 @@ export const updateTask = async (
         assigneeId,
         dueDate,
         status,
+        ...(departmentId && { departmentId }), // Allow changing department if provided, though typically won't happen
       },
     });
 

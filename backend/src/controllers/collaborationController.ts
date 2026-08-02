@@ -32,7 +32,22 @@ export const createProject = async (
       return;
     }
 
-    const { title, description, githubUrl, demoUrl, techStack } = req.body;
+    const { title, description, githubUrl, demoUrl, techStack, departmentId } = req.body;
+    
+    if (!departmentId) {
+      res.status(400).json({ success: false, message: 'Department is required for a project' });
+      return;
+    }
+
+    const userDept = await prisma.userDepartment.findFirst({
+      where: { userId: req.user?.id, departmentId },
+    });
+
+    if (!userDept) {
+      res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
+      return;
+    }
+
     const project = await collabService.createProject(societyId, {
       title,
       description,
@@ -40,6 +55,7 @@ export const createProject = async (
       demoUrl,
       techStack,
       ownerId: member.id,
+      departmentId,
     });
 
     res.status(201).json({ success: true, project });
@@ -60,8 +76,24 @@ export const listProjects = async (
       return;
     }
 
-    const projects = await collabService.listProjects(societyId);
-    res.status(200).json({ success: true, projects });
+    const { departmentId } = req.query;
+
+    const userDepartments = await prisma.userDepartment.findMany({
+      where: { userId: req.user?.id },
+    });
+    const userDeptIds = userDepartments.map((ud) => ud.departmentId);
+
+    if (userDeptIds.length === 0) {
+      res.status(200).json({ success: true, projects: [] });
+      return;
+    }
+
+    try {
+      const projects = await collabService.listProjects(societyId, userDeptIds, departmentId as string);
+      res.status(200).json({ success: true, projects });
+    } catch (e: any) {
+      res.status(403).json({ success: false, message: e.message });
+    }
   } catch (error) {
     next(error);
   }
@@ -84,6 +116,15 @@ export const getProject = async (
 
     if (!project) {
       res.status(404).json({ success: false, message: 'Project not found.' });
+      return;
+    }
+
+    const userDept = await prisma.userDepartment.findFirst({
+      where: { userId: req.user?.id, departmentId: project.departmentId },
+    });
+
+    if (!userDept) {
+      res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
       return;
     }
 
@@ -379,19 +420,7 @@ export const aiEventPlanner = async (
   }
 };
 
-export const aiResumeReview = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
-  try {
-    const { skills, bio, techStack } = req.body;
-    const review = await aiHubService.resumeReviewer(skills, bio, techStack);
-    res.status(200).json({ success: true, review });
-  } catch (error) {
-    next(error);
-  }
-};
+
 
 export const aiGenerateWriting = async (
   req: AuthenticatedRequest,
