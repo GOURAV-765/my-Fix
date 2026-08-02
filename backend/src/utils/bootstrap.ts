@@ -482,12 +482,12 @@ export async function bootstrapDatabase() {
         }
         if (marcus) {
           await prisma.userDepartment.create({
-            data: { userId: marcus.id, departmentId: techDept.id, roleId: generalMemberRole.id }
+            data: { userId: marcus.id, departmentId: techDept.id, roleId: generalMemberRole!.id }
           });
         }
         if (elena) {
           await prisma.userDepartment.create({
-            data: { userId: elena.id, departmentId: prDept.id, roleId: generalMemberRole.id }
+            data: { userId: elena.id, departmentId: prDept.id, roleId: generalMemberRole!.id }
           });
         }
 

@@ -57,7 +57,7 @@ Provide a structured plan. Return ONLY a valid JSON object matching this schema:
 `;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${process.env.GEMINI_MODEL || 'gemini-1.5-flash'}:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -106,7 +106,7 @@ Output clean, well-formatted markdown text ready for posting. Keep it under 250 
 `;
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/${process.env.GEMINI_MODEL || 'gemini-1.5-flash'}:generateContent?key=${apiKey}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -117,6 +117,10 @@ Output clean, well-formatted markdown text ready for posting. Keep it under 250 
       );
 
       const resData = (await response.json()) as any;
+      if (resData.error) {
+        console.error('Gemini API Error:', resData.error);
+        return `API Error: ${resData.error.message}`;
+      }
       const text = resData.candidates?.[0]?.content?.parts?.[0]?.text;
       return text ? text.trim() : 'AI generation error.';
     } catch (e) {

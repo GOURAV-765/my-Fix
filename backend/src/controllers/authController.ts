@@ -272,6 +272,20 @@ export const getCurrentUser = async (
                   },
                 },
                 member: true,
+                departments: {
+                  include: {
+                    department: true,
+                    role: {
+                      include: {
+                        permissions: {
+                          include: {
+                            permission: true,
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
               },
             });
             console.log(`Auto-registered Clerk user: ${email}`);
