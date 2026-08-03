@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { createServer } from 'http';
 import { initSocket } from './config/socket.js';
 import { bootstrapDatabase } from './utils/bootstrap.js';
+import prisma from './config/db.js';
 
 // Load environment variables
 dotenv.config();
@@ -138,8 +139,12 @@ httpServer.listen(PORT, '0.0.0.0', () => {
   // Non-blocking database initialization
   setTimeout(() => {
     console.log(`⏳ Starting background database bootstrap...`);
-    bootstrapDatabase()
-      .then(() => console.log(`✅ Database initialized successfully`))
+    prisma.$connect()
+      .then(() => {
+        console.log(`✅ Database connected successfully`);
+        return bootstrapDatabase();
+      })
+      .then(() => console.log(`✅ Database bootstrap completed successfully`))
       .catch((error) => console.error(`❌ Database initialization failed:`, error));
   }, 1000);
 });
