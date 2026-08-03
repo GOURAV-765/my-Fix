@@ -3,27 +3,27 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+
+console.log("[Startup] Initializing dotenv...");
+dotenv.config();
+console.log("[Startup] dotenv initialized.");
+
+console.log("[Startup] Importing internal modules...");
 import { createServer } from 'http';
 import { initSocket } from './config/socket.js';
 import { bootstrapDatabase } from './utils/bootstrap.js';
 import prisma from './config/db.js';
+console.log("[Startup] Internal modules imported.");
 
-// Load environment variables
-dotenv.config();
-
-console.log("🚀 [1/4] Starting server initialization (dotenv loaded)...");
-
-// Validate required environment variables at startup
+console.log("[Startup] Validating environment variables...");
 const requiredEnv = ['CLERK_SECRET_KEY', 'CLERK_PUBLISHABLE_KEY', 'DATABASE_URL'];
 requiredEnv.forEach((envVar) => {
   if (!process.env[envVar]) {
-    console.warn(`⚠️  Startup Warning: Environment variable "${envVar}" is not set.`);
+    console.warn(`[Startup] Warning: Environment variable "${envVar}" is not set.`);
   }
 });
 
-console.log("📦 [2/4] Loading routes and middlewares...");
-
-// Imports
+console.log("[Startup] Importing routes...");
 import authRoutes from './routes/authRoutes.js';
 import memberRoutes from './routes/memberRoutes.js';
 import announcementRoutes from './routes/announcementRoutes.js';
@@ -35,11 +35,13 @@ import collaborationRoutes from './routes/collaborationRoutes.js';
 import taskRoutes from './routes/taskRoutes.js';
 import meetingRoutes from './routes/meetingRoutes.js';
 import { errorHandler } from './middlewares/error.js';
+console.log("[Startup] Routes imported.");
 
+console.log("[Startup] Creating Express app...");
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
+console.log("[Startup] Express app created.");
 
-// Security Middlewares
+console.log("[Startup] Configuring middlewares...");
 app.use(helmet());
 app.use(
   cors({
@@ -48,21 +50,13 @@ app.use(
         callback(null, true);
         return;
       }
-
       const localAllowed = [
-        'http://localhost:5180',
-        'http://127.0.0.1:5180',
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
-        'http://localhost:5181',
-        'http://127.0.0.1:5181',
+        'http://localhost:5180', 'http://127.0.0.1:5180',
+        'http://localhost:5173', 'http://127.0.0.1:5173',
+        'http://localhost:5181', 'http://127.0.0.1:5181',
         'https://society-management-portal-zeta.vercel.app',
       ];
-
-      const envAllowed = process.env.ALLOWED_ORIGINS
-        ? process.env.ALLOWED_ORIGINS.split(',')
-        : [];
-
+      const envAllowed = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
       const isVercel = origin.startsWith('https://society-management-portal') && origin.endsWith('.vercel.app');
 
       if (localAllowed.includes(origin) || envAllowed.includes(origin) || isVercel) {
@@ -76,18 +70,13 @@ app.use(
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   })
 );
-
-// Logging Middleware
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
-
-// Parse JSON Bodies
 app.use(express.json());
-
-// Rate Limiter
 import { rateLimiter } from './middlewares/rateLimiter.js';
 app.use(rateLimiter);
+console.log("[Startup] Middlewares configured.");
 
-// API Routes
+console.log("[Startup] Registering routes...");
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/members', memberRoutes);
 app.use('/api/v1/announcements', announcementRoutes);
@@ -99,52 +88,34 @@ app.use('/api/v1/tasks', taskRoutes);
 app.use('/api/v1/meetings', meetingRoutes);
 app.use('/api/v1', collaborationRoutes);
 
-
-
-
-// Health Check Endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date(),
-    service: 'society-management-backend',
-  });
+  res.status(200).json({ status: 'healthy', timestamp: new Date(), service: 'society-management-backend' });
 });
 
-// 404 Route handler for undefined endpoints
 app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Resource not found: ${req.originalUrl}`,
-  });
+  res.status(404).json({ success: false, message: `Resource not found: ${req.originalUrl}` });
 });
-
-// Error handling middleware (MUST be last)
 app.use(errorHandler);
+console.log("[Startup] Routes registered.");
 
-// Create HTTP Server & Init Socket.IO
-const httpServer = createServer(app);
-initSocket(httpServer);
+console.log("[Startup] Creating HTTP server and initializing socket...");
+const server = createServer(app);
+initSocket(server);
+console.log("[Startup] Socket initialized.");
 
-console.log(`🔌 [3/4] Attempting to bind port ${PORT} on 0.0.0.0...`);
-
-// Start Server
-httpServer.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ [4/4] Server successfully bound and listening!`);
-  console.log(`===============================================`);
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🔧 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`===============================================`);
-  
-  // Non-blocking database initialization
-  setTimeout(() => {
-    console.log(`⏳ Starting background database bootstrap...`);
+console.log("[Startup] Binding to port...");
+const PORT = Number(process.env.PORT) || 5000;
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`Listening on ${PORT}`);
+    
+    // Database bootstrap moved after server.listen()
+    console.log("[Startup] Initializing Prisma database connection...");
     prisma.$connect()
       .then(() => {
-        console.log(`✅ Database connected successfully`);
+        console.log("[Startup] Prisma connected successfully.");
+        console.log("[Startup] Bootstrapping database...");
         return bootstrapDatabase();
       })
-      .then(() => console.log(`✅ Database bootstrap completed successfully`))
-      .catch((error) => console.error(`❌ Database initialization failed:`, error));
-  }, 1000);
+      .then(() => console.log("[Startup] Database bootstrap completed successfully."))
+      .catch((error) => console.error("[Startup] Database initialization failed:", error));
 });
