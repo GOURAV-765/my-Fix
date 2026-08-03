@@ -23,6 +23,7 @@ interface Member {
  lastName: string;
  unitNumber: string;
  phone: string | null;
+ profileImage?: string | null;
  user: {
  email: string;
  role: {
