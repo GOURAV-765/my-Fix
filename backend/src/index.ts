@@ -1,3 +1,10 @@
+process.on('uncaughtException', (err) => {
+  console.error('[Fatal Error] Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[Fatal Error] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -104,7 +111,7 @@ initSocket(server);
 console.log("[Startup] Socket initialized.");
 
 console.log("[Startup] Binding to port...");
-const PORT = Number(process.env.PORT) || 5000;
+const PORT = Number(process.env.PORT) || 10000;
 server.listen(PORT, "0.0.0.0", () => {
     console.log(`Listening on ${PORT}`);
     
