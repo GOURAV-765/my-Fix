@@ -4,8 +4,12 @@ import axios from 'axios';
 // NEVER fall back to localhost in a production build — that produces an unreachable
 // API and an infinite 401 → reload loop. In dev we keep localhost for convenience.
 const isProd = import.meta.env.PROD;
-const API_BASE_URL = import.meta.env.VITE_API_URL
+let API_BASE_URL = import.meta.env.VITE_API_URL
  || (isProd ? '' : 'http://localhost:12000/api/v1');
+
+if (API_BASE_URL && !API_BASE_URL.endsWith('/api/v1')) {
+  API_BASE_URL = API_BASE_URL.replace(/\/$/, '') + '/api/v1';
+}
 
 if (!import.meta.env.VITE_API_URL) {
  console.warn(
