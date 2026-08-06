@@ -21,6 +21,7 @@ interface Member {
  id: string;
  firstName: string;
  lastName: string;
+ profileImage?: string | null;
  user: {
  role: {
  name: string;
@@ -225,13 +226,14 @@ const defaultTasksMembersList: Member[] = [
  };
 
  const getMemberInitialsAndName = (assigneeId: string | null) => {
- if (!assigneeId) return { initials: '?', name: 'Unassigned' };
- if (assigneeId === '__all__') return { initials: 'ALL', name: 'All Members' };
+ if (!assigneeId) return { initials: '?', name: 'Unassigned', profileImage: null };
+ if (assigneeId === '__all__') return { initials: 'ALL', name: 'All Members', profileImage: null };
  const member = members.find((m) => m.id === assigneeId);
- if (!member) return { initials: '?', name: 'Unknown Member' };
+ if (!member) return { initials: '?', name: 'Unknown Member', profileImage: null };
  return {
  initials: `${member.firstName[0]}${member.lastName[0]}`.toUpperCase(),
  name: `${member.firstName} ${member.lastName}`,
+ profileImage: member.profileImage,
  };
  };
 
