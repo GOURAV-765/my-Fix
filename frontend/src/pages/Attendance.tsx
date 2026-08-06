@@ -243,7 +243,7 @@ const defaultMembersAttendanceList: Member[] = [
  else unmarkedCount++;
  });
 
- const attendanceRate = totalMembers > 0 ? Math.round((presentCount / (presentCount + absentCount || 1)) * 100) : 0;
+ const attendanceRate = totalMembers > 0 ? Math.round((presentCount / totalMembers) * 100) : 0;
 
  // Filter and search logic
  const filteredMembers = members.filter((member) => {
