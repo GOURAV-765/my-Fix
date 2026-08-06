@@ -3,8 +3,8 @@ services:
     name: society-portal-backend
     env: node
     plan: free
-    rootDir: backend
-    buildCommand: npm install --include=dev && npm run render-build
+    rootDir: .
+    buildCommand: npm install && npm run render-build
     startCommand: npm run start
     envVars:
       - key: NODE_ENV
@@ -18,4 +18,4 @@ services:
       - key: ALLOWED_ORIGINS
         sync: true
       - key: DATABASE_URL
-        value: file:./dev.db
+        sync: true
