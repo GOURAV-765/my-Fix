@@ -32,6 +32,7 @@ const createProjectSchema = z.object({
     githubUrl: z.string().url().optional().or(z.literal('')),
     demoUrl: z.string().url().optional().or(z.literal('')),
     techStack: z.string().min(2, 'Tech stack is required'),
+    departmentId: z.string({ required_error: 'Department is required for a project' }),
   }),
 });
 

@@ -19,6 +19,7 @@ import {
  Loader2,
  AlertCircle,
  XCircle,
+ Calendar,
 } from 'lucide-react';
 
 interface Project {
@@ -74,6 +75,7 @@ const Projects: React.FC = () => {
  const [modalOpen, setModalOpen] = useState(false);
  const [taskModalOpen, setTaskModalOpen] = useState(false);
  const [recruitmentModalOpen, setRecruitmentModalOpen] = useState(false);
+ const [sprintModalOpen, setSprintModalOpen] = useState(false);
 
  const { register: projectReg, handleSubmit: projectSub, reset: projectReset } = useForm<{
  title: string;
@@ -94,6 +96,12 @@ const Projects: React.FC = () => {
  const { register: recruitReg, handleSubmit: recruitSub, reset: recruitReset } = useForm<{
  memberId: string;
  role: string;
+ }>();
+
+ const { register: sprintReg, handleSubmit: sprintSub, reset: sprintReset } = useForm<{
+ title: string;
+ description: string;
+ dueDate: string;
  }>();
 
 const defaultProjectsList: Project[] = [
@@ -208,7 +216,26 @@ const defaultProjectDetail = {
  fetchProjects();
  }
  } catch (err: any) {
+ if (err.response?.status === 401) {
+ showToast('Demo mode: Project workspace created locally.', 'success');
+ const newProj = {
+ id: `proj_${Date.now()}`,
+ title: data.title,
+ description: data.description,
+ githubUrl: data.githubUrl || null,
+ demoUrl: data.demoUrl || null,
+ techStack: data.techStack,
+ status: 'IDEATION',
+ members: [],
+ milestones: [],
+ tasks: [],
+ };
+ setProjects([newProj, ...projects]);
+ setModalOpen(false);
+ projectReset();
+ } else {
  showToast(err.response?.data?.message || 'Failed to register project.', 'error');
+ }
  }
  };
 
@@ -239,6 +266,21 @@ const defaultProjectDetail = {
  }
  } catch (err: any) {
  showToast('Failed to recruit teammate.', 'error');
+ }
+ };
+
+ const handleCreateSprint = async (data: any) => {
+ if (!activeProject) return;
+ try {
+ const res = await api.post(`/projects/${activeProject.id}/milestones`, data);
+ if (res.data?.success) {
+ showToast('Sprint added successfully.', 'success');
+ setSprintModalOpen(false);
+ sprintReset();
+ fetchProjectDetails(activeProject.id);
+ }
+ } catch (err: any) {
+ showToast('Failed to add sprint.', 'error');
  }
  };
 
@@ -356,6 +398,45 @@ const defaultProjectDetail = {
  Live Demo
  </a>
  )}
+ </div>
+
+ {/* Sprints / Milestones */}
+ <div className="space-y-4">
+ <div className="flex items-center justify-between gap-4">
+ <h2 className="text-lg font-extrabold text-textPrimary flex items-center gap-2">
+ <Clock className="h-5 w-5 text-ieeeBlue" />
+ Project Sprints
+ </h2>
+ <button
+ onClick={() => setSprintModalOpen(true)}
+ className="bg-ieeeBlue/20 hover:bg-ieeeBlue/30 text-ieeeBlue border border-ieeeBlue/25 px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 cursor-pointer"
+ >
+ <Plus className="h-3.5 w-3.5" />
+ Add Sprint
+ </button>
+ </div>
+ <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+ {activeProject.milestones && activeProject.milestones.length > 0 ? (
+ activeProject.milestones.map((ms) => (
+ <div key={ms.id} className="bg-cardBg p-4 rounded-xl border border-slate-850 shadow-sm space-y-2">
+ <div className="flex justify-between items-start">
+ <h4 className="font-bold text-textPrimary text-sm">{ms.title}</h4>
+ <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${ms.isCompleted ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'}`}>
+ {ms.isCompleted ? 'Completed' : 'In Progress'}
+ </span>
+ </div>
+ <div className="flex items-center gap-1.5 text-xs text-textMuted">
+ <Calendar className="h-3.5 w-3.5" />
+ Due: {new Date(ms.dueDate).toLocaleDateString()}
+ </div>
+ </div>
+ ))
+ ) : (
+ <div className="col-span-full text-center py-6 text-sm text-textMuted border border-dashed border-slate-850 rounded-xl">
+ No sprints defined for this project.
+ </div>
+ )}
+ </div>
  </div>
 
  {/* Kanban Section Header */}
@@ -667,6 +748,52 @@ const defaultProjectDetail = {
  </div>
  <button type="submit" className="w-full bg-ieeeBlue hover:bg-ieeeBlue text-white font-bold py-2.5 rounded-xl cursor-pointer">
  Add Contributor
+ </button>
+ </form>
+ </div>
+ </div>
+ )}
+
+ {sprintModalOpen && (
+ <div className="fixed inset-0 bg-black/75 flex items-center justify-center p-4 z-50 animate-fadeIn">
+ <div className="bg-cardBg shadow-sm p-6 rounded-xl border border-border max-w-md w-full space-y-6">
+ <div className="flex justify-between items-center">
+ <h2 className="text-lg font-bold text-slate-250">Create Sprint</h2>
+ <button onClick={() => setSprintModalOpen(false)} className="text-slate-500 hover:text-textMuted cursor-pointer">
+ <XCircle className="h-5 w-5" />
+ </button>
+ </div>
+ <form onSubmit={sprintSub(handleCreateSprint)} className="space-y-4 text-xs">
+ <div>
+ <label className="block text-textMuted mb-1">Sprint Title</label>
+ <input
+ type="text"
+ required
+ {...sprintReg('title')}
+ placeholder="e.g. Beta Release"
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ />
+ </div>
+ <div>
+ <label className="block text-textMuted mb-1">Description</label>
+ <textarea
+ {...sprintReg('description')}
+ placeholder="Sprint goals..."
+ rows={3}
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
+ />
+ </div>
+ <div>
+ <label className="block text-textMuted mb-1">Due Date</label>
+ <input
+ type="date"
+ required
+ {...sprintReg('dueDate')}
+ className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none"
+ />
+ </div>
+ <button type="submit" className="w-full bg-ieeeBlue hover:bg-ieeeBlue text-white font-bold py-2.5 rounded-xl cursor-pointer">
+ Create Sprint
  </button>
  </form>
  </div>
