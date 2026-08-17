@@ -233,6 +233,9 @@ const defaultProjectDetail = {
  setProjects([newProj, ...projects]);
  setModalOpen(false);
  projectReset();
+ } else if (err.response?.status === 400 && err.response?.data?.errors) {
+ const firstError = err.response.data.errors[0];
+ showToast(`Validation error: ${firstError.field} - ${firstError.message}`, 'error');
  } else {
  showToast(err.response?.data?.message || 'Failed to register project.', 'error');
  }

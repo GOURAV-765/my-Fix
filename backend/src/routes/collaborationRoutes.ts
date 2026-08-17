@@ -29,10 +29,10 @@ const createProjectSchema = z.object({
   body: z.object({
     title: z.string().min(3, 'Title must be at least 3 characters'),
     description: z.string().min(5, 'Description must be at least 5 characters'),
-    githubUrl: z.string().url().optional().or(z.literal('')),
-    demoUrl: z.string().url().optional().or(z.literal('')),
+    githubUrl: z.string().optional().or(z.literal('')),
+    demoUrl: z.string().optional().or(z.literal('')),
     techStack: z.string().min(2, 'Tech stack is required'),
-    departmentId: z.string({ required_error: 'Department is required for a project' }),
+    departmentId: z.string().min(1, 'Department is required for a project'),
   }),
 });
 
