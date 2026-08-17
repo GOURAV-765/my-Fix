@@ -84,7 +84,16 @@ const Projects: React.FC = () => {
  demoUrl: string;
  techStack: string;
  departmentId: string;
- }>();
+ }>({
+    defaultValues: {
+      title: '',
+      description: '',
+      githubUrl: '',
+      demoUrl: '',
+      techStack: '',
+      departmentId: '',
+    }
+  });
 
  const { register: taskReg, handleSubmit: taskSub, reset: taskReset } = useForm<{
  title: string;
