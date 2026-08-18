@@ -43,19 +43,14 @@ export class CollaborationService {
     return project;
   }
 
-  async listProjects(societyId: string, userDeptIds: string[], departmentId?: string) {
-    let whereClause: any = { societyId };
+  async listProjects(societyId: string, departmentId?: string) {
+  let whereClause: any = { societyId };
 
-    if (departmentId) {
-      if (!userDeptIds.includes(departmentId)) {
-        throw new Error('Forbidden: You do not belong to this department.');
-      }
-      whereClause.departmentId = departmentId;
-    } else {
-      whereClause.departmentId = { in: userDeptIds };
-    }
+  if (departmentId) {
+  whereClause.departmentId = departmentId;
+  }
 
-    return prisma.project.findMany({
+  return prisma.project.findMany({
       where: whereClause,
       include: {
         members: {

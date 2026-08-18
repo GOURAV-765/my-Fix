@@ -277,9 +277,15 @@ const Projects: React.FC = () => {
  </button>
  ) : (
  <button
- onClick={() => setModalOpen(true)}
- className="bg-ieeeBlue hover:bg-ieeeBlue text-white text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-1.5 cursor-pointer shadow-[0_0_20px_rgba(79,70,229,0.35)]"
- >
+  onClick={() => {
+  projectReset({
+  title: '', description: '', githubUrl: '', demoUrl: '', techStack: '',
+  departmentId: activeDepartmentId !== 'all' ? activeDepartmentId : ''
+  });
+  setModalOpen(true);
+  }}
+  className="bg-ieeeBlue hover:bg-ieeeBlue text-white font-bold py-2.5 px-4 rounded-xl flex items-center gap-2 cursor-pointer shadow-sm hover:shadow-md transition-all duration-300"
+  >
  <Plus className="h-4 w-4" />
  Add Project
  </button>

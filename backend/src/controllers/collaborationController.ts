@@ -75,18 +75,8 @@ export const listProjects = async (
 
     const { departmentId } = req.query;
 
-    const userDepartments = await prisma.userDepartment.findMany({
-      where: { userId: req.user?.userId },
-    });
-    const userDeptIds = userDepartments.map((ud) => ud.departmentId);
-
-    if (userDeptIds.length === 0) {
-      res.status(200).json({ success: true, projects: [] });
-      return;
-    }
-
     try {
-      const projects = await collabService.listProjects(societyId, userDeptIds, departmentId as string);
+      const projects = await collabService.listProjects(societyId, departmentId as string);
       res.status(200).json({ success: true, projects });
     } catch (e: any) {
       res.status(403).json({ success: false, message: e.message });
