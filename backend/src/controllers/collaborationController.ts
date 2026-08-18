@@ -42,11 +42,8 @@ export const createProject = async (
     const userDept = await prisma.userDepartment.findFirst({
       where: { userId: req.user?.userId, departmentId },
     });
-
-    if (!userDept) {
-      res.status(403).json({ success: false, message: 'Forbidden: You do not belong to this department.' });
-      return;
-    }
+    
+    // We allow users to create projects in other departments now based on user request.
 
     const project = await collabService.createProject(societyId, {
       title,

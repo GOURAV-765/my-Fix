@@ -76,6 +76,7 @@ const Projects: React.FC = () => {
  const [taskModalOpen, setTaskModalOpen] = useState(false);
  const [recruitmentModalOpen, setRecruitmentModalOpen] = useState(false);
  const [sprintModalOpen, setSprintModalOpen] = useState(false);
+ const [allDepartments, setAllDepartments] = useState<{ id: string; name: string }[]>([]);
 
  const { register: projectReg, handleSubmit: projectSub, reset: projectReset } = useForm<{
  title: string;
@@ -111,6 +112,7 @@ const Projects: React.FC = () => {
  title: string;
  description: string;
  dueDate: string;
+ departmentId: string;
  }>();
 
 const defaultProjectsList: Project[] = [
@@ -210,46 +212,57 @@ const defaultProjectDetail = {
     } catch {}
   };
 
+  const fetchAllDepartments = async () => {
+    try {
+      const res = await api.get('/departments');
+      if (res.data?.success && res.data.data) {
+        setAllDepartments(res.data.data);
+      }
+    } catch {}
+  };
+
   useEffect(() => {
     fetchProjects();
     fetchMembers();
+    fetchAllDepartments();
   }, [activeDepartmentId]);
 
- const handleCreateProject = async (data: any) => {
- try {
- const res = await api.post('/projects', data);
- if (res.data?.success) {
- showToast('New project registered in society directory.', 'success');
- setModalOpen(false);
- projectReset();
- fetchProjects();
- }
- } catch (err: any) {
- if (err.response?.status === 401) {
- showToast('Demo mode: Project workspace created locally.', 'success');
- const newProj = {
- id: `proj_${Date.now()}`,
- title: data.title,
- description: data.description,
- githubUrl: data.githubUrl || null,
- demoUrl: data.demoUrl || null,
- techStack: data.techStack,
- status: 'IDEATION',
- members: [],
- milestones: [],
- tasks: [],
- };
- setProjects([newProj, ...projects]);
- setModalOpen(false);
- projectReset();
- } else if (err.response?.status === 400 && err.response?.data?.errors) {
- const firstError = err.response.data.errors[0];
- showToast(`Validation error: ${firstError.field} - ${firstError.message}`, 'error');
- } else {
- showToast(err.response?.data?.message || 'Failed to register project.', 'error');
- }
- }
- };
+  const handleCreateProject = async (data: any) => {
+  try {
+  const res = await api.post('/projects', data);
+  if (res.data?.success) {
+  showToast('New project registered in society directory.', 'success');
+  setModalOpen(false);
+  projectReset();
+  fetchProjects();
+  }
+  } catch (err: any) {
+  const isDemoToken = !localStorage.getItem('auth_token') || localStorage.getItem('auth_token') === 'demo_local_token';
+  if (err.response?.status === 401 && isDemoToken) {
+  showToast('Demo mode: Project workspace created locally.', 'success');
+  const newProj = {
+  id: `proj_${Date.now()}`,
+  title: data.title,
+  description: data.description,
+  githubUrl: data.githubUrl || null,
+  demoUrl: data.demoUrl || null,
+  techStack: data.techStack,
+  status: 'IDEATION',
+  members: [],
+  milestones: [],
+  tasks: [],
+  };
+  setProjects([newProj, ...projects]);
+  setModalOpen(false);
+  projectReset();
+  } else if (err.response?.status === 400 && err.response?.data?.errors) {
+  const firstError = err.response.data.errors[0];
+  showToast(`Validation error: ${firstError.field} - ${firstError.message}`, 'error');
+  } else {
+  showToast(err.response?.data?.message || err.message || 'Failed to register project.', 'error');
+  }
+  }
+  };
 
  const handleCreateTask = async (data: any) => {
  if (!activeProject) return;
@@ -262,7 +275,7 @@ const defaultProjectDetail = {
  fetchProjectDetails(activeProject.id);
  }
  } catch (err: any) {
- showToast('Failed to create task.', 'error');
+ showToast(err.response?.data?.message || err.message || 'Failed to create task.', 'error');
  }
  };
 
@@ -277,24 +290,24 @@ const defaultProjectDetail = {
  fetchProjectDetails(activeProject.id);
  }
  } catch (err: any) {
- showToast('Failed to recruit teammate.', 'error');
+ showToast(err.response?.data?.message || err.message || 'Failed to recruit teammate.', 'error');
  }
  };
 
- const handleCreateSprint = async (data: any) => {
- if (!activeProject) return;
- try {
- const res = await api.post(`/projects/${activeProject.id}/milestones`, data);
- if (res.data?.success) {
- showToast('Sprint added successfully.', 'success');
- setSprintModalOpen(false);
- sprintReset();
- fetchProjectDetails(activeProject.id);
- }
- } catch (err: any) {
- showToast('Failed to add sprint.', 'error');
- }
- };
+  const handleCreateSprint = async (data: any) => {
+  if (!activeProject) return;
+  try {
+  const res = await api.post(`/projects/${activeProject.id}/milestones`, data);
+  if (res.data?.success) {
+  showToast('Sprint added successfully.', 'success');
+  setSprintModalOpen(false);
+  sprintReset();
+  fetchProjectDetails(activeProject.id);
+  }
+  } catch (err: any) {
+  showToast(err.response?.data?.message || err.message || 'Failed to add sprint.', 'error');
+  }
+  };
 
  const handleMoveTask = async (taskId: string, newStatus: string) => {
  if (!activeProject) return;
@@ -305,7 +318,7 @@ const defaultProjectDetail = {
  fetchProjectDetails(activeProject.id);
  }
  } catch (err: any) {
- showToast('Failed to move task.', 'error');
+ showToast(err.response?.data?.message || err.message || 'Failed to move task.', 'error');
  }
  };
 
@@ -644,9 +657,9 @@ const defaultProjectDetail = {
       className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
     >
       <option value="" disabled>Select Department (Required)...</option>
-      {availableDepartments.map(d => (
-        <option key={d.departmentId} value={d.departmentId}>
-          {d.name || `Dept ${d.departmentId.substring(0, 8)}`}
+      {allDepartments.map(d => (
+        <option key={d.id} value={d.id}>
+          {d.name || `Dept ${d.id.substring(0, 8)}`}
         </option>
       ))}
     </select>
@@ -795,6 +808,20 @@ const defaultProjectDetail = {
  className="w-full bg-cardBg border border-border rounded-xl px-4 py-2.5 text-textPrimary focus:outline-none resize-none"
  />
  </div>
+  <div>
+    <label className="block text-textMuted mb-1">Department</label>
+    <select
+      {...sprintReg('departmentId')}
+      className="w-full bg-cardBg border border-border rounded-xl px-3 py-2.5 text-textPrimary focus:outline-none cursor-pointer"
+    >
+      <option value="" disabled>Select Department...</option>
+      {allDepartments.map(d => (
+        <option key={d.id} value={d.id}>
+          {d.name}
+        </option>
+      ))}
+    </select>
+  </div>
  <div>
  <label className="block text-textMuted mb-1">Due Date</label>
  <input
