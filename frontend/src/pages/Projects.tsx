@@ -115,56 +115,7 @@ const Projects: React.FC = () => {
  departmentId: string;
  }>();
 
-const defaultProjectsList: Project[] = [
- {
- id: 'proj_1',
- title: 'IEEE Portal Mobile App',
- description: 'React Native mobile companion app for student chapter announcements and QR check-ins.',
- techStack: 'React Native, Expo, TypeScript, Express',
- status: 'DEVELOPMENT',
- githubUrl: null,
- demoUrl: null,
- members: [
- { id: 'pm_1', role: 'LEAD', member: { firstName: 'Gourav', lastName: 'Admin' } },
- { id: 'pm_2', role: 'DEVELOPER', member: { firstName: 'Alex', lastName: 'Rivera' } }
- ],
- },
- {
- id: 'proj_2',
- title: 'Autonomous Micromouse Robot',
- description: 'Custom PCB and flood-fill maze solving robot for regional IEEE competition.',
- techStack: 'C++, STM32, KiCad, Embedded C',
- status: 'DEVELOPMENT',
- githubUrl: null,
- demoUrl: null,
- members: [
- { id: 'pm_3', role: 'LEAD', member: { firstName: 'Marcus', lastName: 'Chen' } }
- ],
- }
-];
 
-const defaultProjectDetail = {
- id: 'proj_1',
- title: 'IEEE Portal Mobile App',
- description: 'React Native mobile companion app for student chapter announcements and QR check-ins.',
- techStack: 'React Native, Expo, TypeScript, Express',
- status: 'DEVELOPMENT',
- githubUrl: null,
- demoUrl: null,
- members: [
- { id: 'pm_1', role: 'LEAD', member: { firstName: 'Gourav', lastName: 'Admin' } },
- { id: 'pm_2', role: 'DEVELOPER', member: { firstName: 'Alex', lastName: 'Rivera' } }
- ],
- milestones: [
- { id: 'ms_1', title: 'UI Mockups & Figma Design', isCompleted: true, dueDate: '2026-08-15' },
- { id: 'ms_2', title: 'Authentication & API Integration', isCompleted: false, dueDate: '2026-09-01' }
- ],
- tasks: [
- { id: 'pt_1', title: 'Setup Expo Router Navigation', description: null, status: 'DONE' as const, priority: 'HIGH' as const, assignee: null },
- { id: 'pt_2', title: 'Implement QR Code Scanner', description: null, status: 'IN_PROGRESS' as const, priority: 'HIGH' as const, assignee: null },
- { id: 'pt_3', title: 'Push Notification Service', description: null, status: 'TODO' as const, priority: 'MEDIUM' as const, assignee: null }
- ]
-};
 
  const fetchProjects = async () => {
  setLoading(true);
@@ -174,14 +125,14 @@ const defaultProjectDetail = {
  params.departmentId = activeDepartmentId;
  }
  const res = await api.get('/projects', { params });
- if (res.data?.success && res.data.projects && res.data.projects.length > 0) {
- setProjects(res.data.projects);
- } else {
- setProjects(defaultProjectsList);
- }
- } catch {
- setProjects(defaultProjectsList);
- } finally {
+  if (res.data?.success && res.data.projects) {
+  setProjects(res.data.projects);
+  } else {
+  setProjects([]);
+  }
+  } catch {
+  setProjects([]);
+  } finally {
  setLoading(false);
  }
  };
@@ -189,14 +140,14 @@ const defaultProjectDetail = {
  const fetchProjectDetails = async (id: string) => {
  try {
  const res = await api.get(`/projects/${id}`);
- if (res.data?.success && res.data.project) {
- setActiveProject(res.data.project);
- } else {
- setActiveProject(defaultProjectDetail);
- }
- } catch {
- setActiveProject(defaultProjectDetail);
- }
+  if (res.data?.success && res.data.project) {
+  setActiveProject(res.data.project);
+  } else {
+  setActiveProject(null);
+  }
+  } catch {
+  setActiveProject(null);
+  }
  };
 
   const fetchMembers = async () => {
@@ -237,25 +188,7 @@ const defaultProjectDetail = {
   fetchProjects();
   }
   } catch (err: any) {
-  const isDemoToken = !localStorage.getItem('auth_token') || localStorage.getItem('auth_token') === 'demo_local_token';
-  if (err.response?.status === 401 && isDemoToken) {
-  showToast('Demo mode: Project workspace created locally.', 'success');
-  const newProj = {
-  id: `proj_${Date.now()}`,
-  title: data.title,
-  description: data.description,
-  githubUrl: data.githubUrl || null,
-  demoUrl: data.demoUrl || null,
-  techStack: data.techStack,
-  status: 'IDEATION',
-  members: [],
-  milestones: [],
-  tasks: [],
-  };
-  setProjects([newProj, ...projects]);
-  setModalOpen(false);
-  projectReset();
-  } else if (err.response?.status === 400 && err.response?.data?.errors) {
+  if (err.response?.status === 400 && err.response?.data?.errors) {
   const firstError = err.response.data.errors[0];
   showToast(`Validation error: ${firstError.field} - ${firstError.message}`, 'error');
   } else {
