@@ -25,19 +25,15 @@ export const initSocket = (server: HttpServer): Server => {
         }
 
         const localAllowed = [
-          'http://localhost:5180',
-          'http://127.0.0.1:5180',
-          'http://localhost:5173',
-          'http://127.0.0.1:5173',
-          'http://localhost:5181',
-          'http://127.0.0.1:5181',
+          'http://localhost:5180', 'http://127.0.0.1:5180',
+          'http://localhost:5173', 'http://127.0.0.1:5173',
+          'http://localhost:5181', 'http://127.0.0.1:5181',
+          'https://society-management-portal-zeta.vercel.app',
+          'https://my-fix-frontend.vercel.app',
         ];
 
-        const envAllowed = process.env.ALLOWED_ORIGINS
-          ? process.env.ALLOWED_ORIGINS.split(',')
-          : [];
-
-        const isVercel = origin.startsWith('https://society-management-portal') && origin.endsWith('.vercel.app');
+        const envAllowed = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : [];
+        const isVercel = origin.endsWith('.vercel.app');
 
         if (localAllowed.includes(origin) || envAllowed.includes(origin) || isVercel) {
           callback(null, true);

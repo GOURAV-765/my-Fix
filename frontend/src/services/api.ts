@@ -45,8 +45,25 @@ const api = axios.create({
 
 // Request interceptor to automatically attach authorization token
 api.interceptors.request.use(
- (config) => {
- const token = localStorage.getItem('auth_token');
+ async (config) => {
+ let token = localStorage.getItem('auth_token');
+
+ // If Clerk is available on the window object, dynamically get a fresh token
+ // This prevents 401 errors caused by Clerk's short-lived (60s) session tokens.
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ const clerk = (window as any).Clerk;
+ if (clerk && clerk.session) {
+ try {
+ const freshToken = await clerk.session.getToken();
+ if (freshToken) {
+ token = freshToken;
+ localStorage.setItem('auth_token', freshToken);
+ }
+ } catch (err) {
+ console.error('Failed to get fresh Clerk token', err);
+ }
+ }
+
  if (token && config.headers) {
  config.headers.Authorization = `Bearer ${token}`;
  }
