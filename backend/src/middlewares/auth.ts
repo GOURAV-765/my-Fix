@@ -67,9 +67,11 @@ export const authenticate = async (
 
       try {
         const jwtKey = process.env.CLERK_JWT_KEY;
+        const publishableKey = process.env.CLERK_PUBLISHABLE_KEY || process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
         const decodedClerk = await verifyClerkToken(token, {
           secretKey,
           jwtKey,
+          publishableKey,
         });
 
         const clerkUserId = decodedClerk.sub;
